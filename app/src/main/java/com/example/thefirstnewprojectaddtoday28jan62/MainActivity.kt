@@ -45,12 +45,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         popBackStackFragment()
-//        onReplaceFragment(R.id.frameNav, OneFragment.newInstance())
-//        NavMain.menu.findItem(R.id.home).title = "home"
-//        NavMain.menu.findItem(R.id.setting).setTitle("Home")
-//        NavMain.menu.performIdentifierAction(R.id.home,0)
         startActivity(Intent(this@MainActivity,MainActivity::class.java))
-
     }
 
     fun popBackStackFragment() {

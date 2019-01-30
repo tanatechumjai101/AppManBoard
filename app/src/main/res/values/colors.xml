@@ -8,4 +8,7 @@
     <color name="colorColor">#19C2B2</color>
     <color name="colorRedDark">#F44336</color>
     <color name="colorRed">#D55E56</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="Red">#FF1000</color>
+
 </resources>
