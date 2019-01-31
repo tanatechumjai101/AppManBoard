@@ -1,6 +1,5 @@
 package com.example.thefirstnewprojectaddtoday28jan62
 
-import android.content.DialogInterface
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -25,7 +24,6 @@ class LoginActivity : AppCompatActivity() {
             .requestEmail()
             .build()
         val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-//        val signInIntent = mGoogleSignInClient.signInIntent
         sign_in_button.visibility = View.VISIBLE
         sign_in_button.setOnClickListener {
             val signInIntent = mGoogleSignInClient.signInIntent
@@ -34,17 +32,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Are you sure exit Application?")
-        builder.setMessage("Do you want to close the app?")
-        builder.setPositiveButton("yes") { dialog: DialogInterface?, which: Int ->
-            finish()
-        }
-        builder.setNegativeButton("no") { dialog: DialogInterface, i: Int->}
-        builder.show()
-
+        AlertDialog.Builder(this@LoginActivity)
+            .setTitle("Are you sure ?")
+            .setMessage("Do you want to close the app?")
+            .setPositiveButton("yes"){dialog, which -> finish() }
+            .setNegativeButton("no"){dialog, which ->  }
+            .show()
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

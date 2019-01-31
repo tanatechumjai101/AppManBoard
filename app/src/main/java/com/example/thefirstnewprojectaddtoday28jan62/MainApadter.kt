@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.list_data.view.*
 
 class MainApadter(val Listdata: ArrayList<Data>) : RecyclerView.Adapter<MainApadter.ViewHolder>() {
 
@@ -25,8 +26,10 @@ class MainApadter(val Listdata: ArrayList<Data>) : RecyclerView.Adapter<MainApad
         return Listdata.size
     }
 
-    override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
-
+    override fun onBindViewHolder(p0: ViewHolder, position: Int) {
+        val data: Data = Listdata[position]
+        p0.itemView.text_Index_page_adapter.text = data.Index
+        p0.itemView.text_Data_page_adapter.text = data.data
     }
 
     class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {

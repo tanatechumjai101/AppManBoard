@@ -13,6 +13,18 @@
             android:id="@+id/frameNav"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <android.support.v7.widget.RecyclerView
+                        android:id="@+id/RecyclerView_pageHome"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
     </FrameLayout>
     <LinearLayout
             android:layout_alignParentBottom="true"
@@ -24,12 +36,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <android.support.design.widget.BottomNavigationView
+                style="@style/bottom_bar_style"
                 android:layout_gravity="bottom|end"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                app:itemIconSize="30sp"
-                app:itemIconTint="#FFFF"
-                app:itemTextColor="#FFF"
+                app:itemIconSize="25sp"
+                app:itemTextColor="@color/nw_tab_bar_selector_color"
+                app:itemIconTint="@color/nw_tab_bar_selector_color"
                 android:id="@+id/NavMain"
                 app:menu="@menu/menu"
                 android:layout_width="match_parent"

@@ -3,13 +3,18 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+
              tools:context=".FourFragment">
 
     <!-- TODO: Update blank fragment layout -->
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
     <TextView
             android:textSize="40sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/fragmentFour"/>
+    </FrameLayout>
 
 </FrameLayout>
