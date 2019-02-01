@@ -7,13 +7,22 @@
 
     <!-- TODO: Update blank fragment layout -->
     <FrameLayout
+            android:layout_weight="1.8"
+            android:id="@+id/framethree"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <TextView
-                android:textSize="40sp"
+        <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/fragmentThree"/>
+                android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/RecyclerView_pageChat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
     </FrameLayout>
 
 

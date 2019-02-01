@@ -1,5 +1,6 @@
 package com.example.thefirstnewprojectaddtoday28jan62
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -25,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
             .build()
         val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
         sign_in_button.visibility = View.VISIBLE
+
         sign_in_button.setOnClickListener {
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
@@ -45,6 +47,10 @@ class LoginActivity : AppCompatActivity() {
 
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+            val editor = sharedPreference.edit()
+            editor.putString("fullname",task.result.displayName)
+            editor.commit()
             handleSignInResult(task)
             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
         }
