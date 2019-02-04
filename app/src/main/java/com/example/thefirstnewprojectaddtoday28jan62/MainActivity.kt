@@ -2,10 +2,7 @@ package com.example.thefirstnewprojectaddtoday28jan62
 
 import android.content.Context
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.annotation.NonNull
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -17,62 +14,60 @@ class MainActivity : BaseActivity() {
     val listdata = ArrayList<Data>()
     var fragmentTransaction: FragmentTransaction? = null
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
-        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-//        RecyclerView_pageHome.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
-//        adapter = MainApadter(listdata)
-//        RecyclerView_pageHome.adapter = adapter
-//        adapter!!.notifyDataSetChanged()
-//        AddAccount()
-
+        NavMain.menu.getItem(0).isChecked = true
+        startMain()
         NavMain.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        super.onCreate(savedInstanceState)
     }
+
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         changePage(item.itemId)
+        startMain()
+        if(NavMain.isClickable == null){
+            NavMain.menu.performIdentifierAction(R.id.home, 0)
+        }
+        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+        val editor = sharedPreference.edit()
+        editor.putInt("page", item.itemId).apply()
         true
     }
 
     fun changePage(item: Int) {
-
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
         val editor = sharedPreference.edit()
         var result = sharedPreference.getInt("page", 0)
+        val curFrag = this!!.supportFragmentManager.primaryNavigationFragment
 
         if (item != result) {
             var fragment = this!!.supportFragmentManager.findFragmentByTag(item.toString())
             fragmentTransaction = this!!.supportFragmentManager.beginTransaction()
             editor.putInt("page", item).apply()
             if (fragment == null) {
+
                 when (item) {
                     R.id.home -> {
-                        fragment = OneFragment.newInstance()
+                        fragment = PageMainFragment.newInstance()
                         fragmentTransaction!!.add(R.id.frameNav, fragment, item.toString())
                     }
                     R.id.person -> {
-                        fragment = TwoFragment.newInstance()
+                        fragment = PagePersonFragment.newInstance()
                         fragmentTransaction!!.add(R.id.frameNav, fragment, item.toString())
                     }
                     R.id.chat -> {
-                        fragment = ThreeFragment()
+                        fragment = PageChatFragment()
                         fragmentTransaction!!.add(R.id.frameNav, fragment, item.toString())
                     }
                     R.id.setting -> {
-                        fragment = FourFragment()
+                        fragment = PageSettingFragment()
                         fragmentTransaction!!.add(R.id.frameNav, fragment, item.toString())
-
                     }
                 }
             } else {
                 fragmentTransaction!!.show(fragment)
-
             }
 
-
-            val curFrag = this!!.supportFragmentManager.primaryNavigationFragment
             if (curFrag != null) {
                 fragmentTransaction!!.hide(curFrag)
             }
@@ -83,29 +78,27 @@ class MainActivity : BaseActivity() {
         }
     }
 
-//    fun popBackStackFragment() {
-//        val fm = supportFragmentManager
-//        fm.popBackStackImmediate()
-//    }
-//
-//    fun onReplaceFragment(@IdRes containerViewId: Int, @NonNull fragment: Fragment) {
-//        containerView = containerViewId
-//        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-//        supportFragmentManager.beginTransaction()
-//            .replace(containerViewId, fragment)
-//            .addToBackStack(null)
-//            .commitAllowingStateLoss()
-//    }
+    fun startMain() {
+        if(NavMain.isClickable == null){
+//            NavMain.menu.performIdentifierAction(R.id.home, 0)
+            NavMain.menu.getItem(0).isChecked = false
+        }
+
+    }
 
     override fun onPause() {
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
         val editor = sharedPreference.edit()
         editor.clear()
+        editor.remove("page")
         super.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        NavMain.menu.performIdentifierAction(R.id.home, 0)
+        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+        val editor = sharedPreference.edit()
+        editor.clear()
+        editor.remove("page")
     }
 }

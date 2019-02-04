@@ -7,8 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 
 
-
-class SplashActivity: AppCompatActivity() {
+class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,5 +19,6 @@ class SplashActivity: AppCompatActivity() {
                 finish()
             }, 2000)
         }
+
     }
 }

@@ -8,9 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_one.*
-import org.w3c.dom.Text
 
-class OneFragment : Fragment() {
+class PageMainFragment : Fragment() {
     var adapter: MainApadter? = null
     val listdata = ArrayList<Data>()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -19,7 +18,7 @@ class OneFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = OneFragment()
+        fun newInstance() = PageMainFragment()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -50,7 +50,10 @@ dependencies {
     implementation "org.jetbrains.anko:anko-design:$anko_version"
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.1.17'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.16'
+
+    implementation 'com.felipecsl:gifimageview:2.2.0'
+    implementation 'commons-io:commons-io:2.4'
 
     kotlin{
         experimental{

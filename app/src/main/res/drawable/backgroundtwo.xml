@@ -3,7 +3,8 @@
 
     <item android:drawable="@color/colorWhite"/>
     <item>
-        <bitmap android:src="@drawable/ic_appman" android:gravity="center"/>
+        <bitmap android:src="@drawable/back" android:gravity="center" android:tileMode="repeat"/>
+                <!--android:tileMode="repeat"-->
     </item>
 
 </layer-list>

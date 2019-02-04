@@ -5,38 +5,99 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/colorWhite"
         tools:context=".LoginActivity">
-
-    <LinearLayout
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        <LinearLayout
-                android:weightSum="2"
-                android:layout_gravity="center"
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="match_parent">
+        <RelativeLayout
+                android:gravity="center"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-            <ImageView
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_appman"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"/>
             <LinearLayout
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_weight="1"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp">
+                    android:layout_height="wrap_content">
+                <ImageView
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/background"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                 <com.google.android.gms.common.SignInButton
-                        android:layout_gravity="top"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="30dp"
+                        app:buttonSize="wide"
+                        app:colorScheme="dark"
+                        android:layout_gravity="top|center"
                         android:id="@+id/sign_in_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-            </LinearLayout>
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
 
-        </LinearLayout>
-    </LinearLayout>
+                <LinearLayout
+                        android:layout_marginTop="30dp"
+                        android:weightSum="2"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <ImageView
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/img1"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="190dp"/>
+                    <pl.droidsonroids.gif.GifImageView
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginRight="5dp"
+                            android:scaleType="centerCrop"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/gitthree"/>
+                </LinearLayout>
+                <LinearLayout
+
+                        android:layout_marginBottom="20dp"
+                        android:weightSum="2"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <pl.droidsonroids.gif.GifImageView
+
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:scaleType="centerCrop"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="195dp"
+                            android:src="@drawable/gifappman"/>
+                    <ImageView
+                            android:layout_marginRight="5dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/team"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="190dp"/>
+
+                </LinearLayout>
+                <TextView
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/gray"
+                        android:layout_marginBottom="20dp"
+                        android:textSize="10dp"
+                        android:text="https://medium.com/teamappman"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
 
 </LinearLayout>
