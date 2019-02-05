@@ -2,9 +2,7 @@ package com.example.thefirstnewprojectaddtoday28jan62
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 open class BaseActivity : AppCompatActivity() {
