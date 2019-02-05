@@ -44,7 +44,5 @@ class PageMainFragment : Fragment() {
 //            adapter!!.notifyDataSetChanged()
 
         }
-
     }
-
 }

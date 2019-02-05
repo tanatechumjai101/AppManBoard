@@ -19,8 +19,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 <ImageView
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/background"
                         android:layout_width="match_parent"
@@ -36,7 +36,6 @@
                         android:id="@+id/sign_in_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
-
                 <LinearLayout
                         android:layout_marginTop="30dp"
                         android:weightSum="2"
@@ -62,14 +61,12 @@
                             android:src="@drawable/gitthree"/>
                 </LinearLayout>
                 <LinearLayout
-
                         android:layout_marginBottom="20dp"
                         android:weightSum="2"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                     <pl.droidsonroids.gif.GifImageView
-
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:scaleType="centerCrop"
@@ -84,17 +81,15 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="190dp"/>
-
                 </LinearLayout>
                 <TextView
                         android:layout_marginLeft="10dp"
-                        android:textColor="@color/gray"
+                        android:textColor="@color/grayDark"
                         android:layout_marginBottom="20dp"
                         android:textSize="10dp"
                         android:text="https://medium.com/teamappman"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
-
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
