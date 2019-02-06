@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.splashscreen.*
 
 
@@ -23,6 +22,7 @@ class SplashActivity : AppCompatActivity() {
 
             override fun onAnimationEnd(animation: Animation?) {
                 val intent = Intent(this@SplashActivity, LoginActivity::class.java)
+
                 startActivity(intent)
                 finish()
             }
@@ -31,10 +31,8 @@ class SplashActivity : AppCompatActivity() {
 
             }
         })
+        ivLogo.startAnimation(smallToLarge)
 
-        if(FirebaseAuth.getInstance().currentUser == null){
-            ivLogo.startAnimation(smallToLarge)
-        }
 
     }
 }

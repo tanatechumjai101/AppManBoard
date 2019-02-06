@@ -11,23 +11,6 @@ class PageChatFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_chat, container, false)
-//        list_manage_Chat.setOnClickListener {
-//            val popupMenu = PopupMenu(context, it)
-//            popupMenu.setOnMenuItemClickListener { item ->
-//                when (item.itemId) {
-//                    R.id.Btn_edit_chat -> {
-//                        Toast.makeText(context,"Edit",Toast.LENGTH_SHORT).show()
-//                        true
-//                    }
-//                    R.id.Btn_Delete_chat -> {
-//                        Toast.makeText(context,"Delete",Toast.LENGTH_SHORT).show()
-//                        true
-//                    }
-//                }
-//            }
-//            popupMenu.inflate(R.menu.menu_page_chat)
-//            popupMenu.show()
-//        }
 
     }
 

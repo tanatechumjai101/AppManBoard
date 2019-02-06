@@ -22,69 +22,59 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        NavMain.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         pagemainFragment = PageMainFragment.newInstance()
         pagechatFragment = PageChatFragment.newInstance()
         pagepersonFragment = PagePersonFragment.newInstance()
         pagesettingFragment = PageSettingFragment.newInstance()
 
-//        supportFragmentManager.beginTransaction()
-//                .replace(R.id.frameNav, pagepersonFragment)
-//                .addToBackStack(null)
-//                .commit()
         supportFragmentManager.beginTransaction()
-                .replace(R.id.frameNav, pagemainFragment)
-                .addToBackStack(null)
-                .commit()
+            .replace(R.id.frameNav, pagemainFragment)
+            .commit()
 
+        NavMain.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
-
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        changePage(item.itemId)
-
-        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
-        val editor = sharedPreference.edit()
-        editor.putInt("page", item.itemId).apply()
+        when (item.itemId) {
+            R.id.home -> {
+                supportFragmentManager.beginTransaction().replace(R.id.frameNav, pagemainFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+            R.id.person -> {
+                supportFragmentManager.beginTransaction().replace(R.id.frameNav, pagepersonFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+            R.id.chat -> {
+                supportFragmentManager.beginTransaction().replace(R.id.frameNav, pagechatFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+            R.id.setting -> {
+                supportFragmentManager.beginTransaction().replace(R.id.frameNav, pagesettingFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
+//        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+//        val editor = sharedPreference.edit()
+//        editor.putInt("page", item.itemId).apply()
         true
     }
 
     fun changePage(item: Int) {
-        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
-        val editor = sharedPreference.edit()
-        var result = sharedPreference.getInt("page", 0)
+//        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+//        val editor = sharedPreference.edit()
+//        var result = sharedPreference.getInt("page", 0)
 //        val curFrag = this!!.supportFragmentManager.primaryNavigationFragment
-
-        if (item != result) {
-//            var fragment = supportFragmentManager.findFragmentByTag(item.toString())
-            fragmentTransaction = supportFragmentManager.beginTransaction()
-
-            editor.putInt("page", item).apply()
-
-            when (item) {
-                R.id.home -> {
-                    fragmentTransaction!!.replace(R.id.frameNav, pagemainFragment, item.toString())
-                            .addToBackStack(null)
-                            .commit()
-
-                }
-                R.id.person -> {
-                    fragmentTransaction!!.replace(R.id.frameNav, pagepersonFragment, item.toString())
-                            .addToBackStack(null)
-                            .commit()
-                }
-                R.id.chat -> {
-                    fragmentTransaction!!.replace(R.id.frameNav, PageChatFragment.newInstance(), item.toString())
-                            .addToBackStack(null)
-                            .commit()
-                }
-                R.id.setting -> {
-                    fragmentTransaction!!.replace(R.id.frameNav, PageSettingFragment.newInstance(), item.toString())
-                            .addToBackStack(null)
-                            .commit()
-                }
-            }
+//
+//        if (item != result) {
+////            var fragment = supportFragmentManager.findFragmentByTag(item.toString())
+//            fragmentTransaction = supportFragmentManager.beginTransaction()
+//
+//            editor.putInt("page", item).apply()
 //            if (curFrag != null) {
 //                fragmentTransaction!!.hide(curFrag)
 //            }
@@ -92,24 +82,23 @@ class MainActivity : AppCompatActivity() {
 //            fragmentTransaction!!.setReorderingAllowed(true)
 //            fragmentTransaction!!.addToBackStack(null)
 //            fragmentTransaction!!.commit()
-        }
     }
 
 
     override fun onPause() {
         super.onPause()
-        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
-        val editor = sharedPreference.edit()
-        editor.clear()
-        editor.remove("page")
+//        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+//        val editor = sharedPreference.edit()
+//        editor.clear()
+//        editor.remove("page")
     }
 
     override fun onResume() {
         super.onResume()
-        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
-        val editor = sharedPreference.edit()
-        editor.clear()
-        editor.remove("page")
+//        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+//        val editor = sharedPreference.edit()
+//        editor.clear()
+//        editor.remove("page")
     }
 
     override fun onBackPressed() {

@@ -32,22 +32,22 @@ class PagePersonFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         display_profile.text = Singleton.displayName
         email_profile.text = Singleton.email
-//        if (Singleton.imageUrl!!.isEmpty()) {
-////            Load any image
-//            img_profile!!.setImageResource(R.drawable.ic_person24dp)
-//        } else {
-////            Load profile image
-//            Glide.with(mActivity).load(Singleton.imageUrl)
-//                .into(img_profile)
-//        }
-        Glide.with(mActivity).load(Singleton.imageUrl)
+        if (Singleton.imageUrl!!.isEmpty()) {
+//            Load any image
+            img_profile!!.setImageResource(R.drawable.ic_person24dp)
+        } else {
+//            Load profile image
+            Glide.with(mActivity).load(Singleton.imageUrl)
                 .into(img_profile)
+        }
+//        Glide.with(mActivity).load(Singleton.imageUrl)
+//                .into(img_profile)
         initGoogleLogin()
         sign_out_profile.setOnClickListener {
             googleSignIn?.signOut()
             val intent = Intent(mActivity,LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
+            mActivity.finishAffinity()
         }
     }
 
