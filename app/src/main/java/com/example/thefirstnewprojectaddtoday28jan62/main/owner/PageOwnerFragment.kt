@@ -6,30 +6,21 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
 import com.example.thefirstnewprojectaddtoday28jan62.R
-import com.example.thefirstnewprojectaddtoday28jan62.compare.StringDateComparator
-import com.example.thefirstnewprojectaddtoday28jan62.main.home.adapter.HomeAdapter
 import com.example.thefirstnewprojectaddtoday28jan62.main.owner.adapter.OwnerRecyclerAdapter
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import com.example.thefirstnewprojectaddtoday28jan62.util.Singleton
 import com.google.firebase.database.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.text.SimpleDateFormat
+import kotlinx.android.synthetic.main.fragment_one.*
+import kotlinx.android.synthetic.main.fragment_owner.*
 import java.util.*
 
 
-class PageOwnerFragment : Fragment() , View.OnTouchListener {
-
-    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-
-    }
+class PageOwnerFragment : Fragment() {
 
     lateinit var mUsersIns: DatabaseReference
     var adapter: OwnerRecyclerAdapter? = null
@@ -67,7 +58,6 @@ class PageOwnerFragment : Fragment() , View.OnTouchListener {
             }
         })
 
-
         listMain.layoutManager = LinearLayoutManager(mActivity, LinearLayout.VERTICAL, false)
         adapter = OwnerRecyclerAdapter(listdata)
         listMain.adapter = adapter
@@ -91,7 +81,6 @@ class PageOwnerFragment : Fragment() , View.OnTouchListener {
                 }
             }
             listModify.reverse()
-//            listModify.sortWith(compareByDescending{Date().compareTo(SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").parse(it.time))})
             adapter!!.Listdata = listModify
             adapter!!.notifyDataSetChanged()
         }

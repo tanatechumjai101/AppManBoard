@@ -44,9 +44,10 @@ class PageMainFragment : Fragment() {
     }
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        listMain.visibility = View.INVISIBLE
+        progressBar.visibility = View.VISIBLE
 
         val mRootIns = FirebaseDatabase.getInstance().reference
 
@@ -70,8 +71,11 @@ class PageMainFragment : Fragment() {
                     dataReverse.reverse()
                     adapter!!.Listdata = dataReverse
                     adapter!!.notifyDataSetChanged()
+                    listMain.visibility = View.VISIBLE
+                    progressBar.visibility = View.INVISIBLE
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 AlertDialog.Builder(mActivity)
                         .setMessage("Error")
@@ -82,8 +86,8 @@ class PageMainFragment : Fragment() {
 
 
         floating_action_button.setOnClickListener {
-            val intent = Intent(mActivity,FormActivity::class.java)
-            startActivityForResult(intent,CREATE_FORM)
+            val intent = Intent(mActivity, FormActivity::class.java)
+            startActivityForResult(intent, CREATE_FORM)
         }
 
 
@@ -96,8 +100,8 @@ class PageMainFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data != null) {
                         val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
-                        val newData:Data = data.extras.getParcelable("Data")!!
-                        val data = Data(newData.subject ,newData.detail,dateTime, newData.imageURI, newData.displayname,newData.email)
+                        val newData: Data = data.extras.getParcelable("Data")!!
+                        val data = Data(newData.subject, newData.detail, dateTime, newData.imageURI, newData.displayname, newData.email)
                         listdata.add(data!!)
                         mUsersIns.child("Activity").setValue(listdata)
                         val dataReverser: ArrayList<Data> = arrayListOf()

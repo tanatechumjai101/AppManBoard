@@ -2,6 +2,7 @@ package com.example.thefirstnewprojectaddtoday28jan62.main.home.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,10 +34,10 @@ class HomeAdapter(var Listdata: ArrayList<Data>?) : RecyclerView.Adapter<HomeAda
         p0.itemView.tv_setDetail.text = data.detail
         p0.itemView.tv_setTime.text = data.time
         p0.itemView.tv_setName.text = data.displayname
+
         Glide.with(p0.itemView.context).load(data.imageURI)
-                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                .apply(RequestOptions.skipMemoryCacheOf(true))
                 .into(p0.itemView.iv_profile)
+
     }
 
     class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
