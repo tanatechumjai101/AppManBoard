@@ -49,6 +49,7 @@ class PageMainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val mRootIns = FirebaseDatabase.getInstance().reference
+
         listMain.layoutManager = LinearLayoutManager(mActivity, LinearLayout.VERTICAL, false)
         adapter = HomeAdapter(listdata)
         listMain.adapter = adapter
@@ -64,7 +65,10 @@ class PageMainFragment : Fragment() {
                 Log.d("Test", "value: $value")
                 if (value.isNotEmpty()) {
                     listdata = Gson().fromJson<ArrayList<Data>>(value)
-                    adapter!!.Listdata = listdata
+                    val dataReverse: ArrayList<Data> = arrayListOf()
+                    dataReverse.addAll(listdata)
+                    dataReverse.reverse()
+                    adapter!!.Listdata = dataReverse
                     adapter!!.notifyDataSetChanged()
                 }
             }
@@ -95,8 +99,11 @@ class PageMainFragment : Fragment() {
                         val newData:Data = data.extras.getParcelable("Data")!!
                         val data = Data(newData.subject ,newData.detail,dateTime, newData.imageURI, newData.displayname,newData.email)
                         listdata.add(data!!)
-                        adapter!!.Listdata = listdata
-                        mUsersIns.child("Activity").setValue(adapter!!.Listdata)
+                        mUsersIns.child("Activity").setValue(listdata)
+                        val dataReverser: ArrayList<Data> = arrayListOf()
+                        dataReverser.addAll(listdata)
+                        dataReverser.reverse()
+                        adapter!!.Listdata = dataReverser
                         adapter!!.notifyDataSetChanged()
                     }
                 }

@@ -7,21 +7,32 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.example.thefirstnewprojectaddtoday28jan62.R
+import com.example.thefirstnewprojectaddtoday28jan62.compare.StringDateComparator
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.adapter.HomeAdapter
+import com.example.thefirstnewprojectaddtoday28jan62.main.owner.adapter.OwnerRecyclerAdapter
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import com.example.thefirstnewprojectaddtoday28jan62.util.Singleton
 import com.google.firebase.database.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.text.SimpleDateFormat
+import java.util.*
 
 
-class PageOwnerFragment : Fragment() {
+class PageOwnerFragment : Fragment() , View.OnTouchListener {
+
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    }
+
     lateinit var mUsersIns: DatabaseReference
-    var adapter: HomeAdapter? = null
+    var adapter: OwnerRecyclerAdapter? = null
     var listdata = ArrayList<Data>()
     lateinit var mActivity: Activity
     lateinit var listMain: RecyclerView
@@ -39,6 +50,7 @@ class PageOwnerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         val mRootIns = FirebaseDatabase.getInstance().reference
 
         mUsersIns = mRootIns.child("PageMain")
@@ -55,12 +67,14 @@ class PageOwnerFragment : Fragment() {
             }
         })
 
+
         listMain.layoutManager = LinearLayoutManager(mActivity, LinearLayout.VERTICAL, false)
-        adapter = HomeAdapter(listdata)
+        adapter = OwnerRecyclerAdapter(listdata)
         listMain.adapter = adapter
         adapter!!.notifyDataSetChanged()
 
     }
+
 
     private fun setListDataFromDataSnapshot(dataSnapshot: DataSnapshot) {
         if (dataSnapshot.value == null) {
@@ -76,6 +90,8 @@ class PageOwnerFragment : Fragment() {
                     listModify.removeAt(i)
                 }
             }
+            listModify.reverse()
+//            listModify.sortWith(compareByDescending{Date().compareTo(SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").parse(it.time))})
             adapter!!.Listdata = listModify
             adapter!!.notifyDataSetChanged()
         }

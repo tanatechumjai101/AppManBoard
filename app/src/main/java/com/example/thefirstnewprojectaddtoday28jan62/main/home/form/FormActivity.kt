@@ -6,13 +6,14 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.example.thefirstnewprojectaddtoday28jan62.R
+import com.example.thefirstnewprojectaddtoday28jan62.base.BaseActivity
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import com.example.thefirstnewprojectaddtoday28jan62.util.Singleton
 import kotlinx.android.synthetic.main.activity_form.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FormActivity : AppCompatActivity() {
+class FormActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
