@@ -7,7 +7,7 @@
     android:background="@color/colorgray"
     android:orientation="vertical"
     android:weightSum="4.3"
-    tools:context=".PagePersonFragment">
+    tools:context=".main.person.PagePersonFragment">
     <!--cardCornerRadius-->
     <LinearLayout
         android:layout_width="match_parent"
@@ -184,7 +184,7 @@
             android:textSize="30dp" />
 
         <TextView
-            android:id="@+id/text_last_login_profile"
+            android:id="@+id/tv_last_login_profile"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_gravity="center"

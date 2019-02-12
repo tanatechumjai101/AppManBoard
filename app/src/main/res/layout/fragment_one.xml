@@ -1,77 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
     android:orientation="vertical"
-    tools:context=".PageMainFragment">
+    android:background="@color/colorWhite"
+    tools:context=".main.home.PageMainFragment">
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginBottom="5dp"
+        android:background="@color/colorWhite"
+        android:id="@+id/listViewMain"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="2">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/listViewMain"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.8">
-        </android.support.v7.widget.RecyclerView>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
-            android:background="@color/color_gray"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="4">
+    </android.support.v7.widget.RecyclerView>
 
-            <ImageView
-                android:id="@+id/InputCamera"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="0.5"
-                android:background="@color/colorgray"
-                android:src="@drawable/ic_camera" />
-            <ImageView
-                android:id="@+id/InputGallery"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="0.5"
-                android:background="@color/colorgray"
-                android:src="@drawable/ic_imag" />
-            <EditText
-                android:id="@+id/TextInput"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="2.5"
-                android:background="@color/colorWhite"
-                android:freezesText="true" />
-            <ImageView
-                android:id="@+id/submit"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="0.5"
-                android:background="@color/colorgray"
-                android:src="@drawable/ic_send" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add" />
 
-        </LinearLayout>
-    </LinearLayout>
+</FrameLayout>
 
 
-</LinearLayout>

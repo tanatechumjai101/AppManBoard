@@ -1,4 +1,4 @@
-package com.example.thefirstnewprojectaddtoday28jan62
+package com.example.thefirstnewprojectaddtoday28jan62.login
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -7,14 +7,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import android.content.Intent
 import android.support.v7.app.AlertDialog
 import android.view.View
-import android.widget.Toast
+import com.example.thefirstnewprojectaddtoday28jan62.R
+import com.example.thefirstnewprojectaddtoday28jan62.util.Singleton
+import com.example.thefirstnewprojectaddtoday28jan62.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.common.api.ApiException
 import kotlinx.android.synthetic.main.activity_login.*
-import org.jetbrains.anko.toast
 
 
 const val RC_SIGN_IN = 123

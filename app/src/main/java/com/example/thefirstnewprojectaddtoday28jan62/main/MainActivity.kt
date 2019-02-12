@@ -1,30 +1,35 @@
-package com.example.thefirstnewprojectaddtoday28jan62
+package com.example.thefirstnewprojectaddtoday28jan62.main
 
-import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
+import com.example.thefirstnewprojectaddtoday28jan62.*
+import com.example.thefirstnewprojectaddtoday28jan62.main.owner.PageOwnerFragment
+import com.example.thefirstnewprojectaddtoday28jan62.main.home.PageMainFragment
+import com.example.thefirstnewprojectaddtoday28jan62.main.home.adapter.HomeAdapter
+import com.example.thefirstnewprojectaddtoday28jan62.main.person.PagePersonFragment
+import com.example.thefirstnewprojectaddtoday28jan62.main.setting.PageSettingFragment
+import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
-    var containerView: Int = -1
-    var adapter: MainApadter? = null
-    val listdata = ArrayList<Data>()
-    var fragmentTransaction: FragmentTransaction? = null
+//    var containerView: Int = -1
+//    var adapter: HomeAdapter? = null
+//    val listdata = ArrayList<Data>()
+//    var fragmentTransaction: FragmentTransaction? = null
 
     private lateinit var pagemainFragment: PageMainFragment
-    private lateinit var pagechatFragment: PageChatFragment
+    private lateinit var pagechatFragment: PageOwnerFragment
     private lateinit var pagepersonFragment: PagePersonFragment
     private lateinit var pagesettingFragment: PageSettingFragment
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         pagemainFragment = PageMainFragment.newInstance()
-        pagechatFragment = PageChatFragment.newInstance()
+        pagechatFragment = PageOwnerFragment.newInstance()
         pagepersonFragment = PagePersonFragment.newInstance()
         pagesettingFragment = PageSettingFragment.newInstance()
 
@@ -111,7 +116,7 @@ class MainActivity : AppCompatActivity() {
                 NavMain.menu.getItem(0).isChecked = true
             } else if (fragment is PagePersonFragment) {
                 NavMain.menu.getItem(3).isChecked = true
-            } else if (fragment is PageChatFragment) {
+            } else if (fragment is PageOwnerFragment) {
                 NavMain.menu.getItem(1).isChecked = true
             } else if (fragment is PageSettingFragment) {
                 NavMain.menu.getItem(2).isChecked = true
@@ -121,3 +126,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+

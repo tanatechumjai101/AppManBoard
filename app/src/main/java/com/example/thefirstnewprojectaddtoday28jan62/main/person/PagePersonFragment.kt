@@ -1,4 +1,4 @@
-package com.example.thefirstnewprojectaddtoday28jan62
+package com.example.thefirstnewprojectaddtoday28jan62.main.person
 
 
 import android.app.Activity
@@ -9,11 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.example.thefirstnewprojectaddtoday28jan62.R
+import com.example.thefirstnewprojectaddtoday28jan62.login.LoginActivity
+import com.example.thefirstnewprojectaddtoday28jan62.util.Singleton
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_person.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class PagePersonFragment : Fragment() {
@@ -30,6 +34,8 @@ class PagePersonFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
+        tv_last_login_profile.setText("$dateTime")
         display_profile.text = Singleton.displayName
         email_profile.text = Singleton.email
         if (Singleton.imageUrl!!.isEmpty()) {
@@ -40,12 +46,10 @@ class PagePersonFragment : Fragment() {
             Glide.with(mActivity).load(Singleton.imageUrl)
                 .into(img_profile)
         }
-//        Glide.with(mActivity).load(Singleton.imageUrl)
-//                .into(img_profile)
         initGoogleLogin()
         sign_out_profile.setOnClickListener {
             googleSignIn?.signOut()
-            val intent = Intent(mActivity,LoginActivity::class.java)
+            val intent = Intent(mActivity, LoginActivity::class.java)
             startActivity(intent)
             mActivity.finishAffinity()
         }
