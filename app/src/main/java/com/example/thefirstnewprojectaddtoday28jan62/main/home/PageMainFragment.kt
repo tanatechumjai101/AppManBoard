@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.adapter.HomeAdapter
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.form.FormActivity
@@ -33,20 +34,22 @@ class PageMainFragment : Fragment() {
     lateinit var mActivity: Activity
     val CREATE_FORM = 2539
     lateinit var listMain: RecyclerView
+    lateinit var progressBar: ProgressBar
 
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mActivity = activity!!
         val view = inflater.inflate(R.layout.fragment_one, container, false)
+        progressBar = view.findViewById(R.id.progressBar)
         listMain = view.findViewById(R.id.listViewMain)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        listMain.visibility = View.INVISIBLE
-//        progressBar.visibility = View.VISIBLE
+        listMain.visibility = View.INVISIBLE
+        progressBar.visibility = View.VISIBLE
 
         val mRootIns = FirebaseDatabase.getInstance().reference
 
@@ -70,8 +73,8 @@ class PageMainFragment : Fragment() {
                     dataReverse.reverse()
                     adapter!!.Listdata = dataReverse
                     adapter!!.notifyDataSetChanged()
-//                    listMain.visibility = View.VISIBLE
-//                    progressBar.visibility = View.INVISIBLE
+                    listMain.visibility = View.VISIBLE
+                    progressBar.visibility = View.INVISIBLE
                 }
             }
 

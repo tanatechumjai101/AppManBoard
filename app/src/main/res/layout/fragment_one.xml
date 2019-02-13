@@ -13,6 +13,7 @@
         android:id="@+id/listViewMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="invisible"
         tools:visibility="visible"/>
 
     <android.support.design.widget.FloatingActionButton
@@ -23,11 +24,11 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_add" />
 
-    <!--<ProgressBar-->
-        <!--android:id="@+id/progressBar"-->
-        <!--android:layout_width="46dp"-->
-        <!--android:layout_height="46dp"-->
-        <!--android:layout_gravity="center"/>-->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_gravity="center"/>
 
 </FrameLayout>
 
