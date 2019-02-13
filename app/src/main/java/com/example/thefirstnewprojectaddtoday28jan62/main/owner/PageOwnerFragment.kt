@@ -3,6 +3,7 @@ package com.example.thefirstnewprojectaddtoday28jan62.main.owner
 import android.app.Activity
 import android.app.AlertDialog
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -28,7 +29,7 @@ class PageOwnerFragment : Fragment() {
     var listdata = mutableListOf<Data>()
     lateinit var mActivity: Activity
     lateinit var listMain: RecyclerView
-
+    //    private var itemremove : String = ""
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,31 +60,46 @@ class PageOwnerFragment : Fragment() {
             }
         })
 
-        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
+        val itemTouchHelperCallback =
+            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
 
-            override fun onMove(
-                p0: RecyclerView,
-                p1: RecyclerView.ViewHolder,
-                p2: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, position: Int) {
-                Log.d("Test","position: ${viewHolder.adapterPosition}")
-                val listModify: MutableList<Data> = mutableListOf()
-                listModify.addAll(adapter.Listdata!!)
-                listModify.removeAt(viewHolder.adapterPosition)
-                adapter.Listdata = listModify
-                adapter.notifyItemRemoved(viewHolder.adapterPosition)
-            }
+                override fun onMove(
+                    p0: RecyclerView,
+                    p1: RecyclerView.ViewHolder,
+                    p2: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
 
-        }
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, position: Int) {
+                    Log.d("Test", "position: ${viewHolder.adapterPosition}")
+                    val oldList: MutableList<Data> = mutableListOf()
+                    val listModify: MutableList<Data> = mutableListOf()
+                    oldList.addAll(adapter.Listdata!!)
+                    listModify.addAll(adapter.Listdata!!)
+//                    val itemremove = listModify.removeAt(viewHolder.adapterPosition)
+                    val deleteIndex = viewHolder.adapterPosition
+                    listModify.removeAt(deleteIndex)
+                    adapter.Listdata = listModify
+                    adapter.notifyItemRemoved(deleteIndex)
+
+                    Snackbar.make(viewHolder.itemView, " ${oldList[deleteIndex].subject} deleted. ", Snackbar.LENGTH_SHORT)
+                        .setAction("UNDO") {
+                            listModify.add(deleteIndex, oldList[deleteIndex])
+                            adapter.Listdata = listModify
+                            adapter.notifyItemInserted(deleteIndex)
+//                            adapter.notifyDataSetChanged()
+                        }.show()
+                }
+
+            }
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(rv_owner)
+
         adapter = OwnerRecyclerAdapter(null)
         listMain.adapter = adapter
         listMain.layoutManager = LinearLayoutManager(mActivity, LinearLayout.VERTICAL, false)
-        adapter.listener = object: OwnerRecyclerAdapter.RecyclerListener {
+        adapter.listener = object : OwnerRecyclerAdapter.RecyclerListener {
             override fun onItemClick(position: Int) {
                 Log.d("Test", "onClickPosition: $position")
             }
@@ -106,6 +122,7 @@ class PageOwnerFragment : Fragment() {
                     listModify.removeAt(i)
                 }
             }
+            listModify.reverse()
             adapter!!.Listdata = listModify
             adapter!!.notifyDataSetChanged()
         }
