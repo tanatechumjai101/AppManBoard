@@ -43,7 +43,6 @@ class PageMainFragment : Fragment() {
         return view
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listMain.visibility = View.INVISIBLE
@@ -82,15 +81,10 @@ class PageMainFragment : Fragment() {
                         .show()
             }
         })
-
-
-
         floating_action_button.setOnClickListener {
             val intent = Intent(mActivity, FormActivity::class.java)
             startActivityForResult(intent, CREATE_FORM)
         }
-
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -114,7 +108,6 @@ class PageMainFragment : Fragment() {
             }
         }
     }
-
 
     companion object {
         fun newInstance() = PageMainFragment()

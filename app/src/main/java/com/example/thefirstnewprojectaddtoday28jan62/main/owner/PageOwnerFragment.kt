@@ -15,8 +15,6 @@ import com.example.thefirstnewprojectaddtoday28jan62.util.Singleton
 import com.google.firebase.database.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.fragment_one.*
-import kotlinx.android.synthetic.main.fragment_owner.*
 import java.util.*
 
 
