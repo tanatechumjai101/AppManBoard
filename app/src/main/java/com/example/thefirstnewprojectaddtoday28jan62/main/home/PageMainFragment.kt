@@ -45,8 +45,8 @@ class PageMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listMain.visibility = View.INVISIBLE
-        progressBar.visibility = View.VISIBLE
+//        listMain.visibility = View.INVISIBLE
+//        progressBar.visibility = View.VISIBLE
 
         val mRootIns = FirebaseDatabase.getInstance().reference
 
@@ -70,8 +70,8 @@ class PageMainFragment : Fragment() {
                     dataReverse.reverse()
                     adapter!!.Listdata = dataReverse
                     adapter!!.notifyDataSetChanged()
-                    listMain.visibility = View.VISIBLE
-                    progressBar.visibility = View.INVISIBLE
+//                    listMain.visibility = View.VISIBLE
+//                    progressBar.visibility = View.INVISIBLE
                 }
             }
 
