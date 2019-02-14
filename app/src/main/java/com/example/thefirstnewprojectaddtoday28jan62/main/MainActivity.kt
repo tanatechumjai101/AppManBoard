@@ -15,10 +15,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
-//    var containerView: Int = -1
-//    var adapter: HomeAdapter? = null
-//    val listdata = ArrayList<Data>()
-//    var fragmentTransaction: FragmentTransaction? = null
 
     private lateinit var pagemainFragment: PageMainFragment
     private lateinit var pagechatFragment: PageOwnerFragment

@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.TextView
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.adapter.HomeAdapter
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.form.FormActivity
@@ -21,6 +22,7 @@ import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_one.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -35,6 +37,7 @@ class PageMainFragment : Fragment() {
     val CREATE_FORM = 2539
     lateinit var listMain: RecyclerView
     lateinit var progressBar: ProgressBar
+    lateinit var textEmpty : TextView
 
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -43,6 +46,7 @@ class PageMainFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_one, container, false)
         progressBar = view.findViewById(R.id.progressBar)
         listMain = view.findViewById(R.id.listViewMain)
+        textEmpty = view.findViewById(R.id.tv_empty)
         return view
     }
 
@@ -62,10 +66,13 @@ class PageMainFragment : Fragment() {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.value == null) {
+                    progressBar.visibility = View.INVISIBLE
+                    textEmpty.visibility = View.VISIBLE
+                    adapter!!.notifyDataSetChanged()
                     return
                 }
                 val value = Gson().toJson(dataSnapshot.value)
-                Log.d("Test", "value: $value")
+//                Log.d("Test", "value: $value")
                 if (value.isNotEmpty()) {
                     listdata = Gson().fromJson<ArrayList<Data>>(value)
                     val dataReverse: ArrayList<Data> = arrayListOf()
@@ -73,6 +80,7 @@ class PageMainFragment : Fragment() {
                     dataReverse.reverse()
                     adapter!!.Listdata = dataReverse
                     adapter!!.notifyDataSetChanged()
+                    textEmpty.visibility = View.INVISIBLE
                     listMain.visibility = View.VISIBLE
                     progressBar.visibility = View.INVISIBLE
                 }
@@ -97,8 +105,10 @@ class PageMainFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data != null) {
                         val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
+//                        val mTimestamp =  Date().time.toString()
+//                        Log.d("Time","Time = $mTimestamp")
                         val newData: Data = data.extras.getParcelable("Data")!!
-                        val data = Data(newData.subject, newData.detail, dateTime, newData.imageURI, newData.displayname, newData.email)
+                        val data = Data(newData.subject, newData.detail, dateTime, newData.imageURI, newData.displayname, newData.email,newData.id)
                         listdata.add(data!!)
                         mUsersIns.child("Activity").setValue(listdata)
                         val dataReverser: ArrayList<Data> = arrayListOf()

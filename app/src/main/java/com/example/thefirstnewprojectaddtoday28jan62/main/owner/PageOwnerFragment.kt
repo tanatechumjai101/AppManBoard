@@ -2,6 +2,7 @@ package com.example.thefirstnewprojectaddtoday28jan62.main.owner
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -16,6 +17,7 @@ import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import com.example.thefirstnewprojectaddtoday28jan62.R
+import com.example.thefirstnewprojectaddtoday28jan62.main.home.form.FormActivity
 import com.example.thefirstnewprojectaddtoday28jan62.main.owner.adapter.OwnerRecyclerAdapter
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import com.example.thefirstnewprojectaddtoday28jan62.util.Singleton
@@ -33,12 +35,10 @@ class PageOwnerFragment : Fragment() {
     var listdata = mutableListOf<Data>()
     lateinit var mActivity: Activity
     lateinit var listMain: RecyclerView
-
     private lateinit var deleteIcon: Drawable
 
-
-
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mActivity = activity!!
@@ -52,7 +52,7 @@ class PageOwnerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         deleteIcon = ContextCompat.getDrawable(mActivity, R.drawable.ic_delete)!!
-        var swipeBackground: ColorDrawable = ColorDrawable(ContextCompat.getColor(mActivity, android.R.color.holo_red_dark))
+        var swipeBackground = ColorDrawable(ContextCompat.getColor(mActivity, android.R.color.holo_red_dark))
 
         val mRootIns = FirebaseDatabase.getInstance().reference
         mUsersIns = mRootIns.child("PageMain")
@@ -82,27 +82,41 @@ class PageOwnerFragment : Fragment() {
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, position: Int) {
-                    Log.d("Test", "position: ${viewHolder.adapterPosition}")
+                    val mRootIns = FirebaseDatabase.getInstance().reference
                     val oldList: MutableList<Data> = mutableListOf()
                     val listModify: MutableList<Data> = mutableListOf()
                     oldList.addAll(adapter.Listdata!!)
                     listModify.addAll(adapter.Listdata!!)
-//                    val itemremove = listModify.removeAt(viewHolder.adapterPosition)
+
                     val deleteIndex = viewHolder.adapterPosition
-                    listModify.removeAt(deleteIndex)
+                    var insertIndex: Int? = null
+
+//                    Delete item from rows //
+
+                    for (i: Int in 0 until listdata.size) {
+                        if (listdata[i].id == listModify[deleteIndex].id) {
+                            listdata.removeAt(i)
+                            mUsersIns.child("Activity").setValue(listdata)
+                            listModify.removeAt(deleteIndex)
+                            insertIndex = i
+                            break
+                        }
+                    }
                     adapter.Listdata = listModify
                     adapter.notifyItemRemoved(deleteIndex)
 
                     Snackbar.make(
                         viewHolder.itemView,
-                        " ${oldList[deleteIndex].subject} deleted. ",
-                        Snackbar.LENGTH_SHORT
-                    )
-                        .setAction("UNDO") {
-                            listModify.add(deleteIndex, oldList[deleteIndex])
-                            adapter.Listdata = listModify
-                            adapter.notifyItemInserted(deleteIndex)
-                        }.show()
+                        " ${oldList[deleteIndex].subject} deleted. ", Snackbar.LENGTH_SHORT
+                    ).setAction("UNDO") {
+                        listModify.add(deleteIndex, oldList[deleteIndex])
+                        insertIndex?.let {
+                            listdata.add(insertIndex, oldList[deleteIndex])
+                        }
+                        mUsersIns.child("Activity").setValue(listdata)
+                        adapter.Listdata = listModify
+                        adapter.notifyItemInserted(deleteIndex)
+                    }.show()
                 }
 
                 override fun onChildDraw(
@@ -121,7 +135,7 @@ class PageOwnerFragment : Fragment() {
                         deleteIcon.setBounds(
                             itemView.left + iconMargin,
                             itemView.top + iconMargin,
-                            itemView.left + iconMargin + deleteIcon.intrinsicWidth ,
+                            itemView.left + iconMargin + deleteIcon.intrinsicWidth,
                             itemView.bottom - iconMargin
                         )
                     } else {
@@ -132,7 +146,7 @@ class PageOwnerFragment : Fragment() {
                             itemView.bottom
                         )
                         deleteIcon.setBounds(
-                            itemView.right - iconMargin - deleteIcon.intrinsicWidth ,
+                            itemView.right - iconMargin - deleteIcon.intrinsicWidth,
                             itemView.top + iconMargin,
                             itemView.right - iconMargin,
                             itemView.bottom - iconMargin
@@ -150,12 +164,8 @@ class PageOwnerFragment : Fragment() {
                     }
                     deleteIcon.draw(c)
                     c.restore()
-
-
-
                     super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                 }
-
             }
 
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
@@ -165,14 +175,17 @@ class PageOwnerFragment : Fragment() {
         listMain.adapter = adapter
         listMain.setHasFixedSize(true)
         listMain.layoutManager = LinearLayoutManager(mActivity, LinearLayout.VERTICAL, false)
-        adapter.listener =
-            object : OwnerRecyclerAdapter.RecyclerListener {
-                override fun onItemClick(position: Int) {
-                    Log.d("Test", "onClickPosition: $position")
-                }
-            }
+        adapter.listener = object : OwnerRecyclerAdapter.RecyclerListener {
+            override fun onItemClick(position: Int) {
 
+                Log.d("Test", "onClickPosition: $position")
+
+//                val intent = Intent(mActivity,FormActivity::class.java)
+//                startActivity(intent)
+            }
+        }
     }
+
 
     private fun setListDataFromDataSnapshot(dataSnapshot: DataSnapshot) {
         if (dataSnapshot.value == null) {
@@ -181,7 +194,7 @@ class PageOwnerFragment : Fragment() {
         val value = Gson().toJson(dataSnapshot.value)
 
         if (value.isNotEmpty()) {
-            listdata = Gson().fromJson<ArrayList<Data>>(value)
+            listdata = Gson().fromJson<MutableList<Data>>(value)
             val listModify: MutableList<Data> = arrayListOf()
             listModify.addAll(listdata)
             for (i: Int in listModify.size - 1 downTo 0) {

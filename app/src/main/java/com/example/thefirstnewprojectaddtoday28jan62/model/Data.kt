@@ -5,25 +5,30 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class Data(
-        @SerializedName("subject")
-        val subject: String,
-        @SerializedName("detail")
-        val detail: String,
-        @SerializedName("time")
-        val time: String,
-        @SerializedName("imageURI")
-        val imageURI: String,
-        @SerializedName("displayname")
-        val displayname: String,
-        @SerializedName("email")
-        val email: String) : Parcelable {
+    @SerializedName("subject")
+    val subject: String,
+    @SerializedName("detail")
+    val detail: String,
+    @SerializedName("time")
+    val time: String,
+    @SerializedName("imageURI")
+    val imageURI: String,
+    @SerializedName("displayname")
+    val displayname: String,
+    @SerializedName("email")
+    val email: String,
+    @SerializedName("id")
+    val id: String
+) : Parcelable {
     constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString())
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(subject)
@@ -32,6 +37,7 @@ data class Data(
         parcel.writeString(imageURI)
         parcel.writeString(displayname)
         parcel.writeString(email)
+        parcel.writeString(id)
     }
 
     override fun describeContents(): Int {
@@ -47,6 +53,5 @@ data class Data(
             return arrayOfNulls(size)
         }
     }
-
 
 }
