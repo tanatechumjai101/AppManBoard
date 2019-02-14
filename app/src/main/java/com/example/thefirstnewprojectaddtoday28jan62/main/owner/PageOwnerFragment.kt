@@ -182,7 +182,6 @@ class PageOwnerFragment : Fragment() {
                 val intent = Intent(mActivity, EditActivity::class.java)
                 intent.putExtra("data", data)
                 startActivityForResult(intent, 4)
-
             }
         }
     }

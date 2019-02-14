@@ -12,9 +12,11 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".main.owner.edit.EditActivity">
+        <activity android:name=".main.owner.edit.EditActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".main.home.form.FormActivity">
+        <activity android:name=".main.home.form.FormActivity"
+                  android:screenOrientation="portrait">
         </activity>
         <activity
                 android:name=".splash.SplashActivity"

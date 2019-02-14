@@ -22,7 +22,7 @@ class FormActivity : BaseActivity() {
 
         Send_text.apply {
             setOnClickListener {
-                val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
+                val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss", Locale.ENGLISH).format(Date())
                 val mTimestamp = Date().time.toString()
                 val PrimeryKey_id = "${Singleton.email}$mTimestamp"
                 if (Subject_text.text.toString().isEmpty()) {

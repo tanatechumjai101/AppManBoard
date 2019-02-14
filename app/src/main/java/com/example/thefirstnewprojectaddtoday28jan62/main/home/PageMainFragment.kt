@@ -32,12 +32,14 @@ class PageMainFragment : Fragment() {
 
     var adapter: HomeAdapter? = null
     lateinit var mUsersIns: DatabaseReference
+    lateinit var activityReference: DatabaseReference
     var listdata = ArrayList<Data>()
     lateinit var mActivity: Activity
     val CREATE_FORM = 2539
     lateinit var listMain: RecyclerView
     lateinit var progressBar: ProgressBar
     lateinit var textEmpty : TextView
+    private lateinit var firebaseListener: ValueEventListener
 
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -52,6 +54,7 @@ class PageMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initListener()
         listMain.visibility = View.INVISIBLE
         progressBar.visibility = View.VISIBLE
 
@@ -60,9 +63,18 @@ class PageMainFragment : Fragment() {
         listMain.layoutManager = LinearLayoutManager(mActivity, LinearLayout.VERTICAL, false)
         adapter = HomeAdapter(listdata)
         listMain.adapter = adapter
-
         mUsersIns = mRootIns.child("PageMain")
-        mUsersIns.child("Activity").addValueEventListener(object : ValueEventListener {
+        activityReference = mUsersIns.child("Activity")
+        activityReference.addValueEventListener(firebaseListener)
+
+        floating_action_button.setOnClickListener {
+            val intent = Intent(mActivity, FormActivity::class.java)
+            startActivityForResult(intent, CREATE_FORM)
+        }
+    }
+
+    private fun initListener() {
+        firebaseListener = object : ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.value == null) {
@@ -87,13 +99,9 @@ class PageMainFragment : Fragment() {
 
             override fun onCancelled(error: DatabaseError) {
                 AlertDialog.Builder(mActivity)
-                        .setMessage("Error")
-                        .show()
+                    .setMessage("Error")
+                    .show()
             }
-        })
-        floating_action_button.setOnClickListener {
-            val intent = Intent(mActivity, FormActivity::class.java)
-            startActivityForResult(intent, CREATE_FORM)
         }
     }
 
@@ -107,7 +115,7 @@ class PageMainFragment : Fragment() {
                         val newData: Data = data.extras.getParcelable("Data")!!
                         val data = Data(newData.subject, newData.detail, dateTime, newData.imageURI, newData.displayname, newData.email,newData.id)
                         listdata.add(data!!)
-                        mUsersIns.child("Activity").setValue(listdata)
+                        activityReference.setValue(listdata)
                         val dataReverser: ArrayList<Data> = arrayListOf()
                         dataReverser.addAll(listdata)
                         dataReverser.reverse()
@@ -121,6 +129,16 @@ class PageMainFragment : Fragment() {
 
     companion object {
         fun newInstance() = PageMainFragment()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        activityReference.removeEventListener(firebaseListener)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activityReference.addValueEventListener(firebaseListener)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
