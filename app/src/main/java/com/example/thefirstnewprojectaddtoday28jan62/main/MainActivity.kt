@@ -59,9 +59,6 @@ class MainActivity : AppCompatActivity() {
                     .commit()
             }
         }
-//        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
-//        val editor = sharedPreference.edit()
-//        editor.putInt("page", item.itemId).apply()
         true
     }
 

@@ -19,12 +19,14 @@ import android.widget.LinearLayout
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.form.FormActivity
 import com.example.thefirstnewprojectaddtoday28jan62.main.owner.adapter.OwnerRecyclerAdapter
+import com.example.thefirstnewprojectaddtoday28jan62.main.owner.edit.EditActivity
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import com.example.thefirstnewprojectaddtoday28jan62.util.Singleton
 import com.google.firebase.database.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_owner.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -176,12 +178,11 @@ class PageOwnerFragment : Fragment() {
         listMain.setHasFixedSize(true)
         listMain.layoutManager = LinearLayoutManager(mActivity, LinearLayout.VERTICAL, false)
         adapter.listener = object : OwnerRecyclerAdapter.RecyclerListener {
-            override fun onItemClick(position: Int) {
+            override fun onItemClick(position: Int, data: Data) {
+                val intent = Intent(mActivity, EditActivity::class.java)
+                intent.putExtra("data", data)
+                startActivityForResult(intent, 4)
 
-                Log.d("Test", "onClickPosition: $position")
-
-//                val intent = Intent(mActivity,FormActivity::class.java)
-//                startActivity(intent)
             }
         }
     }
@@ -214,6 +215,30 @@ class PageOwnerFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            4 -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    if (data != null) {
+                        val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
+                        val newData: Data = data.extras.getParcelable("new_data")!!
+
+                        for (i:Int in 0 until listdata.size){
+                            if(listdata[i].id == newData.id){
+                                listdata!![i].subject = newData.subject
+                                listdata!![i].detail = newData.detail
+                                break
+                            }
+                        }
+                        mUsersIns.child("Activity").setValue(listdata)
+
+                    }
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
 

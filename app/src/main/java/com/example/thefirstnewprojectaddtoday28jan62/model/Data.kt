@@ -6,19 +6,19 @@ import com.google.gson.annotations.SerializedName
 
 data class Data(
     @SerializedName("subject")
-    val subject: String,
+    var subject: String,
     @SerializedName("detail")
-    val detail: String,
+    var detail: String,
     @SerializedName("time")
-    val time: String,
+    var time: String,
     @SerializedName("imageURI")
-    val imageURI: String,
+    var imageURI: String,
     @SerializedName("displayname")
-    val displayname: String,
+    var displayname: String,
     @SerializedName("email")
-    val email: String,
+    var email: String,
     @SerializedName("id")
-    val id: String
+    var id: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),

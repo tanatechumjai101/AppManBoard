@@ -72,7 +72,6 @@ class PageMainFragment : Fragment() {
                     return
                 }
                 val value = Gson().toJson(dataSnapshot.value)
-//                Log.d("Test", "value: $value")
                 if (value.isNotEmpty()) {
                     listdata = Gson().fromJson<ArrayList<Data>>(value)
                     val dataReverse: ArrayList<Data> = arrayListOf()
@@ -105,8 +104,6 @@ class PageMainFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data != null) {
                         val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
-//                        val mTimestamp =  Date().time.toString()
-//                        Log.d("Time","Time = $mTimestamp")
                         val newData: Data = data.extras.getParcelable("Data")!!
                         val data = Data(newData.subject, newData.detail, dateTime, newData.imageURI, newData.displayname, newData.email,newData.id)
                         listdata.add(data!!)

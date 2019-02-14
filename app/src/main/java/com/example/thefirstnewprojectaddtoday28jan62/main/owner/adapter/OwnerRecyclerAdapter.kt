@@ -14,7 +14,7 @@ class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
     var listener: RecyclerListener? = null
 
     interface RecyclerListener {
-        fun onItemClick(position: Int)
+        fun onItemClick(position: Int, data: Data)
     }
 
     override fun onCreateViewHolder(view: ViewGroup, position: Int): OwnerViewHolder {
@@ -45,7 +45,7 @@ class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
             Glide.with(itemView.context).load(data.imageURI).into(itemView.iv_profile_owner)
             itemView.tv_setName_owner.text = data.displayname
             itemView.setOnClickListener {
-                listener?.onItemClick(position)
+                listener?.onItemClick(position, data)
             }
         }
     }
