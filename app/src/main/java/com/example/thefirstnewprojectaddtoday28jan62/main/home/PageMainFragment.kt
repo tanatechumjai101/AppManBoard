@@ -17,6 +17,8 @@ import android.widget.TextView
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.adapter.HomeAdapter
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.form.FormActivity
+import com.example.thefirstnewprojectaddtoday28jan62.main.owner.adapter.OwnerRecyclerAdapter
+import com.example.thefirstnewprojectaddtoday28jan62.main.owner.edit.EditActivity
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_one.*
@@ -66,6 +68,13 @@ class PageMainFragment : Fragment() {
         mUsersIns = mRootIns.child("PageMain")
         activityReference = mUsersIns.child("Activity")
         activityReference.addValueEventListener(firebaseListener)
+
+        adapter!!.listener = object : HomeAdapter.RecyclerListener_pageHome {
+            override fun onItemClick(position: Int, data: Data) {
+               Log.d("TEST", position.toString())
+                AlertDialog.Builder(mActivity).setTitle("${data.subject}").setMessage("${data.detail}").show()
+            }
+        }
 
         floating_action_button.setOnClickListener {
             val intent = Intent(mActivity, FormActivity::class.java)

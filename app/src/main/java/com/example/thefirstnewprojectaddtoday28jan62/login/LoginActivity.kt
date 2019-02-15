@@ -73,10 +73,6 @@ class LoginActivity : AppCompatActivity() {
             sign_in_button.visibility = View.GONE
         }
 
-//        เก็บ Token ตรงนี้ Token เป็น String
-//        Token มาจาก
-//        completedTask.result.idToken
-
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
         val editor = sharedPreference.edit()
         editor.putString("display_name",completedTask.result.displayName.toString()).apply()
