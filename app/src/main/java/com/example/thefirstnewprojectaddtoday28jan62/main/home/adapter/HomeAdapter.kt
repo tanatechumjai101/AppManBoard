@@ -29,19 +29,18 @@ class HomeAdapter(var Listdata: ArrayList<Data>?) : RecyclerView.Adapter<HomeAda
     }
 
     override fun onBindViewHolder(p0: ViewHolder, position: Int) {
-        val data: Data = Listdata?.get(position)!!
-        p0.itemView.tv_setSubject.text = data.subject
-        p0.itemView.tv_setDetail.text = data.detail
-        p0.itemView.tv_setTime.text = data.time
-        p0.itemView.tv_setName.text = data.displayname
 
-        Glide.with(p0.itemView.context).load(data.imageURI)
+        val data: Data? = Listdata?.get(position)
+        data.let {
+            p0.itemView.tv_setSubject.text = data?.subject
+            p0.itemView.tv_setDetail.text = data?.detail
+            p0.itemView.tv_setTime.text = data?.time
+            p0.itemView.tv_setName.text = data?.displayname
+            Glide.with(p0.itemView.context).load(data?.imageURI)
                 .into(p0.itemView.iv_profile)
+        }
 
     }
 
-    class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
-
-    }
-
+    class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview)
 }

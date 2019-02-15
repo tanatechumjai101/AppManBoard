@@ -2,6 +2,7 @@ package com.example.thefirstnewprojectaddtoday28jan62.main.home.form
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -19,7 +20,8 @@ class FormActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
-
+        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+        val editor = sharedPreference.edit()
         Send_text.apply {
             setOnClickListener {
                 val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss", Locale.ENGLISH).format(Date())
@@ -34,9 +36,9 @@ class FormActivity : BaseActivity() {
                         Subject_text.text.toString(),
                         detel_text.text.toString(),
                         dateTime,
-                        Singleton.imageUrl!!,
-                        Singleton.displayName.toString(),
-                        Singleton.email.toString(),
+                        sharedPreference.getString("img_url",""),
+                        sharedPreference.getString("display_name",""),
+                        sharedPreference.getString("email",""),
                         PrimeryKey_id
 
                     )

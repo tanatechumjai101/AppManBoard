@@ -2,6 +2,7 @@ package com.example.thefirstnewprojectaddtoday28jan62.main.owner
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.drawable.ColorDrawable
@@ -192,13 +193,14 @@ class PageOwnerFragment : Fragment() {
             return
         }
         val value = Gson().toJson(dataSnapshot.value)
-
+        val sharedPreference = mActivity.getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+        val editor = sharedPreference.edit()
         if (value.isNotEmpty()) {
             listdata = Gson().fromJson<MutableList<Data>>(value)
             val listModify: MutableList<Data> = arrayListOf()
             listModify.addAll(listdata)
             for (i: Int in listModify.size - 1 downTo 0) {
-                if (listModify[i].email != Singleton.email) {
+                if (listModify[i].email != sharedPreference.getString("email","")) {
                     listModify.removeAt(i)
                 }
             }
@@ -224,8 +226,8 @@ class PageOwnerFragment : Fragment() {
                         val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
                         val newData: Data = data.extras.getParcelable("new_data")!!
 
-                        for (i:Int in 0 until listdata.size){
-                            if(listdata[i].id == newData.id){
+                        for (i: Int in 0 until listdata.size) {
+                            if (listdata[i].id == newData.id) {
                                 listdata!![i].subject = newData.subject
                                 listdata!![i].detail = newData.detail
                                 break

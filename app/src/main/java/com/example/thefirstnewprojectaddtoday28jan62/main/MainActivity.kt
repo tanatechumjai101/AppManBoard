@@ -1,5 +1,6 @@
 package com.example.thefirstnewprojectaddtoday28jan62.main
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.FragmentTransaction
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         pagemainFragment = PageMainFragment.newInstance()
         pagechatFragment = PageOwnerFragment.newInstance()

@@ -2,6 +2,7 @@ package com.example.thefirstnewprojectaddtoday28jan62.main.person
 
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -26,7 +27,8 @@ class PagePersonFragment : Fragment() {
     private var googleSignIn: GoogleSignInClient? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         mActivity = activity!!
         val view = inflater.inflate(R.layout.fragment_person, container, false)
         return view
@@ -34,23 +36,28 @@ class PagePersonFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val sharedPreference = mActivity.getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+//        val editor = sharedPreference.edit()
+
+
         val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
-        tv_last_login_profile.setText("$dateTime")
-        display_profile.text = Singleton.displayName
-        email_profile.text = Singleton.email
-        if (Singleton.imageUrl!!.isEmpty()) {
-//            Load any image
-            img_profile!!.setImageResource(R.drawable.ic_person24dp)
-        } else {
-//            Load profile image
-            Glide.with(mActivity).load(Singleton.imageUrl)
-                .into(img_profile)
-        }
+        tv_last_login_profile.text = "$dateTime"
+
+        display_profile.text = sharedPreference.getString("display_name", "")
+        email_profile.text = sharedPreference.getString("email", "")
+
+        Glide.with(mActivity).load(sharedPreference.getString("img_url", ""))
+            .into(img_profile)
         initGoogleLogin()
+
         sign_out_profile.setOnClickListener {
+            val sharedPreference = mActivity.getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+            val editor = sharedPreference.edit()
             googleSignIn?.signOut()
             val intent = Intent(mActivity, LoginActivity::class.java)
             startActivity(intent)
+            editor.putString("email", null).apply()
             mActivity.finishAffinity()
         }
     }
