@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
             android:id="@+id/home"
-            android:icon="@drawable/ic_home"
-            android:title="Home"
+            android:icon="@drawable/ic_feed"
+            android:title="Feed"
     />
 
     <item
@@ -12,11 +12,11 @@
             android:title="Owner"
     />
 
-    <item
-            android:id="@+id/setting"
-            android:icon="@drawable/ic_setting"
-            android:title="Setting"
-    />
+    <!--<item-->
+            <!--android:id="@+id/setting"-->
+            <!--android:icon="@drawable/ic_setting"-->
+            <!--android:title="Setting"-->
+    <!--/>-->
     <item
             android:id="@+id/person"
             android:icon="@drawable/ic_person24dp"

@@ -1,21 +1,18 @@
 package com.example.thefirstnewprojectaddtoday28jan62.main
 
-import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import com.example.thefirstnewprojectaddtoday28jan62.*
+import com.example.thefirstnewprojectaddtoday28jan62.base.BaseActivity
 import com.example.thefirstnewprojectaddtoday28jan62.main.owner.PageOwnerFragment
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.PageMainFragment
-import com.example.thefirstnewprojectaddtoday28jan62.main.home.adapter.HomeAdapter
 import com.example.thefirstnewprojectaddtoday28jan62.main.person.PagePersonFragment
 import com.example.thefirstnewprojectaddtoday28jan62.main.setting.PageSettingFragment
-import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var pagemainFragment: PageMainFragment
     private lateinit var pagechatFragment: PageOwnerFragment
@@ -55,11 +52,11 @@ class MainActivity : AppCompatActivity() {
                     .addToBackStack(null)
                     .commit()
             }
-            R.id.setting -> {
-                supportFragmentManager.beginTransaction().replace(R.id.frameNav, pagesettingFragment)
-                    .addToBackStack(null)
-                    .commit()
-            }
+//            R.id.setting -> {
+//                supportFragmentManager.beginTransaction().replace(R.id.frameNav, pagesettingFragment)
+//                    .addToBackStack(null)
+//                    .commit()
+//            }
         }
         true
     }
@@ -101,24 +98,20 @@ class MainActivity : AppCompatActivity() {
 //        editor.remove("page")
     }
 
-    override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount == 0) {
-            // Last of back
-        } else {
-            super.onBackPressed()
-            val fragment = supportFragmentManager.findFragmentById(R.id.frameNav)
-            if (fragment is PageMainFragment) {
-                NavMain.menu.getItem(0).isChecked = true
-            } else if (fragment is PagePersonFragment) {
-                NavMain.menu.getItem(3).isChecked = true
-            } else if (fragment is PageOwnerFragment) {
-                NavMain.menu.getItem(1).isChecked = true
-            } else if (fragment is PageSettingFragment) {
-                NavMain.menu.getItem(2).isChecked = true
-            } else {
-
-            }
-        }
-    }
+//    override fun onBackPressed() {
+//        if (supportFragmentManager.backStackEntryCount == 0) {
+//            // Last of back
+//        } else {
+//            super.onBackPressed()
+//            val fragment = supportFragmentManager.findFragmentById(R.id.frameNav)
+//            when (fragment) {
+//                is PageMainFragment -> NavMain.menu.getItem(0).isChecked = true
+//                is PagePersonFragment -> NavMain.menu.getItem(2).isChecked = true
+//                is PageOwnerFragment -> NavMain.menu.getItem(1).isChecked = true
+//                else -> {
+//                }
+//            }
+//        }
+//    }
 }
 

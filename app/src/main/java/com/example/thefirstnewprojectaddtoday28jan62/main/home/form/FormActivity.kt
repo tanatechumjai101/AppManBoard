@@ -4,9 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.support.v7.app.AppCompatActivity
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import com.example.thefirstnewprojectaddtoday28jan62.base.BaseActivity
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
@@ -15,20 +14,20 @@ import kotlinx.android.synthetic.main.activity_form.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FormActivity : BaseActivity() {
+class FormActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
-        val editor = sharedPreference.edit()
         Send_text.apply {
             setOnClickListener {
                 val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss", Locale.ENGLISH).format(Date())
                 val mTimestamp = Date().time.toString()
                 val PrimeryKey_id = "${Singleton.email}$mTimestamp"
-                if (Subject_text.text.toString().isEmpty()) {
+                if (Subject_text.text.toString().isEmpty() || detel_text.text.toString().isEmpty()) {
                     AlertDialog.Builder(context)
+                        .setTitle("ผิดพลาด")
                         .setMessage("กรุณากรอกข้อมูลใหม่")
                         .show()
                 } else {
@@ -40,7 +39,6 @@ class FormActivity : BaseActivity() {
                         sharedPreference.getString("display_name",""),
                         sharedPreference.getString("email",""),
                         PrimeryKey_id
-
                     )
 
                     val intent = Intent().apply {
@@ -65,5 +63,15 @@ class FormActivity : BaseActivity() {
             }
         }
 
+    }
+
+    override fun onBackPressed() {
+//        super.onBackPressed()
+        android.support.v7.app.AlertDialog.Builder(this@FormActivity)
+            .setTitle("Are you sure ?")
+            .setMessage("Do you want to close this page?")
+            .setPositiveButton("yes") { dialog, which -> finish() }
+            .setNegativeButton("no") { dialog, which -> }
+            .show()
     }
 }

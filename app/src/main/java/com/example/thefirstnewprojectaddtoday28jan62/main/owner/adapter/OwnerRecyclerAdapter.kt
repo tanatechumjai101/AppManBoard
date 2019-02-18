@@ -6,6 +6,7 @@ import android.view.*
 import com.bumptech.glide.Glide
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
+import kotlinx.android.synthetic.main.list_data.view.*
 import kotlinx.android.synthetic.main.list_owner.view.*
 
 class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
@@ -42,8 +43,15 @@ class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
             itemView.tv_setSubject_owner.text = data.subject
             itemView.tv_setDetail_owner.text = data.detail
             itemView.tv_setTime_owner.text = data.time
-            Glide.with(itemView.context).load(data.imageURI).into(itemView.iv_profile_owner)
             itemView.tv_setName_owner.text = data.displayname
+
+            if(data.imageURI == "null"){
+                Glide.with(itemView.context).load(R.drawable.ic_appman).into(itemView.iv_profile_owner)
+            }else {
+                Glide.with(itemView.context).load(data.imageURI)
+                    .into(itemView.iv_profile_owner)
+            }
+
             itemView.setOnClickListener {
                 listener?.onItemClick(position, data)
             }

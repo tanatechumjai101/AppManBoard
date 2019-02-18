@@ -22,13 +22,10 @@ import java.util.*
 
 
 class PagePersonFragment : Fragment() {
-
     private lateinit var mActivity: Activity
     private var googleSignIn: GoogleSignInClient? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mActivity = activity!!
         val view = inflater.inflate(R.layout.fragment_person, container, false)
         return view
@@ -38,19 +35,21 @@ class PagePersonFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val sharedPreference = mActivity.getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
-//        val editor = sharedPreference.edit()
-
 
         val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
         tv_last_login_profile.text = "$dateTime"
 
         display_profile.text = sharedPreference.getString("display_name", "")
         email_profile.text = sharedPreference.getString("email", "")
+        val checking = sharedPreference.getString("img_url", "")
 
-        Glide.with(mActivity).load(sharedPreference.getString("img_url", ""))
-            .into(img_profile)
+        if(checking == "null"){
+            Glide.with(mActivity).load(R.drawable.ic_appman).into(img_profile).view
+        }else {
+            Glide.with(mActivity).load(sharedPreference.getString("img_url", "")).into(img_profile)
+        }
+
         initGoogleLogin()
-
         sign_out_profile.setOnClickListener {
             val sharedPreference = mActivity.getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
             val editor = sharedPreference.edit()
@@ -66,7 +65,6 @@ class PagePersonFragment : Fragment() {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
-
         googleSignIn = GoogleSignIn.getClient(mActivity, googleSignInOptions)
     }
 

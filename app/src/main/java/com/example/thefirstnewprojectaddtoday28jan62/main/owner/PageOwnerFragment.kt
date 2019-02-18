@@ -85,7 +85,6 @@ class PageOwnerFragment : Fragment() {
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, position: Int) {
-                    val mRootIns = FirebaseDatabase.getInstance().reference
                     val oldList: MutableList<Data> = mutableListOf()
                     val listModify: MutableList<Data> = mutableListOf()
                     oldList.addAll(adapter.Listdata!!)
@@ -194,13 +193,12 @@ class PageOwnerFragment : Fragment() {
         }
         val value = Gson().toJson(dataSnapshot.value)
         val sharedPreference = mActivity.getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
-        val editor = sharedPreference.edit()
         if (value.isNotEmpty()) {
             listdata = Gson().fromJson<MutableList<Data>>(value)
             val listModify: MutableList<Data> = arrayListOf()
             listModify.addAll(listdata)
             for (i: Int in listModify.size - 1 downTo 0) {
-                if (listModify[i].email != sharedPreference.getString("email","")) {
+                if (listModify[i].email != sharedPreference.getString("email", "")) {
                     listModify.removeAt(i)
                 }
             }

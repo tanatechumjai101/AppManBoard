@@ -7,24 +7,24 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.adapter.HomeAdapter
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.form.FormActivity
-import com.example.thefirstnewprojectaddtoday28jan62.main.owner.adapter.OwnerRecyclerAdapter
-import com.example.thefirstnewprojectaddtoday28jan62.main.owner.edit.EditActivity
+import com.example.thefirstnewprojectaddtoday28jan62.main.home.show.ShowActivity
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_one.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.sql.Timestamp
+import kotlinx.android.synthetic.main.list_data.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -40,7 +40,14 @@ class PageMainFragment : Fragment() {
     val CREATE_FORM = 2539
     lateinit var listMain: RecyclerView
     lateinit var progressBar: ProgressBar
-    lateinit var textEmpty : TextView
+    lateinit var textEmpty: TextView
+
+    lateinit var tv_subject: TextView
+    lateinit var tv_detail: TextView
+    lateinit var iv_profile_show: ImageView
+
+    val mShowActivity = ShowActivity()
+
     private lateinit var firebaseListener: ValueEventListener
 
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -49,10 +56,13 @@ class PageMainFragment : Fragment() {
         mActivity = activity!!
         val view = inflater.inflate(R.layout.fragment_one, container, false)
         progressBar = view.findViewById(R.id.progressBar)
-        listMain = view.findViewById(R.id.listViewMain)
+        listMain = view.findViewById<RecyclerView>(R.id.listViewMain)
         textEmpty = view.findViewById(R.id.tv_empty)
+
+
         return view
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,9 +80,29 @@ class PageMainFragment : Fragment() {
         activityReference.addValueEventListener(firebaseListener)
 
         adapter!!.listener = object : HomeAdapter.RecyclerListener_pageHome {
+
             override fun onItemClick(position: Int, data: Data) {
-               Log.d("TEST", position.toString())
-                AlertDialog.Builder(mActivity).setTitle("${data.subject}").setMessage("${data.detail}").show()
+
+                val inflater = LayoutInflater.from(mActivity)
+                val view = inflater.inflate(R.layout.activity_show, null)
+
+                tv_subject = view.findViewById(R.id.tv_subject_showAlert)
+                tv_detail = view.findViewById(R.id.tv_detail_showAlert)
+                iv_profile_show = view.findViewById(R.id.iv_profile_showAlert)
+
+                tv_subject.text = data.subject
+                tv_detail.text = data.detail
+
+                if(data.imageURI == "null" || data.imageURI.isNullOrEmpty() || data.imageURI == null ){
+                    Glide.with(mActivity).load(R.drawable.ic_appman).into(iv_profile_show)
+                }else {
+                    Glide.with(mActivity).load(data.imageURI).into(iv_profile_show)
+                }
+
+                AlertDialog.Builder(mActivity)
+                    .setView(view)
+                    .create()
+                    .show()
             }
         }
 
@@ -122,7 +152,15 @@ class PageMainFragment : Fragment() {
                     if (data != null) {
                         val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
                         val newData: Data = data.extras.getParcelable("Data")!!
-                        val data = Data(newData.subject, newData.detail, dateTime, newData.imageURI, newData.displayname, newData.email,newData.id)
+                        val data = Data(
+                            newData.subject,
+                            newData.detail,
+                            dateTime,
+                            newData.imageURI,
+                            newData.displayname,
+                            newData.email,
+                            newData.id
+                        )
                         listdata.add(data!!)
                         activityReference.setValue(listdata)
                         val dataReverser: ArrayList<Data> = arrayListOf()
@@ -155,3 +193,5 @@ class PageMainFragment : Fragment() {
 
     }
 }
+
+

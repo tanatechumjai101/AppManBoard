@@ -1,6 +1,7 @@
 package com.example.thefirstnewprojectaddtoday28jan62.main.owner.edit
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.example.thefirstnewprojectaddtoday28jan62.R
@@ -47,5 +48,11 @@ class EditActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
 //        super.onBackPressed()
+         AlertDialog.Builder(this@EditActivity)
+                .setTitle("Are you sure ?")
+                .setMessage("Do you want to close this page?")
+                .setPositiveButton("yes") { dialog, which -> finish() }
+                .setNegativeButton("no") { dialog, which -> }
+                .show()
     }
 }

@@ -40,8 +40,12 @@ class HomeAdapter(var Listdata: ArrayList<Data>?) : RecyclerView.Adapter<HomeAda
                 itemView.tv_setDetail.text = data.detail
                 itemView.tv_setTime.text = data.time
                 itemView.tv_setName.text = data.displayname
-                Glide.with(itemView.context).load(data.imageURI)
-                    .into(itemView.iv_profile)
+                if(data.imageURI == "null"){
+                    Glide.with(itemView.context).load(R.drawable.ic_appman).into(itemView.iv_profile)
+                }else {
+                    Glide.with(itemView.context).load(data.imageURI)
+                        .into(itemView.iv_profile)
+                }
                 itemView.setOnClickListener {
                     listener?.onItemClick(position, data)
                 }

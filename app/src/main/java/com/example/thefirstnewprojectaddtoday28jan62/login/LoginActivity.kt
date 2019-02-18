@@ -67,18 +67,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
 
-        try {
-            sign_in_button.visibility = View.GONE
-        } catch (e: ApiException) {
-            sign_in_button.visibility = View.GONE
-        }
-
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
         val editor = sharedPreference.edit()
         editor.putString("display_name",completedTask.result.displayName.toString()).apply()
         editor.putString("email",completedTask.result.email.toString()).apply()
         editor.putString("img_url",completedTask.result.photoUrl.toString()).apply()
-
 
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
         finish()
