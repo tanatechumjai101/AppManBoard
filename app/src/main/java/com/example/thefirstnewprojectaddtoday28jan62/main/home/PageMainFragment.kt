@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.*
 import com.bumptech.glide.Glide
@@ -21,6 +22,7 @@ import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_one.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.toolbar.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,7 +44,6 @@ class PageMainFragment : Fragment() {
     lateinit var tv_subject: TextView
     lateinit var tv_detail: TextView
     lateinit var iv_profile_show: ImageView
-    lateinit var  tb : Toolbar
 
     private lateinit var firebaseListener: ValueEventListener
 
@@ -52,8 +53,10 @@ class PageMainFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mActivity = activity!!
+
         val view = inflater.inflate(R.layout.fragment_one, container, false)
         progressBar = view.findViewById(R.id.progressBar)
         listMain = view.findViewById(R.id.listViewMain)
@@ -63,13 +66,10 @@ class PageMainFragment : Fragment() {
     }
 
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListener()
 
-//        tb = view.findViewById(R.id.tb_pageFeed)
 
         listMain.visibility = View.INVISIBLE
         progressBar.visibility = View.VISIBLE
@@ -88,12 +88,11 @@ class PageMainFragment : Fragment() {
             override fun onItemClick(position: Int, data: Data) {
 
                 val inflater = LayoutInflater.from(mActivity)
-                val view = inflater.inflate(R.layout.activity_show, null)
+                val view = inflater.inflate(R.layout.activity_selete, null)
 
                 tv_subject = view.findViewById(R.id.tv_subject_showAlert)
                 tv_detail = view.findViewById(R.id.tv_detail_showAlert)
                 iv_profile_show = view.findViewById(R.id.iv_profile_showAlert)
-
                 tv_subject.text = data.subject
                 tv_detail.text = data.detail
 
@@ -107,6 +106,7 @@ class PageMainFragment : Fragment() {
                     .setView(view)
                     .create()
                     .show()
+
             }
         }
 
@@ -114,13 +114,47 @@ class PageMainFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 filter(s.toString())
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
             }
         })
+
+        ib_sort.setOnClickListener {
+            val popupMenu = PopupMenu(mActivity, it)
+            popupMenu.setOnMenuItemClickListener { item ->
+               when(item.itemId){
+                   R.id.action_select_sort_time -> {
+                       Toast.makeText(mActivity,"Sort by Time",Toast.LENGTH_SHORT).show()
+                       true
+                   }
+                   R.id.action_select_sort_character -> {
+                       Toast.makeText(mActivity,"Sort by character",Toast.LENGTH_SHORT).show()
+                       true
+                   }
+                   else -> false
+               }
+            }
+            popupMenu.inflate(R.menu.searchbar)
+
+            try{
+                val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
+                fieldMPopup.isAccessible  = true
+                val mPopup = fieldMPopup.get(popupMenu)
+                mPopup.javaClass
+                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                    .invoke(mPopup,true)
+            }catch (e: Exception){
+                Log.e("Main","Error Showing menu icons.",e)
+            }finally {
+                popupMenu.show()
+            }
+
+        }
 
         floating_action_button.setOnClickListener {
             val intent = Intent(mActivity, FormActivity::class.java)
@@ -191,10 +225,11 @@ class PageMainFragment : Fragment() {
             }
         }
     }
+
     fun filter(text: String) {
 
         val filteredCourseAry: ArrayList<Data> = ArrayList()
-        val courseAry : ArrayList<Data> = listdata
+        val courseAry: ArrayList<Data> = listdata
         for (eachCourse in courseAry) {
             if (eachCourse.subject!!.toLowerCase().contains(text.toLowerCase())) {
                 filteredCourseAry.add(eachCourse)
@@ -207,7 +242,6 @@ class PageMainFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.searchbar, menu)
     }
-
 
 
     companion object {

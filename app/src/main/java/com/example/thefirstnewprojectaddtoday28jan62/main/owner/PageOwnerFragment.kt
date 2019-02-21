@@ -177,6 +177,7 @@ class PageOwnerFragment : Fragment() {
         listMain.adapter = adapter
         listMain.setHasFixedSize(true)
         listMain.layoutManager = LinearLayoutManager(mActivity, LinearLayout.VERTICAL, false)
+
         adapter.listener = object : OwnerRecyclerAdapter.RecyclerListener {
             override fun onItemClick(position: Int, data: Data) {
                 val intent = Intent(mActivity, EditActivity::class.java)

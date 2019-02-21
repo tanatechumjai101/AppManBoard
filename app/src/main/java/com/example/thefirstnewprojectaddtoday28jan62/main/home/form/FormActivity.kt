@@ -27,6 +27,7 @@ class FormActivity : AppCompatActivity() {
                 val PrimeryKey_id = "${Singleton.email}$mTimestamp"
                 if (Subject_text.text.toString().isEmpty() || detel_text.text.toString().isEmpty()) {
                     AlertDialog.Builder(context)
+                        .setIcon(R.drawable.ic_priority_high_black_24dp)
                         .setTitle("ผิดพลาด")
                         .setMessage("กรุณากรอกข้อมูลใหม่")
                         .show()
@@ -57,9 +58,19 @@ class FormActivity : AppCompatActivity() {
         }
         Cancel_page.apply {
             setOnClickListener {
-                Subject_text.setText("")
-                detel_text.setText("")
-                finish()
+                if(Subject_text.text.toString().isNullOrEmpty() && detel_text.text.toString().isNullOrEmpty() ){
+                    Subject_text.setText("")
+                    detel_text.setText("")
+                    finish()
+                }else {
+                    android.support.v7.app.AlertDialog.Builder(this@FormActivity)
+                        .setTitle("Are you sure ?")
+                        .setMessage("Do you want to close the app?")
+                        .setPositiveButton("yes") { dialog, which -> finish() }
+                        .setNegativeButton("no") { dialog, which -> }
+                        .show()
+                }
+
             }
         }
 

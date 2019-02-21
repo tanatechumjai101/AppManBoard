@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
 
     <item
-            android:id="@+id/action_search"
-            android:title="Search"
-            android:icon="@drawable/ic_search"
-            app:showAsAction="ifRoom|collapseActionView|always"
-            app:actionViewClass="android.support.v7.widget.SearchView"/>
-    <item
+
+            android:icon="@drawable/ic_time"
             android:id="@+id/action_select_sort_time"
             android:title="sort by time"
-            android:orderInCategory="100"
-            app:showAsAction="never"
     />
     <item
+            android:icon="@drawable/ic_sort_by_alpha_black_24dp"
             android:id="@+id/action_select_sort_character"
             android:title="sort by character"
-            android:orderInCategory="100"
-            app:showAsAction="never"
     />
 
 </menu>
