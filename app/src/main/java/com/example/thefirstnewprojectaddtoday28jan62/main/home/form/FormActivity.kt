@@ -7,12 +7,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.example.thefirstnewprojectaddtoday28jan62.R
-import com.example.thefirstnewprojectaddtoday28jan62.base.BaseActivity
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import com.example.thefirstnewprojectaddtoday28jan62.util.Singleton
 import kotlinx.android.synthetic.main.activity_form.*
 import java.text.SimpleDateFormat
 import java.util.*
+import android.view.inputmethod.InputMethodManager
+import kotlinx.android.synthetic.main.toolbar_form_activity.*
+
 
 class FormActivity : AppCompatActivity() {
 
@@ -73,7 +75,18 @@ class FormActivity : AppCompatActivity() {
 
             }
         }
+        ib_done_pageForm.setOnClickListener {
+            closeKeyboard()
+        }
 
+    }
+
+    private fun closeKeyboard() {
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     override fun onBackPressed() {
@@ -85,4 +98,5 @@ class FormActivity : AppCompatActivity() {
             .setNegativeButton("no") { dialog, which -> }
             .show()
     }
+
 }

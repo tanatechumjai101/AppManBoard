@@ -8,7 +8,7 @@
               android:screenOrientation="portrait"
               android:orientation="vertical"
               tools:context=".main.home.form.FormActivity">
-
+    <include android:id="@+id/tb_Done" layout="@layout/toolbar_form_activity"/>
     <LinearLayout
 
             android:layout_width="match_parent"

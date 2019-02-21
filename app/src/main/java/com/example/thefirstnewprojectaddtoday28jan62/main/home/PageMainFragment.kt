@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -27,10 +26,14 @@ import kotlinx.android.synthetic.main.toolbar.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import android.support.v4.content.ContextCompat.getSystemService
+import android.view.inputmethod.InputMethodManager
+import android.content.Context
+
+
 
 
 class PageMainFragment : Fragment() {
-
     var adapter: HomeAdapter? = null
     lateinit var mUsersIns: DatabaseReference
     lateinit var activityReference: DatabaseReference
@@ -44,6 +47,8 @@ class PageMainFragment : Fragment() {
     lateinit var tv_subject: TextView
     lateinit var tv_detail: TextView
     lateinit var iv_profile_show: ImageView
+
+
 
     private lateinit var firebaseListener: ValueEventListener
 
@@ -110,7 +115,7 @@ class PageMainFragment : Fragment() {
             }
         }
 
-        tb_pageFeed.ed_search.addTextChangedListener(object : TextWatcher {
+        ed_search.ed_search.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 filter(s.toString())
             }
@@ -123,6 +128,9 @@ class PageMainFragment : Fragment() {
 
             }
         })
+        ib_done.setOnClickListener {
+            closeKeyboard(view)
+        }
 
         ib_sort.setOnClickListener {
             val popupMenu = PopupMenu(mActivity, it)
@@ -242,6 +250,14 @@ class PageMainFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.searchbar, menu)
     }
+    private fun closeKeyboard(view : View) {
+
+        if (view != null) {
+            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+
 
 
     companion object {
@@ -262,6 +278,7 @@ class PageMainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setHasOptionsMenu(true)
     }
+
 }
 
 
