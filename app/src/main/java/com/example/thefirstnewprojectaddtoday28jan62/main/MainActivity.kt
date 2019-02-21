@@ -10,6 +10,7 @@ import com.example.thefirstnewprojectaddtoday28jan62.main.home.PageMainFragment
 import com.example.thefirstnewprojectaddtoday28jan62.main.person.PagePersonFragment
 import com.example.thefirstnewprojectaddtoday28jan62.main.setting.PageSettingFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_one.*
 
 
 class MainActivity : BaseActivity() {
