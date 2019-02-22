@@ -8,6 +8,7 @@
         android:focusableInTouchMode="false"
         android:layout_width="match_parent"
         android:weightSum="3.5"
+        android:layout_marginBottom="2dp"
         android:layout_height="?attr/actionBarSize">
 
         <ImageView
@@ -61,11 +62,3 @@
 
 
 </LinearLayout>
-
-<!--<ImageButton
-                android:id="@+id/ib_done"
-                android:background="@color/colorWhite"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_done_black_24dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>-->

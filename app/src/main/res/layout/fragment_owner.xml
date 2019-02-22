@@ -6,11 +6,13 @@
               android:orientation="vertical"
               android:focusableInTouchMode="true"
               android:screenOrientation="portrait"
+              android:background="@color/clean"
               tools:context=".main.owner.PageOwnerFragment">
 
     <include android:id="@+id/tb_pageOwner" layout="@layout/toolbar"/>
 
     <android.support.v7.widget.RecyclerView
+            android:layout_marginTop="0.5dp"
             android:background="@color/colorWhite"
             android:id="@+id/rv_owner"
             android:layout_width="match_parent"

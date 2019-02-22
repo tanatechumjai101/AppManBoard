@@ -37,8 +37,9 @@ class EditActivity : AppCompatActivity() {
 
             intent.putExtra("new_data",data)
             setResult(Activity.RESULT_OK, intent)
+            closeKeyboard()
             finish ()
-//            closeKeyboard()
+
         }
     }
 

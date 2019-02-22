@@ -3,12 +3,12 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorgray"
+                android:background="@color/colorWhite"
                 android:screenOrientation="portrait"
                 android:orientation="vertical">
 
     <LinearLayout
-            android:layout_marginTop="1dp"
+            android:layout_marginBottom="15dp"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:background="@color/colorWhite"
