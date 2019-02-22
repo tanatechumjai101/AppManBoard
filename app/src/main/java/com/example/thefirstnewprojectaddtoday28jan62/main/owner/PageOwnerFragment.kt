@@ -14,9 +14,14 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
+import android.widget.PopupMenu
+import android.widget.Toast
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.form.FormActivity
 import com.example.thefirstnewprojectaddtoday28jan62.main.owner.adapter.OwnerRecyclerAdapter
@@ -27,6 +32,8 @@ import com.google.firebase.database.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_owner.*
+import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.toolbar.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -185,9 +192,70 @@ class PageOwnerFragment : Fragment() {
                 startActivityForResult(intent, 4)
             }
         }
+
+        ed_search.ed_search.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+                filter(s.toString())
+
+                if(ed_search.length() > 0){
+                    ib_clear.visibility = View.VISIBLE
+                }else {
+                    ib_clear.visibility = View.INVISIBLE
+                }
+
+                ib_clear.setOnClickListener {
+                    ed_search.setText("")
+                    closeKeyboard(view)
+                }
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
+
+
+        ib_sort.setOnClickListener {
+            val popupMenu = PopupMenu(mActivity, it)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when(item.itemId){
+                    R.id.action_select_sort_time -> {
+                        Toast.makeText(mActivity,"Sort by Time", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    R.id.action_select_sort_character -> {
+                        Toast.makeText(mActivity,"Sort by character", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popupMenu.inflate(R.menu.searchbar)
+
+            try{
+                val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
+                fieldMPopup.isAccessible  = true
+                val mPopup = fieldMPopup.get(popupMenu)
+                mPopup.javaClass
+                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                    .invoke(mPopup,true)
+            }catch (e: Exception){
+                Log.e("Main","Error Showing menu icons.",e)
+            }finally {
+                popupMenu.show()
+            }
+
+        }
     }
 
 
+    var listshow: MutableList<Data> = arrayListOf()
     private fun setListDataFromDataSnapshot(dataSnapshot: DataSnapshot) {
         if (dataSnapshot.value == null) {
             return
@@ -205,9 +273,22 @@ class PageOwnerFragment : Fragment() {
             }
             listModify.reverse()
             adapter!!.Listdata = listModify
+            listshow = listModify
             adapter!!.notifyDataSetChanged()
         }
     }
+    private fun filter(text: String) {
+
+        val filteredCourseAry: ArrayList<Data> = ArrayList()
+        val courseAry: MutableList<Data> = listshow
+        for (eachCourse in courseAry) {
+            if (eachCourse.subject!!.toLowerCase().contains(text.toLowerCase())) {
+                filteredCourseAry.add(eachCourse)
+            }
+        }
+        adapter!!.filterList(filteredCourseAry)
+    }
+
 
     companion object {
         fun newInstance() = PageOwnerFragment()
@@ -241,5 +322,11 @@ class PageOwnerFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    private fun closeKeyboard(view : View) {
 
+        if (view != null) {
+            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
 }

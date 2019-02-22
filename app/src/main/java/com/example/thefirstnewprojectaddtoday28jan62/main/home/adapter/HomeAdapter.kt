@@ -41,7 +41,7 @@ class HomeAdapter(var Listdata: ArrayList<Data>?) : RecyclerView.Adapter<HomeAda
                 itemView.tv_setTime.text = data.time
                 itemView.tv_setName.text = data.displayname
                 if(data.imageURI == "null"){
-                    Glide.with(itemView.context).load(R.drawable.ic_appman).into(itemView.iv_profile)
+                    Glide.with(itemView.context).load(R.drawable.playstore_icon).into(itemView.iv_profile)
                 }else {
                     Glide.with(itemView.context).load(data.imageURI)
                         .into(itemView.iv_profile)

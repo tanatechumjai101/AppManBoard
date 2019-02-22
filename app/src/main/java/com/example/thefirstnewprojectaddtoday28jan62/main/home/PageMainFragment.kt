@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.toolbar.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import android.support.v4.content.ContextCompat.getSystemService
 import android.view.inputmethod.InputMethodManager
 import android.content.Context
 
@@ -102,7 +101,7 @@ class PageMainFragment : Fragment() {
                 tv_detail.text = data.detail
 
                 if (data.imageURI == "null" || data.imageURI.isNullOrEmpty() || data.imageURI == null) {
-                    Glide.with(mActivity).load(R.drawable.ic_appman).into(iv_profile_show)
+                    Glide.with(mActivity).load(R.drawable.playstore_icon).into(iv_profile_show)
                 } else {
                     Glide.with(mActivity).load(data.imageURI).into(iv_profile_show)
                 }
@@ -118,6 +117,15 @@ class PageMainFragment : Fragment() {
         ed_search.ed_search.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 filter(s.toString())
+                if(ed_search.length() != 0){
+                    ib_clear.visibility = View.VISIBLE
+                }else {
+                    ib_clear.visibility = View.INVISIBLE
+                }
+                ib_clear.setOnClickListener {
+                    ed_search.setText("")
+                    closeKeyboard(view)
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -128,9 +136,7 @@ class PageMainFragment : Fragment() {
 
             }
         })
-        ib_done.setOnClickListener {
-            closeKeyboard(view)
-        }
+
 
         ib_sort.setOnClickListener {
             val popupMenu = PopupMenu(mActivity, it)

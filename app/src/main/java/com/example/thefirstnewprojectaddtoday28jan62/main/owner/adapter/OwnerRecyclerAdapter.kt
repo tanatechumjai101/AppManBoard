@@ -46,7 +46,7 @@ class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
             itemView.tv_setName_owner.text = data.displayname
 
             if(data.imageURI == "null"){
-                Glide.with(itemView.context).load(R.drawable.ic_appman).into(itemView.iv_profile_owner)
+                Glide.with(itemView.context).load(R.drawable.playstore_icon).into(itemView.iv_profile_owner)
             }else {
                 Glide.with(itemView.context).load(data.imageURI)
                     .into(itemView.iv_profile_owner)
@@ -56,6 +56,11 @@ class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
                 listener?.onItemClick(position, data)
             }
         }
+    }
+    fun filterList(filteredCourseList: ArrayList<Data>) {
+        this.Listdata = filteredCourseList
+        this.Listdata!!.reverse()
+        notifyDataSetChanged()
     }
 
 }

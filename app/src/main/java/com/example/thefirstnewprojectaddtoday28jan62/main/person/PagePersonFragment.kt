@@ -44,7 +44,7 @@ class PagePersonFragment : Fragment() {
         val checking = sharedPreference.getString("img_url", "")
 
         if(checking == "null"){
-            Glide.with(mActivity).load(R.drawable.ic_appman).into(img_profile).view
+            Glide.with(mActivity).load(R.drawable.playstore_icon).into(img_profile).view
         }else {
             Glide.with(mActivity).load(sharedPreference.getString("img_url", "")).into(img_profile)
         }
