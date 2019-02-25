@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import com.example.thefirstnewprojectaddtoday28jan62.util.Singleton
@@ -13,15 +14,23 @@ import kotlinx.android.synthetic.main.activity_form.*
 import java.text.SimpleDateFormat
 import java.util.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageButton
+import android.widget.Toast
+import com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image.ImageActivity
+import kotlinx.android.synthetic.main.activity_image.*
 import kotlinx.android.synthetic.main.toolbar_form_activity.*
 
 
 class FormActivity : AppCompatActivity() {
 
+    lateinit var camera : ImageButton
+//    lateinit var Garally: ImageButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+
 
         ib_done_pageForm.setOnClickListener {
             val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss", Locale.ENGLISH).format(Date())
@@ -50,7 +59,7 @@ class FormActivity : AppCompatActivity() {
                 setResult(Activity.RESULT_OK, intent)
                 finish()
             }
-//            closeKeyboard()
+            closeKeyboard()
         }
         ib_back_pageForm.setOnClickListener {
             if(Subject_text.text.toString().isNullOrEmpty() && detel_text.text.toString().isNullOrEmpty() ){
@@ -67,7 +76,13 @@ class FormActivity : AppCompatActivity() {
             }
         }
 
+        ib_AddImage.setOnClickListener {
+            var dialog = ImageActivity(this)
+            dialog.show()
+        }
+
     }
+
 
     private fun closeKeyboard() {
         val view = this.currentFocus

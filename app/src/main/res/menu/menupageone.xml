@@ -7,7 +7,7 @@
     />
     <item
             android:id="@+id/photo"
-            android:icon="@drawable/ic_home"
+            android:icon="@drawable/ic_imag"
             android:title="Gallery"
     />
 </menu>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="horizontal"
+              android:gravity="center"
+              android:background="@color/black"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+
+    <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <android.support.v7.widget.CardView
+                android:background="@color/colorPrimaryDark"
+                app:cardCornerRadius="48dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+            <ImageButton
+                    android:id="@+id/ib_camera"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:background="@color/colorPrimaryDark"
+                    android:src="@drawable/ic_camera"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+                android:background="@color/colorPrimaryDark"
+                app:cardCornerRadius="48dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+            <ImageButton
+                    android:id="@+id/ib_photo"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:background="@color/colorPrimaryDark"
+                    android:src="@drawable/ic_imag"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -154,7 +154,6 @@ class PageMainFragment : Fragment() {
                }
             }
             popupMenu.inflate(R.menu.searchbar)
-
             try{
                 val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
                 fieldMPopup.isAccessible  = true
