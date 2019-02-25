@@ -24,7 +24,6 @@ import kotlinx.android.synthetic.main.toolbar_form_activity.*
 class FormActivity : AppCompatActivity() {
 
     lateinit var camera : ImageButton
-//    lateinit var Garally: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
