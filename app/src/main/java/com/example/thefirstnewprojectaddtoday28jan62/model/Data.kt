@@ -2,6 +2,7 @@ package com.example.thefirstnewprojectaddtoday28jan62.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.text.Spanned
 import com.google.gson.annotations.SerializedName
 
 data class Data(

@@ -1,28 +1,33 @@
 package com.example.thefirstnewprojectaddtoday28jan62.main.home.form
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
+import android.text.Html
 import android.view.View
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.TextView
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image.ImageActivity
+import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import jp.wasabeef.richeditor.RichEditor
+import kotlinx.android.synthetic.main.activity_form.*
 import kotlinx.android.synthetic.main.toolbar_form_activity.*
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class FormActivity : AppCompatActivity() {
 
-    lateinit var camera: ImageButton
     lateinit var mEditor: RichEditor
-    lateinit var mPreview: String
-    lateinit var mActivity: Activity
     lateinit var Maction_undo: ImageView
     lateinit var Maction_redo: ImageView
     lateinit var Maction_bold: ImageView
@@ -50,12 +55,15 @@ class FormActivity : AppCompatActivity() {
     lateinit var Maction_insert_image: ImageView
     lateinit var Maction_insert_link: ImageView
     lateinit var Maction_insert_checkbox: ImageView
-
-
+    var nPreview = ""
+    var currentPath: String? = null
+    var TAKE_PICTURE = 1
+//    var newpreview  = "ยังไม่เพิ่มรายละเอียด"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+
         Maction_undo = findViewById(R.id.action_undo)
         Maction_redo = findViewById(R.id.action_redo)
         Maction_bold = findViewById(R.id.action_bold)
@@ -87,59 +95,23 @@ class FormActivity : AppCompatActivity() {
         mEditor = findViewById(R.id.editor) as RichEditor
         mEditor.setEditorHeight(200)
         mEditor.setEditorFontSize(22)
-        mEditor.setEditorFontColor(Color.RED)
+        mEditor.setEditorFontColor(Color.BLACK)
         mEditor.setPadding(10, 10, 10, 10)
-        mEditor.setPlaceholder("Insert text here...")
+
+        mEditor.setPlaceholder("add detail ....")
+
 
         mEditor.setOnTextChangeListener { text ->
-            mPreview = text.toString()
-            Log.d("TEST","TEXT = $mPreview")
+            var mPreview = text.toString()
+            nPreview = mPreview
+
+//            Log.d("TEST_", "TEXT = $mPreview")
+//            newpreview = Html.fromHtml(mPreview).toString()
+//            Log.d("TEST", "TEXT = $newpreview")
+
+
         }
 
-//        ib_done_pageForm.setOnClickListener {
-//            val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss", Locale.ENGLISH).format(Date())
-//            val mTimestamp = Date().time.toString()
-//            val PrimeryKey_id = "${Singleton.email}$mTimestamp"
-//            if (Subject_text.text.toString().isEmpty() || detel_text.text.toString().isEmpty()) {
-//                AlertDialog.Builder(this)
-//                    .setIcon(R.drawable.ic_priority_high_black_24dp)
-//                    .setTitle("ผิดพลาด")
-//                    .setMessage("กรุณากรอกข้อมูลใหม่")
-//                    .show()
-//            } else {
-//                val formPage = Data(
-//                    Subject_text.text.toString(),
-//                    detel_text.text.toString(),
-//                    dateTime,
-//                    sharedPreference.getString("img_url",""),
-//                    sharedPreference.getString("display_name",""),
-//                    sharedPreference.getString("email",""),
-//                    PrimeryKey_id
-//                )
-//
-//                val intent = Intent().apply {
-//                    this.putExtra("Data", formPage)
-//                }
-//                setResult(Activity.RESULT_OK, intent)
-//                finish()
-//            }
-//            closeKeyboard()
-//        }
-        ib_back_pageForm.setOnClickListener {
-//            if(Subject_text.text.toString().isNullOrEmpty() && detel_text.text.toString().isNullOrEmpty() ){
-//                Subject_text.setText("")
-//                detel_text.setText("")
-//                finish()
-//            }else {
-//                android.support.v7.app.AlertDialog.Builder(this@FormActivity)
-//                    .setTitle("Are you sure ?")
-//                    .setMessage("Do you want to close the app?")
-//                    .setPositiveButton("yes") { dialog, which -> finish() }
-//                    .setNegativeButton("no") { dialog, which -> }
-//                    .show()
-//            }
-            finish()
-        }
         Maction_undo.setOnClickListener(View.OnClickListener { mEditor.undo() })
 
         Maction_redo.setOnClickListener(View.OnClickListener { mEditor.redo() })
@@ -166,7 +138,7 @@ class FormActivity : AppCompatActivity() {
 
         Maction_heading5.setOnClickListener(View.OnClickListener { mEditor.setHeading(5) })
 
-       Maction_heading6.setOnClickListener(View.OnClickListener { mEditor.setHeading(6) })
+        Maction_heading6.setOnClickListener(View.OnClickListener { mEditor.setHeading(6) })
 
         Maction_txt_color.setOnClickListener(object : View.OnClickListener {
             private var isChanged: Boolean = false
@@ -186,11 +158,11 @@ class FormActivity : AppCompatActivity() {
             }
         })
 
-       Maction_indent.setOnClickListener(View.OnClickListener { mEditor.setIndent() })
+        Maction_indent.setOnClickListener(View.OnClickListener { mEditor.setIndent() })
 
-       Maction_outdent.setOnClickListener(View.OnClickListener { mEditor.setOutdent() })
+        Maction_outdent.setOnClickListener(View.OnClickListener { mEditor.setOutdent() })
 
-       Maction_align_left.setOnClickListener(View.OnClickListener { mEditor.setAlignLeft() })
+        Maction_align_left.setOnClickListener(View.OnClickListener { mEditor.setAlignLeft() })
 
         Maction_align_center.setOnClickListener(View.OnClickListener { mEditor.setAlignCenter() })
 
@@ -212,14 +184,66 @@ class FormActivity : AppCompatActivity() {
         Maction_insert_link.setOnClickListener(View.OnClickListener {
             mEditor.insertLink(
                 "https://github.com/wasabeef",
-                "wasabeef"
+                "career@appman.co.th"
             )
         })
         Maction_insert_checkbox.setOnClickListener(View.OnClickListener { mEditor.insertTodo() })
 
+
         ib_AddImage.setOnClickListener {
             var dialog = ImageActivity(this)
             dialog.show()
+        }
+
+        ib_back_pageForm.setOnClickListener {
+            nPreview = Html.fromHtml(nPreview).toString()
+            if (Subject_text.text.toString().isNullOrEmpty() || nPreview.isNullOrEmpty()) {
+//                Subject_text.setText("")
+//                nPreview = " "
+                finish()
+            } else {
+                android.support.v7.app.AlertDialog.Builder(this@FormActivity)
+                    .setTitle("Are you sure ?")
+                    .setMessage("Do you want to close the app?")
+                    .setPositiveButton("yes") { dialog, which -> finish() }
+                    .setNegativeButton("no") { dialog, which -> }
+                    .show()
+            }
+        }
+
+        ib_done_pageForm.setOnClickListener {
+            nPreview = Html.fromHtml(nPreview).toString()
+            val mEmail = sharedPreference.getString("email", "")
+            val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss", Locale.ENGLISH).format(Date())
+            val mTimestamp = Date().time.toString()
+            val PrimeryKey_id = "${mEmail} $mTimestamp"
+
+
+            if (Subject_text.text.toString().isEmpty() ||  nPreview.isEmpty()  ) {
+
+                AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_priority_high_black_24dp)
+                    .setTitle("ผิดพลาด")
+                    .setMessage("กรุณากรอกข้อมูลใหม่")
+                    .show()
+
+            } else {
+                val formPage = Data(
+                    Subject_text.text.toString(),
+                    nPreview,
+                    dateTime,
+                    sharedPreference.getString("img_url", ""),
+                    sharedPreference.getString("display_name", ""),
+                    sharedPreference.getString("email", ""),
+                    PrimeryKey_id
+                )
+                val intent = Intent().apply {
+                    this.putExtra("Data", formPage)
+                }
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
+            closeKeyboard()
         }
 
     }
@@ -242,6 +266,19 @@ class FormActivity : AppCompatActivity() {
             .setNegativeButton("no") { dialog, which -> }
             .show()
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if(requestCode == TAKE_PICTURE && resultCode == Activity.RESULT_OK){
+//            try{
+//                val file = File(currentPath)
+//                val uri = Uri.fromFile(file)
+////                imageView.setImageURI(uri)
+//            }catch (e: IOException){
+//                e.printStackTrace()
+//            }
+//        }
+//    }
 
 
 }
