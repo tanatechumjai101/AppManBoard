@@ -10,10 +10,11 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.form.FormActivity
+import kotlinx.android.synthetic.main.activity_camera.*
 
 class cameraActivity : AppCompatActivity() {
 
@@ -24,6 +25,7 @@ class cameraActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
+        progressBar_Camera.visibility = View.VISIBLE
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.CAMERA)
@@ -52,7 +54,7 @@ class cameraActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-
+        progressBar_Camera.visibility = View.INVISIBLE
         when (requestCode) {
             PERMISSION_CODE -> {
 
@@ -68,7 +70,7 @@ class cameraActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
+        progressBar_Camera.visibility = View.INVISIBLE
         if (resultCode == Activity.RESULT_OK && resultCode == IMAGE_CAPTURE_CODE) {
 //            Log.d("TEST","$image_uri")
             val intent = Intent(this, FormActivity::class.java)

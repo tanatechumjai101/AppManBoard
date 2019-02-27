@@ -7,9 +7,11 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.form.FormActivity
+import kotlinx.android.synthetic.main.activity_gallery.*
 
 class galleryActivity : AppCompatActivity() {
 
@@ -17,7 +19,7 @@ class galleryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
 
-
+        progressBar_Gallry.visibility = View.VISIBLE
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                 val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -44,6 +46,7 @@ class galleryActivity : AppCompatActivity() {
 
         when (requestCode) {
             PERMISSION_CODE -> {
+                progressBar_Gallry.visibility = View.INVISIBLE
                 if ((grantResults.size) > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     pickImageFromGallery()
                 } else {
@@ -58,6 +61,7 @@ class galleryActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        progressBar_Gallry.visibility = View.INVISIBLE
         if (requestCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             val intent = Intent(this, FormActivity::class.java)
             startActivity(intent)

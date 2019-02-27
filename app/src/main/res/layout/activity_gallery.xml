@@ -10,7 +10,7 @@
     <ProgressBar
             android:visibility="invisible"
             tools:visibility="visible"
-            android:id="@+id/progressBar_camera"
+            android:id="@+id/progressBar_Gallry"
             android:layout_width="46dp"
             android:layout_height="46dp"
             android:layout_gravity="center"/>
