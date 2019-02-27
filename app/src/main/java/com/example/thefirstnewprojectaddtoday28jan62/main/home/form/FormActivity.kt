@@ -27,38 +27,43 @@ import java.util.*
 
 class FormActivity : AppCompatActivity() {
 
-    lateinit var mEditor: RichEditor
-    lateinit var Maction_undo: ImageView
-    lateinit var Maction_redo: ImageView
-    lateinit var Maction_bold: ImageView
-    lateinit var Maction_italic: ImageView
-    lateinit var Maction_subscript: ImageView
-    lateinit var Maction_superscript: ImageView
-    lateinit var Maction_strikethrough: ImageView
-    lateinit var Maction_underline: ImageView
-    lateinit var Maction_heading1: ImageView
-    lateinit var Maction_heading2: ImageView
-    lateinit var Maction_heading3: ImageView
-    lateinit var Maction_heading4: ImageView
-    lateinit var Maction_heading5: ImageView
-    lateinit var Maction_heading6: ImageView
-    lateinit var Maction_txt_color: ImageView
-    lateinit var Maction_bg_color: ImageView
-    lateinit var Maction_indent: ImageView
-    lateinit var Maction_outdent: ImageView
-    lateinit var Maction_align_left: ImageView
-    lateinit var Maction_align_center: ImageView
-    lateinit var Maction_align_right: ImageView
-    lateinit var Maction_blockquote: ImageView
-    lateinit var Maction_insert_bullets: ImageView
-    lateinit var Maction_insert_numbers: ImageView
-    lateinit var Maction_insert_image: ImageView
-    lateinit var Maction_insert_link: ImageView
-    lateinit var Maction_insert_checkbox: ImageView
-    var nPreview = ""
-    var currentPath: String? = null
-    var TAKE_PICTURE = 1
-//    var newpreview  = "ยังไม่เพิ่มรายละเอียด"
+    companion object {
+        lateinit var mEditor: RichEditor
+        lateinit var Maction_undo: ImageView
+        lateinit var Maction_redo: ImageView
+        lateinit var Maction_bold: ImageView
+        lateinit var Maction_italic: ImageView
+        lateinit var Maction_subscript: ImageView
+        lateinit var Maction_superscript: ImageView
+        lateinit var Maction_strikethrough: ImageView
+        lateinit var Maction_underline: ImageView
+        lateinit var Maction_heading1: ImageView
+        lateinit var Maction_heading2: ImageView
+        lateinit var Maction_heading3: ImageView
+        lateinit var Maction_heading4: ImageView
+        lateinit var Maction_heading5: ImageView
+        lateinit var Maction_heading6: ImageView
+        lateinit var Maction_txt_color: ImageView
+        lateinit var Maction_bg_color: ImageView
+        lateinit var Maction_indent: ImageView
+        lateinit var Maction_outdent: ImageView
+        lateinit var Maction_align_left: ImageView
+        lateinit var Maction_align_center: ImageView
+        lateinit var Maction_align_right: ImageView
+        lateinit var Maction_blockquote: ImageView
+        lateinit var Maction_insert_bullets: ImageView
+        lateinit var Maction_insert_numbers: ImageView
+        lateinit var Maction_insert_image: ImageView
+        lateinit var Maction_insert_link: ImageView
+        lateinit var Maction_insert_checkbox: ImageView
+
+        var nPreview = ""
+
+        var currentPath: String? = null
+        var TAKE_PICTURE = 1
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
@@ -176,8 +181,8 @@ class FormActivity : AppCompatActivity() {
 
         Maction_insert_image.setOnClickListener(View.OnClickListener {
             mEditor.insertImage(
-                "http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG",
-                "dachshund"
+                "https://firebasestorage.googleapis.com/v0/b/firemessage-284c3.appspot.com/o/appman-logo.svg?alt=media&token=d6c1f5f8-5a06-41c2-aa61-fef220c679c7",
+                "Error"
             )
         })
 
@@ -266,19 +271,5 @@ class FormActivity : AppCompatActivity() {
             .setNegativeButton("no") { dialog, which -> }
             .show()
     }
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if(requestCode == TAKE_PICTURE && resultCode == Activity.RESULT_OK){
-//            try{
-//                val file = File(currentPath)
-//                val uri = Uri.fromFile(file)
-////                imageView.setImageURI(uri)
-//            }catch (e: IOException){
-//                e.printStackTrace()
-//            }
-//        }
-//    }
-
 
 }

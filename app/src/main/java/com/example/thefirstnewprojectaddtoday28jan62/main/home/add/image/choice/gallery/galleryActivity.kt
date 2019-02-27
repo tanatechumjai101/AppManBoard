@@ -63,11 +63,9 @@ class galleryActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         progressBar_Gallry.visibility = View.INVISIBLE
         if (requestCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-            val intent = Intent(this, FormActivity::class.java)
-            startActivity(intent)
+            finish()
         } else {
-            val intent = Intent(this, FormActivity::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 

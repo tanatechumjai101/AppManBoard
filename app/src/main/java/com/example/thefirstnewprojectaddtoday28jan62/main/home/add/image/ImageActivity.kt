@@ -22,14 +22,17 @@ class ImageActivity(context: Context) : Dialog(context) {
         setCancelable(true)
 
         ib_camera.setOnClickListener {
-            Toast.makeText(context, "Camera", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "Camera", Toast.LENGTH_SHORT).show()
             val intent = Intent(context, cameraActivity::class.java)
             context.startActivity(intent)
+            dismiss()
         }
         ib_photo.setOnClickListener {
-            Toast.makeText(context, "Photo", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "Photo", Toast.LENGTH_SHORT).show()
             val intent = Intent(context, galleryActivity::class.java)
             context.startActivity(intent)
+            dismiss()
         }
     }
+
 }

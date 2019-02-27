@@ -44,13 +44,16 @@ class cameraActivity : AppCompatActivity() {
     }
 
     private fun openCamera() {
+
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
         image_uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -72,12 +75,9 @@ class cameraActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         progressBar_Camera.visibility = View.INVISIBLE
         if (resultCode == Activity.RESULT_OK && resultCode == IMAGE_CAPTURE_CODE) {
-//            Log.d("TEST","$image_uri")
-            val intent = Intent(this, FormActivity::class.java)
-            startActivity(intent)
+            finish()
         } else {
-            val intent = Intent(this, FormActivity::class.java)
-            startActivity(intent)
+            finish()
         }
 
 
