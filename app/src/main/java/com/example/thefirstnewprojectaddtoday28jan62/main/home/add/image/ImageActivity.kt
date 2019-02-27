@@ -11,7 +11,7 @@ import android.widget.Toast
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image.choice.camera.cameraActivity
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image.choice.gallery.galleryActivity
 
-class ImageActivity(context: Context) : Dialog(context) {
+class ImageActivity(context: Context,var callback : (String)->Unit) : Dialog(context) {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +25,7 @@ class ImageActivity(context: Context) : Dialog(context) {
 //            Toast.makeText(context, "Camera", Toast.LENGTH_SHORT).show()
             val intent = Intent(context, cameraActivity::class.java)
             context.startActivity(intent)
+            callback.invoke("dsfdsf")
             dismiss()
         }
         ib_photo.setOnClickListener {

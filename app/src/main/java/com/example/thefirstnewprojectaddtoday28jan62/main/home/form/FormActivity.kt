@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Html
+import android.util.Log
 import android.view.View
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import android.view.inputmethod.InputMethodManager
@@ -196,7 +197,9 @@ class FormActivity : AppCompatActivity() {
 
 
         ib_AddImage.setOnClickListener {
-            var dialog = ImageActivity(this)
+            var dialog = ImageActivity(this) {url ->
+                Log.d("TT","$url")
+            }
             dialog.show()
         }
 
