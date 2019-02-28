@@ -74,6 +74,7 @@ class FormActivity : AppCompatActivity() {
     private var fileName: String = ""
 
     var nPreview = ""
+    var PreviewHtml = ""
     private val PICK_CAMARA = 1234
     private val PICK_GALLARY = 4321
 
@@ -251,6 +252,7 @@ class FormActivity : AppCompatActivity() {
         mEditor.setOnTextChangeListener { text ->
             var mPreview = text.toString()
             nPreview = mPreview
+            PreviewHtml = mPreview
 
         }
 
@@ -271,7 +273,7 @@ class FormActivity : AppCompatActivity() {
             } else {
                 val formPage = Data(
                         Subject_text.text.toString(),
-                        nPreview,
+                        PreviewHtml,
                         dateTime,
                         sharedPreference.getString("img_url", ""),
                         sharedPreference.getString("display_name", ""),
