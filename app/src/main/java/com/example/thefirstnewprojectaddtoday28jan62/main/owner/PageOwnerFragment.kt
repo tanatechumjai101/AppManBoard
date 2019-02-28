@@ -329,4 +329,9 @@ class PageOwnerFragment : Fragment() {
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        ed_search.setText("")
+    }
 }

@@ -59,7 +59,7 @@ class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
     }
     fun filterList(filteredCourseList: ArrayList<Data>) {
         this.Listdata = filteredCourseList
-        this.Listdata!!.reverse()
+//        this.Listdata!!.reverse()
         notifyDataSetChanged()
     }
 

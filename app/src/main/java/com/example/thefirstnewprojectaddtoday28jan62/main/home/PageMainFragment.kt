@@ -72,6 +72,7 @@ class PageMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initListener()
 
 
@@ -271,12 +272,13 @@ class PageMainFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        activityReference.removeEventListener(firebaseListener)
+//        activityReference.removeEventListener(firebaseListener)
     }
 
     override fun onResume() {
         super.onResume()
-        activityReference.addValueEventListener(firebaseListener)
+//        activityReference.addValueEventListener(firebaseListener)
+        ed_search.setText("")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

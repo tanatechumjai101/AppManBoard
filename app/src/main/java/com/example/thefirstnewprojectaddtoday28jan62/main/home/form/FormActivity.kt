@@ -37,9 +37,6 @@ import com.bumptech.glide.request.target.Target
 import com.example.thefirstnewprojectaddtoday28jan62.toByteArray
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import org.jetbrains.anko.imageBitmap
-import java.io.IOException
-import kotlin.collections.ArrayList
 
 
 class FormActivity : AppCompatActivity() {
@@ -74,6 +71,7 @@ class FormActivity : AppCompatActivity() {
     lateinit var Maction_insert_image: ImageView
     lateinit var Maction_insert_link: ImageView
     lateinit var Maction_insert_checkbox: ImageView
+    private var fileName: String = ""
 
     var nPreview = ""
     private val PICK_CAMARA = 1234
@@ -239,8 +237,6 @@ class FormActivity : AppCompatActivity() {
         ib_back_pageForm.setOnClickListener {
             nPreview = Html.fromHtml(nPreview).toString()
             if (Subject_text.text.toString().isNullOrBlank() && nPreview.isNullOrBlank()) {
-//                Subject_text.setText("")
-//                nPreview = " "
                 finish()
             } else {
                 android.support.v7.app.AlertDialog.Builder(this@FormActivity)
@@ -355,7 +351,7 @@ class FormActivity : AppCompatActivity() {
     }
 
     private fun createPathForCameraIntent(): Uri? {
-        val fileName = "image_" + Date().time.toString() + ".jpg"
+        fileName = "image_" + Date().time.toString() + ".jpg"
         val output: File = File(imagesFolder, fileName)
         imageSavedPath = Uri.fromFile(output)
         return imageSavedPath
@@ -370,9 +366,7 @@ class FormActivity : AppCompatActivity() {
             val options = BitmapFactory.Options()
             options.inPreferredConfig = Bitmap.Config.ARGB_8888
             val bitmap = BitmapFactory.decodeFile(imagePath, options)
-            Log.d("TEST", "ABCDEF")
             cursor?.close()
-
             uploadImageForGallery(resizeBitmap(bitmap, bitmap.width/2, bitmap.height/2).toByteArray())
         }
     }
@@ -383,9 +377,12 @@ class FormActivity : AppCompatActivity() {
             progressDialog.setTitle("Uploading....")
             val imageRef = storageReference!!.child("Image/Camera/" + UUID.randomUUID().toString())
             imageRef.putBytes(byteArray)
-                    .addOnSuccessListener {
+                    .addOnSuccessListener {taskSnapShot->
                         progressDialog.dismiss()
                         Toast.makeText(applicationContext, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                        imageRef.downloadUrl.addOnCompleteListener { p0 ->
+                            mEditor.insertImage(p0.result.toString(),"Failed")
+                        }
                     }
                     .addOnFailureListener {
                         progressDialog.dismiss()
@@ -408,11 +405,12 @@ class FormActivity : AppCompatActivity() {
             var progress: Double = 100.00
             val imageRef = storageReference!!.child("Image/Gallery/" + UUID.randomUUID().toString())
             imageRef.putBytes(byteArray)
-                    .addOnSuccessListener {
-
+                    .addOnSuccessListener {taskSnapShot->
                         Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
                         progressDialog.dismiss()
-
+                        imageRef.downloadUrl.addOnCompleteListener { p0 ->
+//                            Log.d("TEST", "Uri: ${p0.result.toString()}")
+                            mEditor.insertImage(p0.result.toString(),"Failed")}
                     }
                     .addOnProgressListener { taskSnapShot ->
                         progress = (100.0 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
