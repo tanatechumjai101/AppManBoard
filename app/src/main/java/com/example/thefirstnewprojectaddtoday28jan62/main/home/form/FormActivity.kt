@@ -5,6 +5,8 @@ import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -27,14 +29,22 @@ import java.util.*
 import android.os.Environment
 import android.os.StrictMode
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.example.thefirstnewprojectaddtoday28jan62.toByteArray
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import org.jetbrains.anko.imageBitmap
+import java.io.IOException
 
 
 class FormActivity : AppCompatActivity() {
 
     private lateinit var progressDialog: ProgressDialog
-
+    private var bitmap: Bitmap? = null
     lateinit var mEditor: RichEditor
     lateinit var Maction_undo: ImageView
     lateinit var Maction_redo: ImageView
@@ -65,9 +75,6 @@ class FormActivity : AppCompatActivity() {
     lateinit var Maction_insert_checkbox: ImageView
 
     var nPreview = ""
-
-    var currentPath: String? = null
-    var TAKE_PICTURE = 1
     private val PICK_CAMARA = 1234
     private val PICK_GALLARY = 4321
 
@@ -195,15 +202,15 @@ class FormActivity : AppCompatActivity() {
 
         Maction_insert_image.setOnClickListener(View.OnClickListener {
             mEditor.insertImage(
-                "https://firebasestorage.googleapis.com/v0/b/firemessage-284c3.appspot.com/o/appman-logo.svg?alt=media&token=d6c1f5f8-5a06-41c2-aa61-fef220c679c7",
-                "Error"
+                    "https://firebasestorage.googleapis.com/v0/b/firemessage-284c3.appspot.com/o/appman-logo.svg?alt=media&token=d6c1f5f8-5a06-41c2-aa61-fef220c679c7",
+                    "Error"
             )
         })
 
         Maction_insert_link.setOnClickListener(View.OnClickListener {
             mEditor.insertLink(
-                "https://github.com/wasabeef",
-                "career@appman.co.th"
+                    "https://github.com/wasabeef",
+                    "career@appman.co.th"
             )
         })
         Maction_insert_checkbox.setOnClickListener(View.OnClickListener { mEditor.insertTodo() })
@@ -230,17 +237,17 @@ class FormActivity : AppCompatActivity() {
 
         ib_back_pageForm.setOnClickListener {
             nPreview = Html.fromHtml(nPreview).toString()
-            if (Subject_text.text.toString().isNullOrEmpty() || nPreview.isNullOrEmpty()) {
+            if (Subject_text.text.toString().isNullOrBlank() && nPreview.isNullOrBlank()) {
 //                Subject_text.setText("")
 //                nPreview = " "
                 finish()
             } else {
                 android.support.v7.app.AlertDialog.Builder(this@FormActivity)
-                    .setTitle("Are you sure ?")
-                    .setMessage("Do you want to close the app?")
-                    .setPositiveButton("yes") { dialog, which -> finish() }
-                    .setNegativeButton("no") { dialog, which -> }
-                    .show()
+                        .setTitle("Are you sure ?")
+                        .setMessage("Do you want to close the app?")
+                        .setPositiveButton("yes") { dialog, which -> finish() }
+                        .setNegativeButton("no") { dialog, which -> }
+                        .show()
             }
         }
 
@@ -260,20 +267,19 @@ class FormActivity : AppCompatActivity() {
             if (Subject_text.text.toString().isEmpty() || nPreview.isEmpty()) {
 
                 AlertDialog.Builder(this)
-                    .setIcon(R.drawable.ic_priority_high_black_24dp)
-                    .setTitle("ผิดพลาด")
-                    .setMessage("กรุณากรอกข้อมูลใหม่")
-                    .show()
-
+                        .setIcon(R.drawable.ic_priority_high_black_24dp)
+                        .setTitle("ผิดพลาด")
+                        .setMessage("กรุณากรอกข้อมูลใหม่")
+                        .show()
             } else {
                 val formPage = Data(
-                    Subject_text.text.toString(),
-                    nPreview,
-                    dateTime,
-                    sharedPreference.getString("img_url", ""),
-                    sharedPreference.getString("display_name", ""),
-                    sharedPreference.getString("email", ""),
-                    PrimeryKey_id
+                        Subject_text.text.toString(),
+                        nPreview,
+                        dateTime,
+                        sharedPreference.getString("img_url", ""),
+                        sharedPreference.getString("display_name", ""),
+                        sharedPreference.getString("email", ""),
+                        PrimeryKey_id
                 )
                 val intent = Intent().apply {
                     this.putExtra("Data", formPage)
@@ -284,14 +290,6 @@ class FormActivity : AppCompatActivity() {
             closeKeyboard()
         }
 
-    }
-
-
-    private fun createPathForCameraIntent(): Uri? {
-        val fileName = "image_" + Date().time.toString() + ".jpg"
-        val output: File = File(imagesFolder, fileName)
-        imageSavedPath = Uri.fromFile(output)
-        return imageSavedPath
     }
 
 
@@ -306,26 +304,52 @@ class FormActivity : AppCompatActivity() {
     override fun onBackPressed() {
 //        super.onBackPressed()
         android.support.v7.app.AlertDialog.Builder(this@FormActivity)
-            .setTitle("Are you sure ?")
-            .setMessage("Do you want to close this page?")
-            .setPositiveButton("yes") { dialog, which -> finish() }
-            .setNegativeButton("no") { dialog, which -> }
-            .show()
+                .setTitle("Are you sure ?")
+                .setMessage("Do you want to close this page?")
+                .setPositiveButton("yes") { dialog, which -> finish() }
+                .setNegativeButton("no") { dialog, which -> }
+                .show()
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             PICK_CAMARA -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    Log.d("TEST", "uri: " + imageSavedPath)
+
                     progressDialog.show()
-                    uploadImageForCamera(imageSavedPath!!)
+
+                    if (imageSavedPath != null) {
+//                        uploadImageForCamera(imageSavedPath!!)
+                        toast("Bitmap resized.")
+                        Glide.with(this)
+                                .asBitmap()
+                                .listener(object : RequestListener<Bitmap?> {
+                                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap?>?, isFirstResource: Boolean): Boolean {
+                                        return false
+                                    }
+
+                                    override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap?>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                        resource?.let {
+                                            val rescaleBitmap = resizeBitmap(resource, resource.width / 2, resource.height / 2)
+                                            uploadImageForCamera(rescaleBitmap.toByteArray())
+
+                                        }
+                                        return false
+                                    }
+                                })
+                                .load(imageSavedPath)
+                                .into(ivCamera)
+                    } else {
+                        toast("bitmap not found.")
+                    }
+
                 } else {
                     AlertDialog.Builder(this)
-                        .setIcon(R.drawable.ic_priority_high_black_24dp)
-                        .setTitle("ผิดพลาด")
-                        .setMessage("กรุณาทำรายการใหม่")
-                        .show()
+                            .setIcon(R.drawable.ic_priority_high_black_24dp)
+                            .setTitle("ผิดพลาด")
+                            .setMessage("กรุณาทำรายการใหม่")
+                            .show()
                 }
             }
             PICK_GALLARY -> {
@@ -335,34 +359,41 @@ class FormActivity : AppCompatActivity() {
 
                 } else {
                     AlertDialog.Builder(this)
-                        .setIcon(R.drawable.ic_priority_high_black_24dp)
-                        .setTitle("ผิดพลาด")
-                        .setMessage("กรุณาทำรายการใหม่")
-                        .show()
+                            .setIcon(R.drawable.ic_priority_high_black_24dp)
+                            .setTitle("ผิดพลาด")
+                            .setMessage("กรุณาทำรายการใหม่")
+                            .show()
                 }
             }
         }
     }
 
-    private fun uploadImageForCamera(imageSavedPath: Uri) {
+    private fun createPathForCameraIntent(): Uri? {
+        val fileName = "image_" + Date().time.toString() + ".jpg"
+        val output: File = File(imagesFolder, fileName)
+        imageSavedPath = Uri.fromFile(output)
+        return imageSavedPath
+    }
 
-        if (imageSavedPath != null) {
+    private fun uploadImageForCamera(byteArray: ByteArray?) {
+
+        if (byteArray != null) {
             progressDialog.setTitle("Uploading....")
             val imageRef = storageReference!!.child("Image/Camera/" + UUID.randomUUID().toString())
-            imageRef.putFile(imageSavedPath)
-                .addOnSuccessListener {
-                    progressDialog.dismiss()
-                    Toast.makeText(applicationContext, "Image Uploaded", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener {
-                    progressDialog.dismiss()
-                    Toast.makeText(applicationContext, "Failed", Toast.LENGTH_SHORT).show()
-                }
-                .addOnProgressListener { taskSnapShot ->
-                    val progress = (100.00 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
-                    progressDialog.setMessage("Uploading  " + progress.toInt() + "  % ...")
+            imageRef.putBytes(byteArray)
+                    .addOnSuccessListener {
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, "Failed", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnProgressListener { taskSnapShot ->
+                        val progress = (100.00 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
+                        progressDialog.setMessage("Uploading  " + progress.toInt() + "  % ...")
 
-                }
+                    }
 
         }
     }
@@ -372,28 +403,35 @@ class FormActivity : AppCompatActivity() {
         if (data != null) {
 
             progressDialog.setTitle("Uploading....")
-
+            var progress: Double = 100.00
             val imageRef = storageReference!!.child("Image/Gallery/" + UUID.randomUUID().toString())
             imageRef.putFile(data)
-                .addOnSuccessListener {
+                    .addOnSuccessListener {
+                        if (progress <= 100.00) {
+                            progressDialog.show()
+                        }
+                        Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                        progressDialog.dismiss()
 
-                    Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
-                    progressDialog.dismiss()
+                    }
+                    .addOnProgressListener { taskSnapShot ->
+                        progress = (100.0 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
+                        progressDialog.setMessage("Uploading " + progress.toInt() + "% ...")
+                    }
+                    .addOnFailureListener {
+                        progressDialog.dismiss()
+                        Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
 
-                }
-                .addOnProgressListener { taskSnapShot ->
-                    val progress = (100.0 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
-                    progressDialog.setMessage("Uploading " + progress.toInt() + "% ...")
-                }
-                .addOnFailureListener {
-                    progressDialog.dismiss()
-                    Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
-
-                }
-
-
+                    }
         }
     }
 
 
+    private fun resizeBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap {
+        return Bitmap.createScaledBitmap(bitmap, width, height, false)
+    }
+
+    fun Context.toast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 }

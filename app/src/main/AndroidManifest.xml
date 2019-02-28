@@ -21,10 +21,6 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".main.home.add.image.choice.gallery.galleryActivity">
-        </activity>
-        <activity android:name=".main.home.add.image.choice.camera.cameraActivity">
-        </activity>
         <activity android:name=".main.home.show.SeleteActivity">
         </activity>
         <activity
