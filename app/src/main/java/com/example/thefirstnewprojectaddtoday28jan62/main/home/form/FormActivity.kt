@@ -17,7 +17,6 @@ import com.example.thefirstnewprojectaddtoday28jan62.R
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image.ImageActivity
-import com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image.choice.gallery.galleryActivity
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import jp.wasabeef.richeditor.RichEditor
 import kotlinx.android.synthetic.main.activity_form.*
@@ -91,6 +90,7 @@ class FormActivity : AppCompatActivity() {
         StrictMode.setVmPolicy(builder.build())
 
         imagesFolder = File(Environment.getExternalStorageDirectory(), "AppmanBoard")
+
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
 
         Maction_undo = findViewById(R.id.action_undo)
@@ -126,20 +126,10 @@ class FormActivity : AppCompatActivity() {
         mEditor.setEditorFontSize(22)
         mEditor.setEditorFontColor(Color.BLACK)
         mEditor.setPadding(10, 10, 10, 10)
-
         mEditor.setPlaceholder("add detail ....")
 
 
-        mEditor.setOnTextChangeListener { text ->
-            var mPreview = text.toString()
-            nPreview = mPreview
 
-//            Log.d("TEST_", "TEXT = $mPreview")
-//            newpreview = Html.fromHtml(mPreview).toString()
-//            Log.d("TEST", "TEXT = $newpreview")
-
-
-        }
 
         Maction_undo.setOnClickListener(View.OnClickListener { mEditor.undo() })
 
@@ -228,7 +218,8 @@ class FormActivity : AppCompatActivity() {
             }
 
             override fun onGalleryClick() {
-                val intent = Intent(this@FormActivity, galleryActivity::class.java)
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.type = "image/*"
                 startActivityForResult(intent, PICK_GALLARY)
             }
         }
@@ -253,13 +244,18 @@ class FormActivity : AppCompatActivity() {
             }
         }
 
+        mEditor.setOnTextChangeListener { text ->
+            var mPreview = text.toString()
+            nPreview = mPreview
+
+        }
+
         ib_done_pageForm.setOnClickListener {
             nPreview = Html.fromHtml(nPreview).toString()
             val mEmail = sharedPreference.getString("email", "")
             val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss", Locale.ENGLISH).format(Date())
             val mTimestamp = Date().time.toString()
             val PrimeryKey_id = "${mEmail} $mTimestamp"
-
 
             if (Subject_text.text.toString().isEmpty() || nPreview.isEmpty()) {
 
@@ -323,26 +319,36 @@ class FormActivity : AppCompatActivity() {
                 if (resultCode == Activity.RESULT_OK) {
                     Log.d("TEST", "uri: " + imageSavedPath)
                     progressDialog.show()
-                    uploadImage(imageSavedPath!!)
+                    uploadImageForCamera(imageSavedPath!!)
                 } else {
-
+                    AlertDialog.Builder(this)
+                        .setIcon(R.drawable.ic_priority_high_black_24dp)
+                        .setTitle("ผิดพลาด")
+                        .setMessage("กรุณาทำรายการใหม่")
+                        .show()
                 }
             }
             PICK_GALLARY -> {
                 if (resultCode == Activity.RESULT_OK) {
+                    progressDialog.show()
+                    uploadImageForGallery(data?.data!!)
 
                 } else {
-
+                    AlertDialog.Builder(this)
+                        .setIcon(R.drawable.ic_priority_high_black_24dp)
+                        .setTitle("ผิดพลาด")
+                        .setMessage("กรุณาทำรายการใหม่")
+                        .show()
                 }
             }
         }
     }
 
-    private fun uploadImage(imageSavedPath: Uri) {
+    private fun uploadImageForCamera(imageSavedPath: Uri) {
 
         if (imageSavedPath != null) {
             progressDialog.setTitle("Uploading....")
-            val imageRef = storageReference!!.child("Camera/" + UUID.randomUUID().toString())
+            val imageRef = storageReference!!.child("Image/Camera/" + UUID.randomUUID().toString())
             imageRef.putFile(imageSavedPath)
                 .addOnSuccessListener {
                     progressDialog.dismiss()
@@ -353,9 +359,38 @@ class FormActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Failed", Toast.LENGTH_SHORT).show()
                 }
                 .addOnProgressListener { taskSnapShot ->
-                    val progress = Math.floor((100.00 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount)
-                    progressDialog.setMessage("Uploaded" + progress.toInt() + "%...")
+                    val progress = (100.00 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
+                    progressDialog.setMessage("Uploading  " + progress.toInt() + "  % ...")
+
                 }
+
+        }
+    }
+
+    private fun uploadImageForGallery(data: Uri) {
+
+        if (data != null) {
+
+            progressDialog.setTitle("Uploading....")
+
+            val imageRef = storageReference!!.child("Image/Gallery/" + UUID.randomUUID().toString())
+            imageRef.putFile(data)
+                .addOnSuccessListener {
+
+                    Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                    progressDialog.dismiss()
+
+                }
+                .addOnProgressListener { taskSnapShot ->
+                    val progress = (100.0 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
+                    progressDialog.setMessage("Uploading " + progress.toInt() + "% ...")
+                }
+                .addOnFailureListener {
+                    progressDialog.dismiss()
+                    Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+
+                }
+
 
         }
     }

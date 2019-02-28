@@ -68,9 +68,9 @@ class galleryActivity : AppCompatActivity() {
     private fun pickImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
-        progressDialog.show()
         startActivityForResult(intent, IMAGE_PICK_CODE)
 
+        progressDialog.show()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
