@@ -39,6 +39,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import org.jetbrains.anko.imageBitmap
 import java.io.IOException
+import kotlin.collections.ArrayList
 
 
 class FormActivity : AppCompatActivity() {
@@ -316,9 +317,7 @@ class FormActivity : AppCompatActivity() {
         when (requestCode) {
             PICK_CAMARA -> {
                 if (resultCode == Activity.RESULT_OK) {
-
                     progressDialog.show()
-
                     if (imageSavedPath != null) {
 //                        uploadImageForCamera(imageSavedPath!!)
                         toast("Bitmap resized.")
@@ -344,25 +343,13 @@ class FormActivity : AppCompatActivity() {
                         toast("bitmap not found.")
                     }
 
-                } else {
-                    AlertDialog.Builder(this)
-                            .setIcon(R.drawable.ic_priority_high_black_24dp)
-                            .setTitle("ผิดพลาด")
-                            .setMessage("กรุณาทำรายการใหม่")
-                            .show()
                 }
             }
+
             PICK_GALLARY -> {
                 if (resultCode == Activity.RESULT_OK) {
                     progressDialog.show()
-                    uploadImageForGallery(data?.data!!)
-
-                } else {
-                    AlertDialog.Builder(this)
-                            .setIcon(R.drawable.ic_priority_high_black_24dp)
-                            .setTitle("ผิดพลาด")
-                            .setMessage("กรุณาทำรายการใหม่")
-                            .show()
+                    getBitmapFormUriGallery(data?.data)
                 }
             }
         }
@@ -373,6 +360,22 @@ class FormActivity : AppCompatActivity() {
         val output: File = File(imagesFolder, fileName)
         imageSavedPath = Uri.fromFile(output)
         return imageSavedPath
+    }
+
+    private fun getBitmapFormUriGallery(uri: Uri?) {
+        uri?.let {
+            val filePath: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+            val cursor = getContentResolver().query(uri, filePath, null, null, null)
+            cursor?.moveToFirst()
+            val imagePath = cursor?.getString(cursor.getColumnIndex(filePath[0]))
+            val options = BitmapFactory.Options()
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888
+            val bitmap = BitmapFactory.decodeFile(imagePath, options)
+            Log.d("TEST", "ABCDEF")
+            cursor?.close()
+
+            uploadImageForGallery(resizeBitmap(bitmap, bitmap.width/2, bitmap.height/2).toByteArray())
+        }
     }
 
     private fun uploadImageForCamera(byteArray: ByteArray?) {
@@ -398,18 +401,16 @@ class FormActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadImageForGallery(data: Uri) {
+    private fun uploadImageForGallery(byteArray: ByteArray?) {
 
-        if (data != null) {
+        if (byteArray != null) {
 
             progressDialog.setTitle("Uploading....")
             var progress: Double = 100.00
             val imageRef = storageReference!!.child("Image/Gallery/" + UUID.randomUUID().toString())
-            imageRef.putFile(data)
+            imageRef.putBytes(byteArray)
                     .addOnSuccessListener {
-                        if (progress <= 100.00) {
-                            progressDialog.show()
-                        }
+
                         Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
                         progressDialog.dismiss()
 
@@ -428,7 +429,21 @@ class FormActivity : AppCompatActivity() {
 
 
     private fun resizeBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap {
-        return Bitmap.createScaledBitmap(bitmap, width, height, false)
+        return if (bitmap.width > bitmap.height) {
+            //Landscape
+            if (bitmap.width > 1024) {
+                Bitmap.createScaledBitmap(bitmap, width, height, false)
+            } else {
+                bitmap
+            }
+        } else {
+            //Portrait
+            if (bitmap.height > 1024) {
+                Bitmap.createScaledBitmap(bitmap, width, height, false)
+            } else {
+                bitmap
+            }
+        }
     }
 
     fun Context.toast(message: String) {
