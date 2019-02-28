@@ -77,6 +77,7 @@
 
 
             <ImageButton
+                android:visibility="gone"
                 android:id="@+id/action_subscript"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -90,6 +91,7 @@
 
 
             <ImageButton
+                android:visibility="gone"
                 android:id="@+id/action_superscript"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -103,6 +105,7 @@
 
 
             <ImageButton
+                android:visibility="gone"
                 android:id="@+id/action_strikethrough"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -154,6 +157,7 @@
                 android:src="@drawable/h2" />
 
             <ImageButton
+                android:visibility="gone"
                 android:id="@+id/action_heading3"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -167,6 +171,7 @@
 
 
             <ImageButton
+                android:visibility="gone"
                 android:id="@+id/action_heading4"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -180,6 +185,7 @@
 
 
             <ImageButton
+                android:visibility="gone"
                 android:id="@+id/action_heading5"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -193,6 +199,7 @@
 
 
             <ImageButton
+                android:visibility="gone"
                 android:id="@+id/action_heading6"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -317,6 +324,7 @@
                 android:src="@drawable/numbers" />
 
             <ImageButton
+                android:visibility="gone"
                 android:id="@+id/action_blockquote"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -329,6 +337,7 @@
                 android:src="@drawable/blockquote" />
 
             <ImageButton
+                android:visibility="gone"
                 android:id="@+id/action_insert_image"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -341,6 +350,7 @@
                 android:src="@drawable/insert_image" />
 
             <ImageButton
+
                 android:id="@+id/action_insert_link"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -363,7 +373,6 @@
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
                 android:src="@android:drawable/checkbox_on_background" />
-
         </LinearLayout>
 
     </HorizontalScrollView>

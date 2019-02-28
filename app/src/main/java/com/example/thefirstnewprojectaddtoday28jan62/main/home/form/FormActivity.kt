@@ -203,7 +203,7 @@ class FormActivity : AppCompatActivity() {
 
         Maction_insert_image.setOnClickListener(View.OnClickListener {
             mEditor.insertImage(
-                    "https://firebasestorage.googleapis.com/v0/b/firemessage-284c3.appspot.com/o/appman-logo.svg?alt=media&token=d6c1f5f8-5a06-41c2-aa61-fef220c679c7",
+                    "https://scontent.fbkk2-8.fna.fbcdn.net/v/t1.0-9/52797687_2298520613710284_7860353166057930752_n.jpg?_nc_cat=105&_nc_eui2=AeGlIcW8ccOQS0EYl_DQjA3BiIBTyy7fgG77qtPmq4hvR6jwPKjFXzJEheuFG4AxuMwYJsMr9zp75bDEeKO4MC3l8IZgLfFnnijkjv0E1rht4Q&_nc_ht=scontent.fbkk2-8.fna&oh=65f853c7e25b17138e5e90cf3831207c&oe=5CECF51F",
                     "Error"
             )
         })
@@ -265,7 +265,7 @@ class FormActivity : AppCompatActivity() {
             val mTimestamp = Date().time.toString()
             val PrimeryKey_id = "${mEmail} $mTimestamp"
 
-            if (Subject_text.text.toString().isEmpty() || nPreview.isEmpty()) {
+            if (Subject_text.text.toString().isNullOrBlank() || nPreview.isNullOrBlank()) {
 
                 AlertDialog.Builder(this)
                         .setIcon(R.drawable.ic_priority_high_black_24dp)
@@ -327,7 +327,6 @@ class FormActivity : AppCompatActivity() {
                                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap?>?, isFirstResource: Boolean): Boolean {
                                         return false
                                     }
-
                                     override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap?>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                                         resource?.let {
                                             val rescaleBitmap = resizeBitmap(resource, resource.width / 2, resource.height / 2)
