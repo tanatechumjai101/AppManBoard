@@ -29,7 +29,6 @@ import java.io.File
 
 class galleryActivity : AppCompatActivity() {
 
-    companion object {
         internal var storage: FirebaseStorage? = null
         internal var storageReference: StorageReference? = null
         private val PERMISSION_CODE = 1001
@@ -38,7 +37,8 @@ class galleryActivity : AppCompatActivity() {
         lateinit var uri_image: String
         lateinit var mActivity: Activity
         lateinit var file: File
-    }
+
+    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +46,8 @@ class galleryActivity : AppCompatActivity() {
         mActivity = galleryActivity()
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
+
+        progressDialog = ProgressDialog(this)
 
         progressBar_Gallry.visibility = View.VISIBLE
 
@@ -66,7 +68,7 @@ class galleryActivity : AppCompatActivity() {
     private fun pickImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
-
+        progressDialog.show()
         startActivityForResult(intent, IMAGE_PICK_CODE)
 
     }
@@ -90,15 +92,15 @@ class galleryActivity : AppCompatActivity() {
 
         if (file_Path != null) {
 
-            val progressDialog = ProgressDialog(this)
             progressDialog.setTitle("Uploading....")
-            progressDialog.show()
 
-            val imageRef = storageReference!!.child("image/" + UUID.randomUUID().toString())
+            val imageRef = storageReference!!.child("Gallery/" + UUID.randomUUID().toString())
             imageRef.putFile(file_Path)
                 .addOnSuccessListener {
-                    progressDialog.dismiss()
+
                     Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                    progressDialog.dismiss()
+                    finish()
 
                 }
                 .addOnProgressListener { taskSnapShot ->
@@ -119,45 +121,53 @@ class galleryActivity : AppCompatActivity() {
 
         progressBar_Gallry.visibility = View.INVISIBLE
 
-        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE && data != null && data.data != null) {
+        when (requestCode) {
+            IMAGE_PICK_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    file_Path = data?.data!!
+                    uploadImage()
 
-            file_Path = data.data
-
-
-            try {
-                val bitmaps = MediaStore.Images.Media.getBitmap(contentResolver, data.data)
-
-                val bytes = ByteArrayOutputStream()
-                bitmaps.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-                val path = MediaStore.Images.Media.insertImage(contentResolver, bitmaps, "Title", null)
-
-                val getbitmap = assetsToBitmap(path)
-
-                val myDir =  File(cacheDir, "folder")
-                myDir.mkdir()
-                myDir.writeText("$getbitmap")
-
-
-                if (getbitmap != null) {
-                    val resizedBitmap = getbitmap.scale(500)
-
-                    Log.d("size1", "${resizedBitmap.height}")
-                    Log.d("size", "${resizedBitmap.width} ")
-
-                    toast("Bitmap resized.")
-
-
+                    finish()
                 } else {
-                    toast("bitmap not found.")
+                    finish()
                 }
-
-            } catch (e: IOException) {
-                e.printStackTrace()
             }
-            finish()
-        } else {
-            finish()
         }
+//        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE && data != null && data.data != null) {
+//
+
+
+//            try {
+//                val bitmaps = MediaStore.Images.Media.getBitmap(contentResolver, data.data)
+//
+//                val bytes = ByteArrayOutputStream()
+//                bitmaps.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+//                val path = MediaStore.Images.Media.insertImage(contentResolver, bitmaps, "Title", null)
+//
+//                val getbitmap = assetsToBitmap(path)
+//
+//                val myDir =  File(cacheDir, "folder")
+//                myDir.mkdir()
+//                myDir.writeText("$getbitmap")
+//
+//
+//                if (getbitmap != null) {
+//                    val resizedBitmap = getbitmap.scale(500)
+//
+//                    toast("Bitmap resized.")
+//
+//
+//                } else {
+//                    toast("bitmap not found.")
+//                }
+//
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//            }
+//            finish()
+//        } else {
+//            finish()
+//        }
     }
 
     private fun assetsToBitmap(fileName: String): Bitmap? {
@@ -198,6 +208,11 @@ class galleryActivity : AppCompatActivity() {
 
     fun Context.toast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onBackPressed() {
+//        super.onBackPressed()
+        finishAffinity()
     }
 
 }

@@ -2,72 +2,95 @@ package com.example.thefirstnewprojectaddtoday28jan62.main.home.form
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.text.Html
 import android.util.Log
 import android.view.View
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageButton
 import android.widget.ImageView
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image.ImageActivity
+import com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image.choice.gallery.galleryActivity
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import jp.wasabeef.richeditor.RichEditor
 import kotlinx.android.synthetic.main.activity_form.*
 import kotlinx.android.synthetic.main.toolbar_form_activity.*
 import java.io.File
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import android.os.Environment
+import android.os.StrictMode
+import android.widget.Toast
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 
 class FormActivity : AppCompatActivity() {
 
-    companion object {
-        lateinit var mEditor: RichEditor
-        lateinit var Maction_undo: ImageView
-        lateinit var Maction_redo: ImageView
-        lateinit var Maction_bold: ImageView
-        lateinit var Maction_italic: ImageView
-        lateinit var Maction_subscript: ImageView
-        lateinit var Maction_superscript: ImageView
-        lateinit var Maction_strikethrough: ImageView
-        lateinit var Maction_underline: ImageView
-        lateinit var Maction_heading1: ImageView
-        lateinit var Maction_heading2: ImageView
-        lateinit var Maction_heading3: ImageView
-        lateinit var Maction_heading4: ImageView
-        lateinit var Maction_heading5: ImageView
-        lateinit var Maction_heading6: ImageView
-        lateinit var Maction_txt_color: ImageView
-        lateinit var Maction_bg_color: ImageView
-        lateinit var Maction_indent: ImageView
-        lateinit var Maction_outdent: ImageView
-        lateinit var Maction_align_left: ImageView
-        lateinit var Maction_align_center: ImageView
-        lateinit var Maction_align_right: ImageView
-        lateinit var Maction_blockquote: ImageView
-        lateinit var Maction_insert_bullets: ImageView
-        lateinit var Maction_insert_numbers: ImageView
-        lateinit var Maction_insert_image: ImageView
-        lateinit var Maction_insert_link: ImageView
-        lateinit var Maction_insert_checkbox: ImageView
+    private lateinit var progressDialog: ProgressDialog
 
-        var nPreview = ""
+    lateinit var mEditor: RichEditor
+    lateinit var Maction_undo: ImageView
+    lateinit var Maction_redo: ImageView
+    lateinit var Maction_bold: ImageView
+    lateinit var Maction_italic: ImageView
+    lateinit var Maction_subscript: ImageView
+    lateinit var Maction_superscript: ImageView
+    lateinit var Maction_strikethrough: ImageView
+    lateinit var Maction_underline: ImageView
+    lateinit var Maction_heading1: ImageView
+    lateinit var Maction_heading2: ImageView
+    lateinit var Maction_heading3: ImageView
+    lateinit var Maction_heading4: ImageView
+    lateinit var Maction_heading5: ImageView
+    lateinit var Maction_heading6: ImageView
+    lateinit var Maction_txt_color: ImageView
+    lateinit var Maction_bg_color: ImageView
+    lateinit var Maction_indent: ImageView
+    lateinit var Maction_outdent: ImageView
+    lateinit var Maction_align_left: ImageView
+    lateinit var Maction_align_center: ImageView
+    lateinit var Maction_align_right: ImageView
+    lateinit var Maction_blockquote: ImageView
+    lateinit var Maction_insert_bullets: ImageView
+    lateinit var Maction_insert_numbers: ImageView
+    lateinit var Maction_insert_image: ImageView
+    lateinit var Maction_insert_link: ImageView
+    lateinit var Maction_insert_checkbox: ImageView
 
-        var currentPath: String? = null
-        var TAKE_PICTURE = 1
-    }
+    var nPreview = ""
 
+    var currentPath: String? = null
+    var TAKE_PICTURE = 1
+    private val PICK_CAMARA = 1234
+    private val PICK_GALLARY = 4321
+
+    var storage: FirebaseStorage? = null
+    var storageReference: StorageReference? = null
+
+    private lateinit var imagesFolder: File
+    private var imageSavedPath: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
+
+        progressDialog = ProgressDialog(this)
+
+        storage = FirebaseStorage.getInstance()
+        storageReference = storage!!.reference
+
+        val builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
+
+        imagesFolder = File(Environment.getExternalStorageDirectory(), "AppmanBoard")
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
 
         Maction_undo = findViewById(R.id.action_undo)
@@ -195,11 +218,22 @@ class FormActivity : AppCompatActivity() {
         })
         Maction_insert_checkbox.setOnClickListener(View.OnClickListener { mEditor.insertTodo() })
 
+        val dialog = ImageActivity(this)
+        dialog.listener = object : ImageActivity.DialogListener {
+            override fun onCameraClick() {
+
+                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, createPathForCameraIntent())
+                startActivityForResult(cameraIntent, PICK_CAMARA)
+            }
+
+            override fun onGalleryClick() {
+                val intent = Intent(this@FormActivity, galleryActivity::class.java)
+                startActivityForResult(intent, PICK_GALLARY)
+            }
+        }
 
         ib_AddImage.setOnClickListener {
-            var dialog = ImageActivity(this) {url ->
-                Log.d("TT","$url")
-            }
             dialog.show()
         }
 
@@ -227,7 +261,7 @@ class FormActivity : AppCompatActivity() {
             val PrimeryKey_id = "${mEmail} $mTimestamp"
 
 
-            if (Subject_text.text.toString().isEmpty() ||  nPreview.isEmpty()  ) {
+            if (Subject_text.text.toString().isEmpty() || nPreview.isEmpty()) {
 
                 AlertDialog.Builder(this)
                     .setIcon(R.drawable.ic_priority_high_black_24dp)
@@ -257,6 +291,14 @@ class FormActivity : AppCompatActivity() {
     }
 
 
+    private fun createPathForCameraIntent(): Uri? {
+        val fileName = "image_" + Date().time.toString() + ".jpg"
+        val output: File = File(imagesFolder, fileName)
+        imageSavedPath = Uri.fromFile(output)
+        return imageSavedPath
+    }
+
+
     private fun closeKeyboard() {
         val view = this.currentFocus
         if (view != null) {
@@ -274,5 +316,49 @@ class FormActivity : AppCompatActivity() {
             .setNegativeButton("no") { dialog, which -> }
             .show()
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            PICK_CAMARA -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    Log.d("TEST", "uri: " + imageSavedPath)
+                    progressDialog.show()
+                    uploadImage(imageSavedPath!!)
+                } else {
+
+                }
+            }
+            PICK_GALLARY -> {
+                if (resultCode == Activity.RESULT_OK) {
+
+                } else {
+
+                }
+            }
+        }
+    }
+
+    private fun uploadImage(imageSavedPath: Uri) {
+
+        if (imageSavedPath != null) {
+            progressDialog.setTitle("Uploading....")
+            val imageRef = storageReference!!.child("Camera/" + UUID.randomUUID().toString())
+            imageRef.putFile(imageSavedPath)
+                .addOnSuccessListener {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext, "Failed", Toast.LENGTH_SHORT).show()
+                }
+                .addOnProgressListener { taskSnapShot ->
+                    val progress = Math.floor((100.00 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount)
+                    progressDialog.setMessage("Uploaded" + progress.toInt() + "%...")
+                }
+
+        }
+    }
+
 
 }

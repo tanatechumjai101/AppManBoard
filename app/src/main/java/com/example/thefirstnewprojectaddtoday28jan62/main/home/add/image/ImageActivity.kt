@@ -7,11 +7,16 @@ import android.os.Bundle
 import android.view.Window
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import kotlinx.android.synthetic.main.activity_image.*
-import android.widget.Toast
-import com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image.choice.camera.cameraActivity
-import com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image.choice.gallery.galleryActivity
 
-class ImageActivity(context: Context,var callback : (String)->Unit) : Dialog(context) {
+class ImageActivity(context: Context) : Dialog(context) {
+
+    var listener: DialogListener? = null
+
+    interface DialogListener {
+        fun onCameraClick()
+
+        fun onGalleryClick()
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,16 +27,12 @@ class ImageActivity(context: Context,var callback : (String)->Unit) : Dialog(con
         setCancelable(true)
 
         ib_camera.setOnClickListener {
-//            Toast.makeText(context, "Camera", Toast.LENGTH_SHORT).show()
-            val intent = Intent(context, cameraActivity::class.java)
-            context.startActivity(intent)
-            callback.invoke("dsfdsf")
+            listener?.onCameraClick()
             dismiss()
         }
         ib_photo.setOnClickListener {
-//            Toast.makeText(context, "Photo", Toast.LENGTH_SHORT).show()
-            val intent = Intent(context, galleryActivity::class.java)
-            context.startActivity(intent)
+
+            listener?.onGalleryClick()
             dismiss()
         }
     }
