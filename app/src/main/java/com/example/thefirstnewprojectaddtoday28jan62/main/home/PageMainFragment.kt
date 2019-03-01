@@ -28,14 +28,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 import android.view.inputmethod.InputMethodManager
 import android.content.Context
-import android.graphics.drawable.Drawable
-import android.support.v7.app.AppCompatDialog
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 
 
 class PageMainFragment : Fragment() {
@@ -49,10 +41,6 @@ class PageMainFragment : Fragment() {
     lateinit var progressBar: ProgressBar
     lateinit var textEmpty: TextView
 
-    //    lateinit var tv_subject: TextView
-//    lateinit var webview_detail: WebView
-//    lateinit var iv_profile_show: ImageView
-    lateinit var iv_test: ImageView
 
 
     private lateinit var firebaseListener: ValueEventListener
@@ -173,6 +161,7 @@ class PageMainFragment : Fragment() {
                 if (dataSnapshot.value == null) {
                     progressBar.visibility = View.INVISIBLE
                     textEmpty.visibility = View.VISIBLE
+                    listdata.clear()
                     adapter!!.notifyDataSetChanged()
                     return
                 }

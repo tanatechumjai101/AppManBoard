@@ -118,9 +118,8 @@ class PageOwnerFragment : Fragment() {
                         viewHolder.itemView,
                         " ${oldList[deleteIndex].subject} deleted. ", Snackbar.LENGTH_SHORT
                     ).setAction("UNDO") {
-
-                        insertIndex!!.let {
-//                            listModify.add(deleteIndex, oldList[deleteIndex])
+                        listModify.add(deleteIndex, oldList[deleteIndex])
+                        insertIndex?.let {
                             listdata.add(insertIndex, oldList[deleteIndex])
                         }
                         mUsersIns.child("Activity").setValue(listdata)
