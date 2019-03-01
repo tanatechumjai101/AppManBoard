@@ -41,7 +41,6 @@ import com.google.firebase.storage.StorageReference
 class FormActivity : AppCompatActivity() {
 
     private lateinit var progressDialog: ProgressDialog
-    private var bitmap: Bitmap? = null
     lateinit var mEditor: RichEditor
     lateinit var Maction_undo: ImageView
     lateinit var Maction_redo: ImageView
