@@ -37,7 +37,7 @@ class HomeAdapter(var Listdata: ArrayList<Data>?) : RecyclerView.Adapter<HomeAda
     class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview){
             fun setResource(data: Data, listener: RecyclerListener_pageHome?, position: Int){
                 itemView.tv_setSubject.text = data.subject
-                itemView.tv_setDetail.text = data.detail
+                itemView.tv_setDetail.loadData(data.detail, "text/html; charset=utf-8", "UTF-8")
                 itemView.tv_setTime.text = data.time
                 itemView.tv_setName.text = data.displayname
                 if(data.imageURI == "null"){
