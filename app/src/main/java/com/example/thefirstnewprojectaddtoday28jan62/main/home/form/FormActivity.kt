@@ -135,43 +135,75 @@ class FormActivity : AppCompatActivity() {
         mEditor.setPlaceholder("add detail ....")
 
 
-
-
-        Maction_undo.setOnClickListener(View.OnClickListener {
+        Maction_undo.setOnClickListener {
             mEditor.undo()
-        })
+        }
 
-        Maction_redo.setOnClickListener(View.OnClickListener { mEditor.redo() })
+        Maction_redo.setOnClickListener{
+            mEditor.redo()
+        }
 
-        Maction_bold.setOnClickListener(View.OnClickListener { mEditor.setBold() })
+        Maction_bold.setOnClickListener{
+            mEditor.setBold()
+        }
 
-        Maction_italic.setOnClickListener(View.OnClickListener { mEditor.setItalic() })
+        Maction_italic.setOnClickListener {
+            mEditor.setItalic()
+        }
 
-        Maction_subscript.setOnClickListener(View.OnClickListener { mEditor.setSubscript() })
+        Maction_subscript.setOnClickListener {
+            mEditor.setSubscript()
+        }
 
-        Maction_superscript.setOnClickListener(View.OnClickListener { mEditor.setSuperscript() })
+        Maction_superscript.setOnClickListener {
+            mEditor.setSuperscript()
+        }
 
-        Maction_strikethrough.setOnClickListener(View.OnClickListener { mEditor.setStrikeThrough() })
+        Maction_strikethrough.setOnClickListener{
+            mEditor.setStrikeThrough()
+        }
 
-        Maction_underline.setOnClickListener(View.OnClickListener { mEditor.setUnderline() })
+        Maction_underline.setOnClickListener {
+            mEditor.setUnderline()
+        }
 
-        Maction_heading1.setOnClickListener(View.OnClickListener { mEditor.setHeading(1) })
+        Maction_heading1.setOnClickListener {
+            mEditor.setHeading(1)
+        }
 
-        Maction_heading2.setOnClickListener(View.OnClickListener { mEditor.setHeading(2) })
+        Maction_heading2.setOnClickListener {
+            mEditor.setHeading(2)
+        }
 
-        Maction_heading3.setOnClickListener(View.OnClickListener { mEditor.setHeading(3) })
+        Maction_heading3.setOnClickListener{
+            mEditor.setHeading(3)
+        }
 
-        Maction_heading4.setOnClickListener(View.OnClickListener { mEditor.setHeading(4) })
+        Maction_heading4.setOnClickListener {
+            mEditor.setHeading(4)
+        }
 
-        Maction_heading5.setOnClickListener(View.OnClickListener { mEditor.setHeading(5) })
 
-        Maction_heading6.setOnClickListener(View.OnClickListener { mEditor.setHeading(6) })
+        Maction_heading5.setOnClickListener {
+            mEditor.setHeading(5)
+        }
+
+        Maction_heading6.setOnClickListener {
+            mEditor.setHeading(6)
+        }
 
         Maction_txt_color.setOnClickListener(object : View.OnClickListener {
             private var isChanged: Boolean = false
 
             override fun onClick(v: View) {
-                mEditor.setTextColor(if (isChanged) Color.BLACK else Color.RED)
+                mEditor.setTextColor(
+                    if (isChanged){
+                        Color.BLACK
+                    }
+                    else {
+                        Color.RED
+                    }
+                )
                 isChanged = !isChanged
             }
         })
@@ -180,41 +212,66 @@ class FormActivity : AppCompatActivity() {
             private var isChanged: Boolean = false
 
             override fun onClick(v: View) {
-                mEditor.setTextBackgroundColor(if (isChanged) Color.TRANSPARENT else Color.YELLOW)
+                mEditor.setTextBackgroundColor(
+                    if(isChanged){
+                        Color.TRANSPARENT
+                    }else{
+                        Color.YELLOW
+                    }
+                        )
                 isChanged = !isChanged
             }
         })
 
-        Maction_indent.setOnClickListener(View.OnClickListener { mEditor.setIndent() })
+        Maction_indent.setOnClickListener {
+            mEditor.setIndent()
+        }
 
-        Maction_outdent.setOnClickListener(View.OnClickListener { mEditor.setOutdent() })
+        Maction_outdent.setOnClickListener {
+            mEditor.setOutdent()
+        }
 
-        Maction_align_left.setOnClickListener(View.OnClickListener { mEditor.setAlignLeft() })
+        Maction_align_left.setOnClickListener {
+            mEditor.setAlignLeft()
+        }
 
-        Maction_align_center.setOnClickListener(View.OnClickListener { mEditor.setAlignCenter() })
+        Maction_align_center.setOnClickListener{
+            mEditor.setAlignCenter()
+        }
 
-        Maction_align_right.setOnClickListener(View.OnClickListener { mEditor.setAlignRight() })
+        Maction_align_right.setOnClickListener {
+            mEditor.setAlignRight()
+        }
 
-        Maction_blockquote.setOnClickListener(View.OnClickListener { mEditor.setBlockquote() })
+        Maction_blockquote.setOnClickListener{
+            mEditor.setBlockquote()
+        }
 
-        Maction_insert_bullets.setOnClickListener(View.OnClickListener { mEditor.setBullets() })
+        Maction_insert_bullets.setOnClickListener{
+            mEditor.setBullets()
+        }
 
-        Maction_insert_numbers.setOnClickListener(View.OnClickListener { mEditor.setNumbers() })
+        Maction_insert_numbers.setOnClickListener{
+            mEditor.setNumbers()
+        }
 
-        Maction_insert_image.setOnClickListener(View.OnClickListener {
+        Maction_insert_image.setOnClickListener {
             mEditor.insertImage(
-                    "https://scontent.fbkk2-8.fna.fbcdn.net/v/t1.0-9/52797687_2298520613710284_7860353166057930752_n.jpg?_nc_cat=105&_nc_eui2=AeGlIcW8ccOQS0EYl_DQjA3BiIBTyy7fgG77qtPmq4hvR6jwPKjFXzJEheuFG4AxuMwYJsMr9zp75bDEeKO4MC3l8IZgLfFnnijkjv0E1rht4Q&_nc_ht=scontent.fbkk2-8.fna&oh=65f853c7e25b17138e5e90cf3831207c&oe=5CECF51F",
-                    "Error"
+                "https://scontent.fbkk2-8.fna.fbcdn.net/v/t1.0-9/52797687_2298520613710284_7860353166057930752_n.jpg?_nc_cat=105&_nc_eui2=AeGlIcW8ccOQS0EYl_DQjA3BiIBTyy7fgG77qtPmq4hvR6jwPKjFXzJEheuFG4AxuMwYJsMr9zp75bDEeKO4MC3l8IZgLfFnnijkjv0E1rht4Q&_nc_ht=scontent.fbkk2-8.fna&oh=65f853c7e25b17138e5e90cf3831207c&oe=5CECF51F",
+                "Error"
             )
-        })
+        }
 
-        Maction_insert_link.setOnClickListener(View.OnClickListener {
+        Maction_insert_link.setOnClickListener {
             mEditor.insertLink(
-                    "https://github.com/wasabeef",
-                    "career@appman.co.th"
+                "https://github.com/wasabeef",
+                "career@appman.co.th"
             )
-        })
-        Maction_insert_checkbox.setOnClickListener(View.OnClickListener { mEditor.insertTodo() })
+        }
+
+        Maction_insert_checkbox.setOnClickListener {
+            mEditor.insertTodo()
+        }
 
         val dialog = ImageDialog(this)
         dialog.listener = object : ImageDialog.DialogListener {
@@ -242,11 +299,11 @@ class FormActivity : AppCompatActivity() {
                 finish()
             } else {
                 android.support.v7.app.AlertDialog.Builder(this@FormActivity)
-                        .setTitle("Are you sure ?")
-                        .setMessage("Do you want to close the app?")
-                        .setPositiveButton("yes") { dialog, which -> finish() }
-                        .setNegativeButton("no") { dialog, which -> }
-                        .show()
+                    .setTitle("Are you sure ?")
+                    .setMessage("Do you want to close the app?")
+                    .setPositiveButton("yes") { dialog, which -> finish() }
+                    .setNegativeButton("no") { dialog, which -> }
+                    .show()
             }
         }
 
@@ -267,19 +324,19 @@ class FormActivity : AppCompatActivity() {
             if (Subject_text.text.toString().isNullOrBlank() || nPreview.isNullOrBlank()) {
 
                 AlertDialog.Builder(this)
-                        .setIcon(R.drawable.ic_priority_high_black_24dp)
-                        .setTitle("ผิดพลาด")
-                        .setMessage("กรุณากรอกข้อมูลใหม่")
-                        .show()
+                    .setIcon(R.drawable.ic_priority_high_black_24dp)
+                    .setTitle("ผิดพลาด")
+                    .setMessage("กรุณากรอกข้อมูลใหม่")
+                    .show()
             } else {
                 val formPage = Data(
-                        Subject_text.text.toString(),
-                        PreviewHtml,
-                        dateTime,
-                        sharedPreference.getString("img_url", ""),
-                        sharedPreference.getString("display_name", ""),
-                        sharedPreference.getString("email", ""),
-                        PrimeryKey_id
+                    Subject_text.text.toString(),
+                    PreviewHtml,
+                    dateTime,
+                    sharedPreference.getString("img_url", ""),
+                    sharedPreference.getString("display_name", ""),
+                    sharedPreference.getString("email", ""),
+                    PrimeryKey_id
                 )
                 val intent = Intent().apply {
                     this.putExtra("Data", formPage)
@@ -304,11 +361,11 @@ class FormActivity : AppCompatActivity() {
     override fun onBackPressed() {
 //        super.onBackPressed()
         android.support.v7.app.AlertDialog.Builder(this@FormActivity)
-                .setTitle("Are you sure ?")
-                .setMessage("Do you want to close this page?")
-                .setPositiveButton("yes") { dialog, which -> finish() }
-                .setNegativeButton("no") { dialog, which -> }
-                .show()
+            .setTitle("Are you sure ?")
+            .setMessage("Do you want to close this page?")
+            .setPositiveButton("yes") { dialog, which -> finish() }
+            .setNegativeButton("no") { dialog, which -> }
+            .show()
     }
 
 
@@ -318,25 +375,26 @@ class FormActivity : AppCompatActivity() {
                 if (resultCode == Activity.RESULT_OK) {
                     progressDialog.show()
                     if (imageSavedPath != null) {
-//                        uploadImageForCamera(imageSavedPath!!)
                         toast("Bitmap resized.")
                         Glide.with(this)
-                                .asBitmap()
-                                .listener(object : RequestListener<Bitmap?> {
-                                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap?>?, isFirstResource: Boolean): Boolean {
-                                        return false
-                                    }
-                                    override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap?>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                                        resource?.let {
-                                            val rescaleBitmap = resizeBitmap(resource, resource.width / 2, resource.height / 2)
-                                            uploadImageForCamera(rescaleBitmap.toByteArray())
+                            .asBitmap()
+                            .listener(object : RequestListener<Bitmap?> {
+                                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap?>?, isFirstResource: Boolean): Boolean {
+                                    return false
+                                }
 
-                                        }
-                                        return false
+                                override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap?>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                    resource?.let {
+                                        val rescaleBitmap =
+                                            resizeBitmap(resource, resource.width / 2, resource.height / 2)
+                                        uploadImageForCamera(rescaleBitmap.toByteArray())
+
                                     }
-                                })
-                                .load(imageSavedPath)
-                                .into(ivCamera)
+                                    return false
+                                }
+                            })
+                            .load(imageSavedPath)
+                            .into(ivCamera)
                     } else {
                         toast("bitmap not found.")
                     }
@@ -370,17 +428,20 @@ class FormActivity : AppCompatActivity() {
             options.inPreferredConfig = Bitmap.Config.ARGB_8888
             val bitmap = BitmapFactory.decodeFile(imagePath, options)
             cursor?.close()
-            uploadImageForGallery(resizeBitmap(bitmap, bitmap.width/2, bitmap.height/2).toByteArray())
+            uploadImageForGallery(resizeBitmap(bitmap, bitmap.width / 2, bitmap.height / 2).toByteArray())
         }
     }
+
+
     private fun deleteImageForCamera(imageRef: StorageReference) {
-        imageRef.delete().addOnSuccessListener {
-            Toast.makeText(this,"Deleted",Toast.LENGTH_SHORT).show()
+        imageRef.delete().addOnSuccessListener() {
+            Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show()
         }
     }
+
     private fun deleteImageForGallery(imageRef: StorageReference) {
         imageRef.delete().addOnSuccessListener {
-            Toast.makeText(this,"Deleted ",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Deleted ", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -390,27 +451,25 @@ class FormActivity : AppCompatActivity() {
             progressDialog.setTitle("Uploading....")
             val imageRef = storageReference!!.child("Image/Camera/" + UUID.randomUUID().toString())
             imageRef.putBytes(byteArray)
-                    .addOnSuccessListener {taskSnapShot->
-                        progressDialog.dismiss()
-                        Toast.makeText(applicationContext, "Image Uploaded", Toast.LENGTH_SHORT).show()
-                        imageRef.downloadUrl.addOnCompleteListener { p0 ->
-                            mEditor.insertImage(p0.result.toString(),"Failed")
-                        }
-//                        deleteImageForCamera(imageRef)
+                .addOnSuccessListener { taskSnapShot ->
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                    imageRef.downloadUrl.addOnCompleteListener { p0 ->
+                        mEditor.insertImage(p0.result.toString(), "Failed")
                     }
-                    .addOnFailureListener {
-                        progressDialog.dismiss()
-                        Toast.makeText(applicationContext, "Failed", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnProgressListener { taskSnapShot ->
-                        val progress = (100.00 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
-                        progressDialog.setMessage("Uploading  " + progress.toInt() + "  % ...")
+                }
+                .addOnFailureListener {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext, "Failed", Toast.LENGTH_SHORT).show()
+                }
+                .addOnProgressListener { taskSnapShot ->
+                    val progress = (100.00 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
+                    progressDialog.setMessage("Uploading  " + progress.toInt() + "  % ...")
 
-                    }
+                }
 
         }
     }
-
 
 
     private fun uploadImageForGallery(byteArray: ByteArray?) {
@@ -421,23 +480,23 @@ class FormActivity : AppCompatActivity() {
             var progress: Double = 100.00
             val imageRef = storageReference!!.child("Image/Gallery/" + UUID.randomUUID().toString())
             imageRef.putBytes(byteArray)
-                    .addOnSuccessListener {taskSnapShot->
-                        Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
-                        progressDialog.dismiss()
-                        imageRef.downloadUrl.addOnCompleteListener { p0 ->
-//                            Log.d("TEST", "Uri: ${p0.result.toString()}")
-                            mEditor.insertImage(p0.result.toString(),"Failed")}
-//                        deleteImageForGallery(imageRef)
+                .addOnSuccessListener { taskSnapShot ->
+                    Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                    progressDialog.dismiss()
+                    imageRef.downloadUrl.addOnCompleteListener { p0 ->
+                        //                            Log.d("TEST", "Uri: ${p0.result.toString()}")
+                        mEditor.insertImage(p0.result.toString(), "Failed")
                     }
-                    .addOnProgressListener { taskSnapShot ->
-                        progress = (100.0 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
-                        progressDialog.setMessage("Uploading " + progress.toInt() + "% ...")
-                    }
-                    .addOnFailureListener {
-                        progressDialog.dismiss()
-                        Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+                }
+                .addOnProgressListener { taskSnapShot ->
+                    progress = (100.0 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
+                    progressDialog.setMessage("Uploading " + progress.toInt() + "% ...")
+                }
+                .addOnFailureListener {
+                    progressDialog.dismiss()
+                    Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
 
-                    }
+                }
         }
     }
 
