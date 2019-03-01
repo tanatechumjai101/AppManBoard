@@ -14,9 +14,6 @@ import kotlinx.android.synthetic.main.activity_edit.*
 import kotlinx.android.synthetic.main.toolbar_form_activity.*
 
 class EditActivity : AppCompatActivity() {
-    lateinit var adapter: OwnerRecyclerAdapter
-    var listdata = mutableListOf<Data>()
-    lateinit var mUsersIns: DatabaseReference
     private var data: Data? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

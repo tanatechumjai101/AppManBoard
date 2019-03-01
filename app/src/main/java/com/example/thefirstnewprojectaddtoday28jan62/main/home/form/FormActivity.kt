@@ -138,11 +138,11 @@ class FormActivity : AppCompatActivity() {
             mEditor.undo()
         }
 
-        Maction_redo.setOnClickListener{
+        Maction_redo.setOnClickListener {
             mEditor.redo()
         }
 
-        Maction_bold.setOnClickListener{
+        Maction_bold.setOnClickListener {
             mEditor.setBold()
         }
 
@@ -158,7 +158,7 @@ class FormActivity : AppCompatActivity() {
             mEditor.setSuperscript()
         }
 
-        Maction_strikethrough.setOnClickListener{
+        Maction_strikethrough.setOnClickListener {
             mEditor.setStrikeThrough()
         }
 
@@ -174,7 +174,7 @@ class FormActivity : AppCompatActivity() {
             mEditor.setHeading(2)
         }
 
-        Maction_heading3.setOnClickListener{
+        Maction_heading3.setOnClickListener {
             mEditor.setHeading(3)
         }
 
@@ -196,10 +196,9 @@ class FormActivity : AppCompatActivity() {
 
             override fun onClick(v: View) {
                 mEditor.setTextColor(
-                    if (isChanged){
+                    if (isChanged) {
                         Color.BLACK
-                    }
-                    else {
+                    } else {
                         Color.RED
                     }
                 )
@@ -212,12 +211,12 @@ class FormActivity : AppCompatActivity() {
 
             override fun onClick(v: View) {
                 mEditor.setTextBackgroundColor(
-                    if(isChanged){
+                    if (isChanged) {
                         Color.TRANSPARENT
-                    }else{
+                    } else {
                         Color.YELLOW
                     }
-                        )
+                )
                 isChanged = !isChanged
             }
         })
@@ -234,7 +233,7 @@ class FormActivity : AppCompatActivity() {
             mEditor.setAlignLeft()
         }
 
-        Maction_align_center.setOnClickListener{
+        Maction_align_center.setOnClickListener {
             mEditor.setAlignCenter()
         }
 
@@ -242,24 +241,19 @@ class FormActivity : AppCompatActivity() {
             mEditor.setAlignRight()
         }
 
-        Maction_blockquote.setOnClickListener{
+        Maction_blockquote.setOnClickListener {
             mEditor.setBlockquote()
         }
 
-        Maction_insert_bullets.setOnClickListener{
+        Maction_insert_bullets.setOnClickListener {
             mEditor.setBullets()
         }
 
-        Maction_insert_numbers.setOnClickListener{
+        Maction_insert_numbers.setOnClickListener {
             mEditor.setNumbers()
         }
 
-        Maction_insert_image.setOnClickListener {
-            mEditor.insertImage(
-                "https://scontent.fbkk2-8.fna.fbcdn.net/v/t1.0-9/52797687_2298520613710284_7860353166057930752_n.jpg?_nc_cat=105&_nc_eui2=AeGlIcW8ccOQS0EYl_DQjA3BiIBTyy7fgG77qtPmq4hvR6jwPKjFXzJEheuFG4AxuMwYJsMr9zp75bDEeKO4MC3l8IZgLfFnnijkjv0E1rht4Q&_nc_ht=scontent.fbkk2-8.fna&oh=65f853c7e25b17138e5e90cf3831207c&oe=5CECF51F",
-                "Error"
-            )
-        }
+
 
         Maction_insert_link.setOnClickListener {
             mEditor.insertLink(
@@ -378,11 +372,22 @@ class FormActivity : AppCompatActivity() {
                         Glide.with(this)
                             .asBitmap()
                             .listener(object : RequestListener<Bitmap?> {
-                                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap?>?, isFirstResource: Boolean): Boolean {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: Target<Bitmap?>?,
+                                    isFirstResource: Boolean
+                                ): Boolean {
                                     return false
                                 }
 
-                                override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap?>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                override fun onResourceReady(
+                                    resource: Bitmap?,
+                                    model: Any?,
+                                    target: Target<Bitmap?>?,
+                                    dataSource: DataSource?,
+                                    isFirstResource: Boolean
+                                ): Boolean {
                                     resource?.let {
                                         val rescaleBitmap =
                                             resizeBitmap(resource, resource.width / 2, resource.height / 2)
@@ -411,7 +416,7 @@ class FormActivity : AppCompatActivity() {
     }
 
     private fun createPathForCameraIntent(): Uri? {
-        fileName = "image_" + Date().time.toString() + ".jpg"
+        fileName = "image_" + Date().time.toString() + ".jpeg"
         val output: File = File(imagesFolder, fileName)
         imageSavedPath = Uri.fromFile(output)
         return imageSavedPath
@@ -476,19 +481,17 @@ class FormActivity : AppCompatActivity() {
         if (byteArray != null) {
 
             progressDialog.setTitle("Uploading....")
-            var progress: Double = 100.00
             val imageRef = storageReference!!.child("Image/Gallery/" + UUID.randomUUID().toString())
             imageRef.putBytes(byteArray)
                 .addOnSuccessListener { taskSnapShot ->
                     Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()
                     imageRef.downloadUrl.addOnCompleteListener { p0 ->
-                        //                            Log.d("TEST", "Uri: ${p0.result.toString()}")
                         mEditor.insertImage(p0.result.toString(), "Failed")
                     }
                 }
                 .addOnProgressListener { taskSnapShot ->
-                    progress = (100.0 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
+                    var progress = (100.0 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
                     progressDialog.setMessage("Uploading " + progress.toInt() + "% ...")
                 }
                 .addOnFailureListener {
@@ -504,14 +507,14 @@ class FormActivity : AppCompatActivity() {
         return if (bitmap.width > bitmap.height) {
             //Landscape
             if (bitmap.width > 1024) {
-                Bitmap.createScaledBitmap(bitmap, width, height, false)
+                Bitmap.createScaledBitmap(bitmap, width / 2, height / 2, false)
             } else {
                 bitmap
             }
         } else {
             //Portrait
             if (bitmap.height > 1024) {
-                Bitmap.createScaledBitmap(bitmap, width, height, false)
+                Bitmap.createScaledBitmap(bitmap, width / 2, height / 2, false)
             } else {
                 bitmap
             }

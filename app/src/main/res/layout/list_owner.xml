@@ -75,16 +75,15 @@
                     android:layout_weight="1"
                     android:gravity="top">
 
-                <WebView
-                        android:layout_gravity="top"
-                        android:layout_marginLeft="2dp"
+                <TextView
                         android:id="@+id/tv_setDetail_owner"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:clickable="false"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                />
+                        android:layout_gravity="top"
+                        android:layout_marginLeft="2dp"
+                        android:gravity="top"
+                        android:text="test"
+                        android:textSize="20dp"/>
             </LinearLayout>
 
             <LinearLayout

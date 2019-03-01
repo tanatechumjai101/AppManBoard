@@ -2,6 +2,7 @@ package com.example.thefirstnewprojectaddtoday28jan62.main.home.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +38,7 @@ class HomeAdapter(var Listdata: ArrayList<Data>?) : RecyclerView.Adapter<HomeAda
     class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview){
             fun setResource(data: Data, listener: RecyclerListener_pageHome?, position: Int){
                 itemView.tv_setSubject.text = data.subject
-                itemView.tv_setDetail.loadData(data.detail, "text/html; charset=utf-8", "UTF-8")
+                itemView.tv_setDetail.text = Html.fromHtml(data.detail)
                 itemView.tv_setTime.text = data.time
                 itemView.tv_setName.text = data.displayname
                 if(data.imageURI == "null"){

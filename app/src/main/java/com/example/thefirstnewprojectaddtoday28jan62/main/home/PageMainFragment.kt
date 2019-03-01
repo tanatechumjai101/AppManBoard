@@ -28,8 +28,14 @@ import java.util.*
 import kotlin.collections.ArrayList
 import android.view.inputmethod.InputMethodManager
 import android.content.Context
-
-
+import android.graphics.drawable.Drawable
+import android.support.v7.app.AppCompatDialog
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 
 
 class PageMainFragment : Fragment() {
@@ -43,10 +49,10 @@ class PageMainFragment : Fragment() {
     lateinit var progressBar: ProgressBar
     lateinit var textEmpty: TextView
 
-    lateinit var tv_subject: TextView
-    lateinit var tv_detail: TextView
-    lateinit var iv_profile_show: ImageView
-
+    //    lateinit var tv_subject: TextView
+//    lateinit var webview_detail: WebView
+//    lateinit var iv_profile_show: ImageView
+    lateinit var iv_test: ImageView
 
 
     private lateinit var firebaseListener: ValueEventListener
@@ -88,39 +94,22 @@ class PageMainFragment : Fragment() {
         activityReference = mUsersIns.child("Activity")
         activityReference.addValueEventListener(firebaseListener)
 
+
         adapter!!.listener = object : HomeAdapter.RecyclerListener_pageHome {
 
             override fun onItemClick(position: Int, data: Data) {
-
-                val inflater = LayoutInflater.from(mActivity)
-                val view = inflater.inflate(R.layout.activity_selete, null)
-
-                tv_subject = view.findViewById(R.id.tv_subject_showAlert)
-                tv_detail = view.findViewById(R.id.tv_detail_showAlert)
-                iv_profile_show = view.findViewById(R.id.iv_profile_showAlert)
-                tv_subject.text = data.subject
-                tv_detail.text = data.detail
-
-                if (data.imageURI == "null" || data.imageURI.isNullOrEmpty() || data.imageURI == null) {
-                    Glide.with(mActivity).load(R.drawable.playstore_icon).into(iv_profile_show)
-                } else {
-                    Glide.with(mActivity).load(data.imageURI).into(iv_profile_show)
-                }
-
-                AlertDialog.Builder(mActivity)
-                    .setView(view)
-                    .create()
-                    .show()
-
+                val dataString = Gson().toJson(data)
+                val dialogFragment = ContentDialogFragment.newInstance(dataString)
+                dialogFragment.show(fragmentManager, "")
             }
         }
 
         ed_search.ed_search.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 filter(s.toString())
-                if(ed_search.length() != 0){
+                if (ed_search.length() != 0) {
                     ib_clear.visibility = View.VISIBLE
-                }else {
+                } else {
                     ib_clear.visibility = View.INVISIBLE
                 }
                 ib_clear.setOnClickListener {
@@ -142,29 +131,29 @@ class PageMainFragment : Fragment() {
         ib_sort.setOnClickListener {
             val popupMenu = PopupMenu(mActivity, it)
             popupMenu.setOnMenuItemClickListener { item ->
-               when(item.itemId){
-                   R.id.action_select_sort_time -> {
-                       Toast.makeText(mActivity,"Sort by Time",Toast.LENGTH_SHORT).show()
-                       true
-                   }
-                   R.id.action_select_sort_character -> {
-                       Toast.makeText(mActivity,"Sort by character",Toast.LENGTH_SHORT).show()
-                       true
-                   }
-                   else -> false
-               }
+                when (item.itemId) {
+                    R.id.action_select_sort_time -> {
+                        Toast.makeText(mActivity, "Sort by Time", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    R.id.action_select_sort_character -> {
+                        Toast.makeText(mActivity, "Sort by character", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    else -> false
+                }
             }
             popupMenu.inflate(R.menu.searchbar)
-            try{
+            try {
                 val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
-                fieldMPopup.isAccessible  = true
+                fieldMPopup.isAccessible = true
                 val mPopup = fieldMPopup.get(popupMenu)
                 mPopup.javaClass
-                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                    .invoke(mPopup,true)
-            }catch (e: Exception){
-                Log.e("Main","Error Showing menu icons.",e)
-            }finally {
+                        .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                        .invoke(mPopup, true)
+            } catch (e: Exception) {
+                Log.e("Main", "Error Showing menu icons.", e)
+            } finally {
                 popupMenu.show()
             }
 
@@ -204,8 +193,8 @@ class PageMainFragment : Fragment() {
 
             override fun onCancelled(error: DatabaseError) {
                 AlertDialog.Builder(mActivity)
-                    .setMessage("Error")
-                    .show()
+                        .setMessage("Error")
+                        .show()
             }
         }
     }
@@ -219,15 +208,15 @@ class PageMainFragment : Fragment() {
                         val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
                         val newData: Data = data.extras.getParcelable("Data")!!
                         val data = Data(
-                            newData.subject,
-                            newData.detail,
-                            dateTime,
-                            newData.imageURI,
-                            newData.displayname,
-                            newData.email,
-                            newData.id
+                                newData.subject,
+                                newData.detail,
+                                dateTime,
+                                newData.imageURI,
+                                newData.displayname,
+                                newData.email,
+                                newData.id
                         )
-                        listdata.add(data!!)
+                        listdata.add(data)
                         activityReference.setValue(listdata)
                         val dataReverser: ArrayList<Data> = arrayListOf()
                         dataReverser.addAll(listdata)
@@ -245,7 +234,7 @@ class PageMainFragment : Fragment() {
         val filteredCourseAry: ArrayList<Data> = ArrayList()
         val courseAry: ArrayList<Data> = listdata
         for (eachCourse in courseAry) {
-            if (eachCourse.subject!!.toLowerCase().contains(text.toLowerCase())) {
+            if (eachCourse.subject.toLowerCase().contains(text.toLowerCase())) {
                 filteredCourseAry.add(eachCourse)
             }
         }
@@ -256,7 +245,8 @@ class PageMainFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.searchbar, menu)
     }
-    private fun closeKeyboard(view : View) {
+
+    private fun closeKeyboard(view: View) {
 
         if (view != null) {
             val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -265,14 +255,8 @@ class PageMainFragment : Fragment() {
     }
 
 
-
     companion object {
         fun newInstance() = PageMainFragment()
-    }
-
-    override fun onPause() {
-        super.onPause()
-//        activityReference.removeEventListener(firebaseListener)
     }
 
     override fun onResume() {
