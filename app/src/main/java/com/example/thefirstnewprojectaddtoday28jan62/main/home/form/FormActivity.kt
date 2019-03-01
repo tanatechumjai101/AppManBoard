@@ -13,12 +13,11 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.text.Html
-import android.util.Log
 import android.view.View
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
-import com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image.ImageActivity
+import com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image.ImageDialog
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
 import jp.wasabeef.richeditor.RichEditor
 import kotlinx.android.synthetic.main.activity_form.*
@@ -215,8 +214,8 @@ class FormActivity : AppCompatActivity() {
         })
         Maction_insert_checkbox.setOnClickListener(View.OnClickListener { mEditor.insertTodo() })
 
-        val dialog = ImageActivity(this)
-        dialog.listener = object : ImageActivity.DialogListener {
+        val dialog = ImageDialog(this)
+        dialog.listener = object : ImageDialog.DialogListener {
             override fun onCameraClick() {
 
                 val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)

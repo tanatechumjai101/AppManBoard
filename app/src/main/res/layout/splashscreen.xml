@@ -14,6 +14,6 @@
         android:layout_gravity="center"
         android:layout_margin="60dp"
         android:adjustViewBounds="true"
-        android:src="@drawable/playstore_icon" />
+        android:src="@drawable/custom" />
 
 </RelativeLayout>

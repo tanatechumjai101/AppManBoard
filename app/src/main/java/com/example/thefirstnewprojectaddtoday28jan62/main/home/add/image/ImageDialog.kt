@@ -8,7 +8,7 @@ import android.view.Window
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import kotlinx.android.synthetic.main.activity_image.*
 
-class ImageActivity(context: Context) : Dialog(context) {
+class ImageDialog(context: Context) : Dialog(context) {
 
     var listener: DialogListener? = null
 

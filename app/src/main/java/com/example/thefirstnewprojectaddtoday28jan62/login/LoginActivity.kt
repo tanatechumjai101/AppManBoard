@@ -9,6 +9,8 @@ import android.content.Intent
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import com.example.thefirstnewprojectaddtoday28jan62.util.Singleton
 import com.example.thefirstnewprojectaddtoday28jan62.main.MainActivity
@@ -29,10 +31,11 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build()
+            .requestEmail()
+            .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
         sign_in_button.visibility = View.VISIBLE
@@ -46,11 +49,11 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         AlertDialog.Builder(this@LoginActivity)
-                .setTitle("Are you sure ?")
-                .setMessage("Do you want to close the app?")
-                .setPositiveButton("yes") { dialog, which -> finishAffinity() }
-                .setNegativeButton("no") { dialog, which -> }
-                .show()
+            .setTitle("Are you sure ?")
+            .setMessage("Do you want to close the app?")
+            .setPositiveButton("yes") { dialog, which -> finishAffinity() }
+            .setNegativeButton("no") { dialog, which -> }
+            .show()
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -70,9 +73,9 @@ class LoginActivity : AppCompatActivity() {
 
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
         val editor = sharedPreference.edit()
-        editor.putString("display_name",completedTask.result.displayName.toString()).apply()
-        editor.putString("email",completedTask.result.email.toString()).apply()
-        editor.putString("img_url",completedTask.result.photoUrl.toString()).apply()
+        editor.putString("display_name", completedTask.result.displayName.toString()).apply()
+        editor.putString("email", completedTask.result.email.toString()).apply()
+        editor.putString("img_url", completedTask.result.photoUrl.toString()).apply()
 
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
         finish()
