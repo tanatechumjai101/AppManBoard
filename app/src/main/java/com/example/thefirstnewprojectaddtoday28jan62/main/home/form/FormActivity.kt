@@ -137,7 +137,9 @@ class FormActivity : AppCompatActivity() {
 
 
 
-        Maction_undo.setOnClickListener(View.OnClickListener { mEditor.undo() })
+        Maction_undo.setOnClickListener(View.OnClickListener {
+            mEditor.undo()
+        })
 
         Maction_redo.setOnClickListener(View.OnClickListener { mEditor.redo() })
 
@@ -371,6 +373,16 @@ class FormActivity : AppCompatActivity() {
             uploadImageForGallery(resizeBitmap(bitmap, bitmap.width/2, bitmap.height/2).toByteArray())
         }
     }
+    private fun deleteImageForCamera(imageRef: StorageReference) {
+        imageRef.delete().addOnSuccessListener {
+            Toast.makeText(this,"Deleted",Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun deleteImageForGallery(imageRef: StorageReference) {
+        imageRef.delete().addOnSuccessListener {
+            Toast.makeText(this,"Deleted ",Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun uploadImageForCamera(byteArray: ByteArray?) {
 
@@ -384,6 +396,7 @@ class FormActivity : AppCompatActivity() {
                         imageRef.downloadUrl.addOnCompleteListener { p0 ->
                             mEditor.insertImage(p0.result.toString(),"Failed")
                         }
+//                        deleteImageForCamera(imageRef)
                     }
                     .addOnFailureListener {
                         progressDialog.dismiss()
@@ -397,6 +410,8 @@ class FormActivity : AppCompatActivity() {
 
         }
     }
+
+
 
     private fun uploadImageForGallery(byteArray: ByteArray?) {
 
@@ -412,6 +427,7 @@ class FormActivity : AppCompatActivity() {
                         imageRef.downloadUrl.addOnCompleteListener { p0 ->
 //                            Log.d("TEST", "Uri: ${p0.result.toString()}")
                             mEditor.insertImage(p0.result.toString(),"Failed")}
+//                        deleteImageForGallery(imageRef)
                     }
                     .addOnProgressListener { taskSnapShot ->
                         progress = (100.0 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
