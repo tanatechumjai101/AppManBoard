@@ -41,7 +41,7 @@ class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
             position: Int
         ) {
             itemView.tv_setSubject_owner.text = data.subject
-            itemView.tv_setDetail_owner.text = data.detail
+            itemView.tv_setDetail_owner.loadData(data.detail, "text/html; charset=utf-8", "UTF-8")
             itemView.tv_setTime_owner.text = data.time
             itemView.tv_setName_owner.text = data.displayname
 
@@ -59,7 +59,6 @@ class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
     }
     fun filterList(filteredCourseList: ArrayList<Data>) {
         this.Listdata = filteredCourseList
-//        this.Listdata!!.reverse()
         notifyDataSetChanged()
     }
 
