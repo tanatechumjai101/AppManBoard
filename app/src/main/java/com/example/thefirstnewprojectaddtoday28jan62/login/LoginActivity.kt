@@ -7,18 +7,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import android.content.Intent
 import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
 import com.example.thefirstnewprojectaddtoday28jan62.R
-import com.example.thefirstnewprojectaddtoday28jan62.util.Singleton
 import com.example.thefirstnewprojectaddtoday28jan62.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.tasks.Task
-import com.google.android.gms.common.api.ApiException
 import kotlinx.android.synthetic.main.activity_login.*
 
 
@@ -38,10 +34,10 @@ class LoginActivity : AppCompatActivity() {
             .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-        sign_in_button.visibility = View.VISIBLE
-        sign_in_button.setSize(SignInButton.SIZE_WIDE)
+        btn_signin.visibility = View.VISIBLE
+        btn_signin.setSize(SignInButton.SIZE_WIDE)
 
-        sign_in_button.setOnClickListener {
+        btn_signin.setOnClickListener {
             val signInIntent = mGoogleSignInClient?.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
