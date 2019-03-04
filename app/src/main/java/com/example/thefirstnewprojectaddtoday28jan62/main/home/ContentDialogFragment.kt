@@ -46,7 +46,9 @@ class ContentDialogFragment : DialogFragment() {
         val dataModel = Gson().fromJson(data, Data::class.java)
 
         tv_subject_showAlert.text = dataModel.subject
-
+        ib_close.setOnClickListener {
+            dismissAllowingStateLoss()
+        }
         if (dataModel.imageURI == "null" || dataModel.imageURI.isNullOrEmpty() || dataModel.imageURI == null) {
                     Glide.with(mActivity).load(R.drawable.playstore_icon).into(iv_profile_showAlert)
                 } else {
