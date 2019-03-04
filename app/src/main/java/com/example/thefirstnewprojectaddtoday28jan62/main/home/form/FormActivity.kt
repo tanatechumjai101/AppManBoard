@@ -16,10 +16,8 @@ import android.text.Html
 import android.view.View
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image.ImageDialog
 import com.example.thefirstnewprojectaddtoday28jan62.model.Data
-import jp.wasabeef.richeditor.RichEditor
 import kotlinx.android.synthetic.main.activity_form.*
 import kotlinx.android.synthetic.main.toolbar_form_activity.*
 import java.io.File
@@ -41,34 +39,7 @@ import com.google.firebase.storage.StorageReference
 class FormActivity : AppCompatActivity() {
 
     private lateinit var progressDialog: ProgressDialog
-    lateinit var mEditor: RichEditor
-    lateinit var Maction_undo: ImageView
-    lateinit var Maction_redo: ImageView
-    lateinit var Maction_bold: ImageView
-    lateinit var Maction_italic: ImageView
-    lateinit var Maction_subscript: ImageView
-    lateinit var Maction_superscript: ImageView
-    lateinit var Maction_strikethrough: ImageView
-    lateinit var Maction_underline: ImageView
-    lateinit var Maction_heading1: ImageView
-    lateinit var Maction_heading2: ImageView
-    lateinit var Maction_heading3: ImageView
-    lateinit var Maction_heading4: ImageView
-    lateinit var Maction_heading5: ImageView
-    lateinit var Maction_heading6: ImageView
-    lateinit var Maction_txt_color: ImageView
-    lateinit var Maction_bg_color: ImageView
-    lateinit var Maction_indent: ImageView
-    lateinit var Maction_outdent: ImageView
-    lateinit var Maction_align_left: ImageView
-    lateinit var Maction_align_center: ImageView
-    lateinit var Maction_align_right: ImageView
-    lateinit var Maction_blockquote: ImageView
-    lateinit var Maction_insert_bullets: ImageView
-    lateinit var Maction_insert_numbers: ImageView
-    lateinit var Maction_insert_image: ImageView
-    lateinit var Maction_insert_link: ImageView
-    lateinit var Maction_insert_checkbox: ImageView
+
     private var fileName: String = ""
 
     var nPreview = ""
@@ -98,104 +69,76 @@ class FormActivity : AppCompatActivity() {
 
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
 
-        Maction_undo = findViewById(R.id.action_undo)
-        Maction_redo = findViewById(R.id.action_redo)
-        Maction_bold = findViewById(R.id.action_bold)
-        Maction_italic = findViewById(R.id.action_italic)
-        Maction_subscript = findViewById(R.id.action_subscript)
-        Maction_superscript = findViewById(R.id.action_superscript)
-        Maction_strikethrough = findViewById(R.id.action_strikethrough)
-        Maction_underline = findViewById(R.id.action_underline)
-        Maction_heading1 = findViewById(R.id.action_heading1)
-        Maction_heading2 = findViewById(R.id.action_heading2)
-        Maction_heading3 = findViewById(R.id.action_heading3)
-        Maction_heading4 = findViewById(R.id.action_heading4)
-        Maction_heading5 = findViewById(R.id.action_heading5)
-        Maction_heading6 = findViewById(R.id.action_heading6)
-        Maction_txt_color = findViewById(R.id.action_txt_color)
-        Maction_bg_color = findViewById(R.id.action_bg_color)
-        Maction_indent = findViewById(R.id.action_indent)
-        Maction_outdent = findViewById(R.id.action_outdent)
-        Maction_align_left = findViewById(R.id.action_align_left)
-        Maction_align_center = findViewById(R.id.action_align_center)
-        Maction_align_right = findViewById(R.id.action_align_right)
-        Maction_blockquote = findViewById(R.id.action_blockquote)
-        Maction_insert_bullets = findViewById(R.id.action_insert_bullets)
-        Maction_insert_numbers = findViewById(R.id.action_insert_numbers)
-        Maction_insert_image = findViewById(R.id.action_insert_image)
-        Maction_insert_link = findViewById(R.id.action_insert_link)
-        Maction_insert_checkbox = findViewById(R.id.action_insert_checkbox)
 
-        mEditor = findViewById(R.id.editor) as RichEditor
-        mEditor.setEditorHeight(200)
-        mEditor.setEditorFontSize(22)
-        mEditor.setEditorFontColor(Color.BLACK)
-        mEditor.setPadding(10, 10, 10, 10)
-        mEditor.setPlaceholder("add detail ....")
+        editor.setEditorHeight(200)
+        editor.setEditorFontSize(22)
+        editor.setEditorFontColor(Color.BLACK)
+        editor.setPadding(10, 10, 10, 10)
+        editor.setPlaceholder("add detail ....")
 
 
-        Maction_undo.setOnClickListener {
-            mEditor.undo()
+        action_undo.setOnClickListener {
+            editor.undo()
         }
 
-        Maction_redo.setOnClickListener {
-            mEditor.redo()
+        action_redo.setOnClickListener {
+            editor.redo()
         }
 
-        Maction_bold.setOnClickListener {
-            mEditor.setBold()
+        action_bold.setOnClickListener {
+            editor.setBold()
         }
 
-        Maction_italic.setOnClickListener {
-            mEditor.setItalic()
+        action_italic.setOnClickListener {
+            editor.setItalic()
         }
 
-        Maction_subscript.setOnClickListener {
-            mEditor.setSubscript()
+        action_subscript.setOnClickListener {
+            editor.setSubscript()
         }
 
-        Maction_superscript.setOnClickListener {
-            mEditor.setSuperscript()
+        action_superscript.setOnClickListener {
+            editor.setSuperscript()
         }
 
-        Maction_strikethrough.setOnClickListener {
-            mEditor.setStrikeThrough()
+        action_strikethrough.setOnClickListener {
+            editor.setStrikeThrough()
         }
 
-        Maction_underline.setOnClickListener {
-            mEditor.setUnderline()
+        action_underline.setOnClickListener {
+            editor.setUnderline()
         }
 
-        Maction_heading1.setOnClickListener {
-            mEditor.setHeading(1)
+        action_heading1.setOnClickListener {
+            editor.setHeading(1)
         }
 
-        Maction_heading2.setOnClickListener {
-            mEditor.setHeading(2)
+        action_heading2.setOnClickListener {
+            editor.setHeading(2)
         }
 
-        Maction_heading3.setOnClickListener {
-            mEditor.setHeading(3)
+        action_heading3.setOnClickListener {
+            editor.setHeading(3)
         }
 
-        Maction_heading4.setOnClickListener {
-            mEditor.setHeading(4)
+        action_heading4.setOnClickListener {
+            editor.setHeading(4)
         }
 
 
-        Maction_heading5.setOnClickListener {
-            mEditor.setHeading(5)
+        action_heading5.setOnClickListener {
+            editor.setHeading(5)
         }
 
-        Maction_heading6.setOnClickListener {
-            mEditor.setHeading(6)
+        action_heading6.setOnClickListener {
+            editor.setHeading(6)
         }
 
-        Maction_txt_color.setOnClickListener(object : View.OnClickListener {
+        action_txt_color.setOnClickListener(object : View.OnClickListener {
             private var isChanged: Boolean = false
 
             override fun onClick(v: View) {
-                mEditor.setTextColor(
+                editor.setTextColor(
                     if (isChanged) {
                         Color.BLACK
                     } else {
@@ -206,11 +149,11 @@ class FormActivity : AppCompatActivity() {
             }
         })
 
-        Maction_bg_color.setOnClickListener(object : View.OnClickListener {
+        action_bg_color.setOnClickListener(object : View.OnClickListener {
             private var isChanged: Boolean = false
 
             override fun onClick(v: View) {
-                mEditor.setTextBackgroundColor(
+                editor.setTextBackgroundColor(
                     if (isChanged) {
                         Color.TRANSPARENT
                     } else {
@@ -221,49 +164,49 @@ class FormActivity : AppCompatActivity() {
             }
         })
 
-        Maction_indent.setOnClickListener {
-            mEditor.setIndent()
+        action_indent.setOnClickListener {
+            editor.setIndent()
         }
 
-        Maction_outdent.setOnClickListener {
-            mEditor.setOutdent()
+        action_outdent.setOnClickListener {
+            editor.setOutdent()
         }
 
-        Maction_align_left.setOnClickListener {
-            mEditor.setAlignLeft()
+        action_align_left.setOnClickListener {
+            editor.setAlignLeft()
         }
 
-        Maction_align_center.setOnClickListener {
-            mEditor.setAlignCenter()
+        action_align_center.setOnClickListener {
+            editor.setAlignCenter()
         }
 
-        Maction_align_right.setOnClickListener {
-            mEditor.setAlignRight()
+        action_align_right.setOnClickListener {
+            editor.setAlignRight()
         }
 
-        Maction_blockquote.setOnClickListener {
-            mEditor.setBlockquote()
+        action_blockquote.setOnClickListener {
+            editor.setBlockquote()
         }
 
-        Maction_insert_bullets.setOnClickListener {
-            mEditor.setBullets()
+        action_insert_bullets.setOnClickListener {
+            editor.setBullets()
         }
 
-        Maction_insert_numbers.setOnClickListener {
-            mEditor.setNumbers()
+        action_insert_numbers.setOnClickListener {
+            editor.setNumbers()
         }
 
 
 
-        Maction_insert_link.setOnClickListener {
-            mEditor.insertLink(
+        action_insert_link.setOnClickListener {
+            editor.insertLink(
                 "https://github.com/wasabeef",
                 "career@appman.co.th"
             )
         }
 
-        Maction_insert_checkbox.setOnClickListener {
-            mEditor.insertTodo()
+        action_insert_checkbox.setOnClickListener {
+            editor.insertTodo()
         }
 
         val dialog = ImageDialog(this)
@@ -288,7 +231,7 @@ class FormActivity : AppCompatActivity() {
 
         ib_back_pageForm.setOnClickListener {
             nPreview = Html.fromHtml(nPreview).toString()
-            if (Subject_text.text.toString().isNullOrBlank() && nPreview.isNullOrBlank()) {
+            if (ed_subject_from.text.toString().isNullOrBlank() && nPreview.isNullOrBlank()) {
                 finish()
             } else {
                 android.support.v7.app.AlertDialog.Builder(this@FormActivity)
@@ -300,7 +243,7 @@ class FormActivity : AppCompatActivity() {
             }
         }
 
-        mEditor.setOnTextChangeListener { text ->
+        editor.setOnTextChangeListener { text ->
             var mPreview = text.toString()
             nPreview = mPreview
             PreviewHtml = mPreview
@@ -314,7 +257,7 @@ class FormActivity : AppCompatActivity() {
             val mTimestamp = Date().time.toString()
             val PrimeryKey_id = "${mEmail} $mTimestamp"
 
-            if (Subject_text.text.toString().isNullOrBlank() || nPreview.isNullOrBlank()) {
+            if (ed_subject_from.text.toString().isNullOrBlank() || nPreview.isNullOrBlank()) {
 
                 AlertDialog.Builder(this)
                     .setIcon(R.drawable.ic_priority_high_black_24dp)
@@ -323,7 +266,7 @@ class FormActivity : AppCompatActivity() {
                     .show()
             } else {
                 val formPage = Data(
-                    Subject_text.text.toString(),
+                    ed_subject_from.text.toString(),
                     PreviewHtml,
                     dateTime,
                     sharedPreference.getString("img_url", ""),
@@ -459,7 +402,7 @@ class FormActivity : AppCompatActivity() {
                     progressDialog.dismiss()
                     Toast.makeText(applicationContext, "Image Uploaded", Toast.LENGTH_SHORT).show()
                     imageRef.downloadUrl.addOnCompleteListener { p0 ->
-                        mEditor.insertImage(p0.result.toString(), "Failed")
+                        editor.insertImage(p0.result.toString(), "Failed")
                     }
                 }
                 .addOnFailureListener {
@@ -487,7 +430,7 @@ class FormActivity : AppCompatActivity() {
                     Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()
                     imageRef.downloadUrl.addOnCompleteListener { p0 ->
-                        mEditor.insertImage(p0.result.toString(), "Failed")
+                        editor.insertImage(p0.result.toString(), "Failed")
                     }
                 }
                 .addOnProgressListener { taskSnapShot ->

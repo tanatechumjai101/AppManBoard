@@ -53,66 +53,8 @@ class MainActivity : BaseActivity() {
                     .addToBackStack(null)
                     .commit()
             }
-//            R.id.setting -> {
-//                supportFragmentManager.beginTransaction().replace(R.id.frameNav, pagesettingFragment)
-//                    .addToBackStack(null)
-//                    .commit()
-//            }
         }
         true
     }
-
-    fun changePage(item: Int) {
-//        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
-//        val editor = sharedPreference.edit()
-//        var result = sharedPreference.getInt("page", 0)
-//        val curFrag = this!!.supportFragmentManager.primaryNavigationFragment
-//
-//        if (item != result) {
-////            var fragment = supportFragmentManager.findFragmentByTag(item.toString())
-//            fragmentTransaction = supportFragmentManager.beginTransaction()
-//
-//            editor.putInt("page", item).apply()
-//            if (curFrag != null) {
-//                fragmentTransaction!!.hide(curFrag)
-//            }
-//            fragmentTransaction!!.setPrimaryNavigationFragment(fragment)
-//            fragmentTransaction!!.setReorderingAllowed(true)
-//            fragmentTransaction!!.addToBackStack(null)
-//            fragmentTransaction!!.commit()
-    }
-
-
-    override fun onPause() {
-        super.onPause()
-//        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
-//        val editor = sharedPreference.edit()
-//        editor.clear()
-//        editor.remove("page")
-    }
-
-    override fun onResume() {
-        super.onResume()
-//        val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
-//        val editor = sharedPreference.edit()
-//        editor.clear()
-//        editor.remove("page")
-    }
-
-//    override fun onBackPressed() {
-//        if (supportFragmentManager.backStackEntryCount == 0) {
-//            // Last of back
-//        } else {
-//            super.onBackPressed()
-//            val fragment = supportFragmentManager.findFragmentById(R.id.frameNav)
-//            when (fragment) {
-//                is PageMainFragment -> NavMain.menu.getItem(0).isChecked = true
-//                is PagePersonFragment -> NavMain.menu.getItem(2).isChecked = true
-//                is PageOwnerFragment -> NavMain.menu.getItem(1).isChecked = true
-//                else -> {
-//                }
-//            }
-//        }
-//    }
 }
 

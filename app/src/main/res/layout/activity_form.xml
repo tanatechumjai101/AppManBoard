@@ -410,7 +410,7 @@
             android:background="@color/colorWhite">
 
             <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/Subject_text"
+                android:id="@+id/ed_subject_from"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
