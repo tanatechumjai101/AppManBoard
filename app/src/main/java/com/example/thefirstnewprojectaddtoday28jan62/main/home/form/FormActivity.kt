@@ -517,14 +517,14 @@ class FormActivity : AppCompatActivity() {
         return if (bitmap.width > bitmap.height) {
             //Landscape
             if (bitmap.width > 1024) {
-                Bitmap.createScaledBitmap(bitmap, width / 2, height / 2, false)
+                Bitmap.createScaledBitmap(bitmap, width , height , false)
             } else {
                 bitmap
             }
         } else {
             //Portrait
             if (bitmap.height > 1024) {
-                Bitmap.createScaledBitmap(bitmap, width / 2, height / 2, false)
+                Bitmap.createScaledBitmap(bitmap, width, height , false)
             } else {
                 bitmap
             }
