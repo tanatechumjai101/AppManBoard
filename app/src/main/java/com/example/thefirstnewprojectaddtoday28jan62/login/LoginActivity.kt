@@ -27,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
         this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -69,8 +70,8 @@ class LoginActivity : AppCompatActivity() {
 
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
         val editor = sharedPreference.edit()
-        editor.putString("display_name", completedTask.result.displayName.toString()).apply()
-        editor.putString("email", completedTask.result.email.toString()).apply()
+        editor.putString("display_name", completedTask.result.displayName ).apply()
+        editor.putString("email", completedTask.result.email).apply()
         editor.putString("img_url", completedTask.result.photoUrl.toString()).apply()
 
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
