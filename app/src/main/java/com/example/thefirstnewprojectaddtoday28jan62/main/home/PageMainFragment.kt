@@ -41,7 +41,7 @@ class PageMainFragment : Fragment() {
     lateinit var progressBar: ProgressBar
     lateinit var textEmpty: TextView
 
-
+     private var switchPopUp : Boolean = false
 
     private lateinit var firebaseListener: ValueEventListener
 
@@ -119,14 +119,21 @@ class PageMainFragment : Fragment() {
         ib_sort.setOnClickListener {
             val popupMenu = PopupMenu(mActivity, it)
             popupMenu.setOnMenuItemClickListener { item ->
+
                 when (item.itemId) {
                     R.id.action_select_sort_time -> {
-                        Toast.makeText(mActivity, "Sort by Time", Toast.LENGTH_SHORT).show()
+
+                         switchPopUp = false
+                         adapter!!.notifyDataSetChanged()
                         true
+
                     }
                     R.id.action_select_sort_character -> {
-                        Toast.makeText(mActivity, "Sort by character", Toast.LENGTH_SHORT).show()
+
+                        switchPopUp = true
+                        adapter!!.notifyDataSetChanged()
                         true
+
                     }
                     else -> false
                 }
@@ -152,6 +159,22 @@ class PageMainFragment : Fragment() {
             startActivityForResult(intent, CREATE_FORM)
         }
     }
+    private fun sortOnClick(data: ArrayList<Data>){
+
+        if(switchPopUp == false ){
+            data.reverse()
+
+            adapter!!.notifyDataSetChanged()
+        } else {
+            var sortedList = data.sortedWith(compareBy { it.subject })
+
+            for (obj in sortedList) {
+                println(obj.subject)
+            }
+            adapter!!.notifyDataSetChanged()
+        }
+
+    }
 
     private fun initListener() {
 
@@ -171,7 +194,9 @@ class PageMainFragment : Fragment() {
                     listdata = Gson().fromJson<ArrayList<Data>>(value)
                     val dataReverse: ArrayList<Data> = arrayListOf()
                     dataReverse.addAll(listdata)
-                    dataReverse.reverse()
+
+                    sortOnClick(dataReverse)
+
                     adapter!!.Listdata = dataReverse
                     adapter!!.notifyDataSetChanged()
                     textEmpty.visibility = View.INVISIBLE
@@ -209,11 +234,13 @@ class PageMainFragment : Fragment() {
                         activityReference.setValue(listdata)
                         val dataReverser: ArrayList<Data> = arrayListOf()
                         dataReverser.addAll(listdata)
-                        dataReverser.reverse()
+//                        dataReverser.reverse()
+                        sortOnClick(dataReverser)
                         adapter!!.Listdata = dataReverser
                         adapter!!.notifyDataSetChanged()
                     }
                 }
+                adapter!!.notifyDataSetChanged()
             }
         }
     }
@@ -250,7 +277,6 @@ class PageMainFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-//        activityReference.addValueEventListener(firebaseListener)
         ed_search.setText("")
     }
 

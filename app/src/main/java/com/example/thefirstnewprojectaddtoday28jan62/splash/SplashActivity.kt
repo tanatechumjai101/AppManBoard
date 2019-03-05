@@ -32,7 +32,9 @@ class SplashActivity : AppCompatActivity() {
 
         smallToLarge = AnimationUtils.loadAnimation(
                 this, R.anim.small_to_large)
+
         ivLogo.startAnimation(smallToLarge)
+
         if(checkInternet()){
 
             if (checkPermission()) {
