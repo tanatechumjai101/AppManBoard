@@ -21,6 +21,7 @@
                 android:layout_height="match_parent"/>
 
     <android.support.v7.widget.AppCompatEditText
+            android:singleLine="true"
             android:id="@+id/ed_search"
             android:textSize="20sp"
             android:hint="Search"

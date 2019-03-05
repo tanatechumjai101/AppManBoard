@@ -2,6 +2,7 @@ package com.example.thefirstnewprojectaddtoday28jan62.main.owner.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.text.Html
 import android.view.*
 import com.bumptech.glide.Glide
 import com.example.thefirstnewprojectaddtoday28jan62.R
@@ -41,7 +42,7 @@ class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
             position: Int
         ) {
             itemView.tv_setSubject_owner.text = data.subject
-            itemView.tv_setDetail_owner.text = data.detail
+            itemView.tv_setDetail_owner.text = Html.fromHtml(data.detail)
             itemView.tv_setTime_owner.text = data.time
             itemView.tv_setName_owner.text = data.displayname
 
