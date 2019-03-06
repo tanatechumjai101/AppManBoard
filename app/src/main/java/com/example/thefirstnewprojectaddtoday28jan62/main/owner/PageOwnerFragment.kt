@@ -49,7 +49,7 @@ class PageOwnerFragment : Fragment() {
 
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
-
+    private var DATA_OWNER = 4
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mActivity = activity!!
         val view = inflater.inflate(R.layout.fragment_owner, container, false)
@@ -187,9 +187,10 @@ class PageOwnerFragment : Fragment() {
 
         adapter.listener = object : OwnerRecyclerAdapter.RecyclerListener {
             override fun onItemClick(position: Int, data: Data) {
+
                 val intent = Intent(mActivity, EditActivity::class.java)
                 intent.putExtra("data", data)
-                startActivityForResult(intent, 4)
+                startActivityForResult(intent, DATA_OWNER)
             }
         }
 
@@ -300,7 +301,7 @@ class PageOwnerFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            4 -> {
+            DATA_OWNER -> {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data != null) {
                         val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())

@@ -52,9 +52,4 @@ class HomeAdapter(var Listdata: ArrayList<Data>?) : RecyclerView.Adapter<HomeAda
                 }
         }
     }
-    fun filterList(filteredCourseList: ArrayList<Data>) {
-        this.Listdata = filteredCourseList
-        this.Listdata!!.reverse()
-        notifyDataSetChanged()
-    }
 }

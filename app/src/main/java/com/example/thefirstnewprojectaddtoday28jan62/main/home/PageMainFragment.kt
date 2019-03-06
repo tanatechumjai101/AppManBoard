@@ -33,8 +33,8 @@ import android.content.SharedPreferences
 
 class PageMainFragment : Fragment() {
 
-    var shredPref: SharedPreferences?=null
-    var editor:SharedPreferences.Editor?=null
+    var shredPref: SharedPreferences? = null
+    var editor: SharedPreferences.Editor? = null
 
     var adapter: HomeAdapter? = null
     lateinit var mUsersIns: DatabaseReference
@@ -47,8 +47,8 @@ class PageMainFragment : Fragment() {
     lateinit var textEmpty: TextView
 
     private var switchPopUp: Int = 1
-//    private var dataSortByCharactor : Int = 2
-//    private var dataSortByReverse : Int = 1
+    private var dataSortByCharactor: Int = 2
+    private var dataSortByReverse: Int = 1
 
     private lateinit var firebaseListener: ValueEventListener
 
@@ -78,8 +78,9 @@ class PageMainFragment : Fragment() {
 
 
         initListener()
+
         shredPref = mActivity.getSharedPreferences("MENU_SORT", Context.MODE_PRIVATE)
-        editor=shredPref!!.edit()
+        editor = shredPref!!.edit()
 
         listMain.visibility = View.INVISIBLE
         progressBar.visibility = View.VISIBLE
@@ -88,11 +89,11 @@ class PageMainFragment : Fragment() {
 
         listMain.layoutManager = LinearLayoutManager(mActivity, LinearLayout.VERTICAL, false)
         adapter = HomeAdapter(listdata)
+
         listMain.adapter = adapter
         mUsersIns = mRootIns.child("PageMain")
         activityReference = mUsersIns.child("Activity")
         activityReference.addValueEventListener(firebaseListener)
-
 
         adapter!!.listener = object : HomeAdapter.RecyclerListener_pageHome {
 
@@ -104,6 +105,7 @@ class PageMainFragment : Fragment() {
         }
 
         ed_search.ed_search.addTextChangedListener(object : TextWatcher {
+
             override fun afterTextChanged(s: Editable?) {
                 filter(s.toString())
                 if (ed_search.length() != 0) {
@@ -135,24 +137,25 @@ class PageMainFragment : Fragment() {
                     R.id.action_select_sort_time -> {
 
                         switchPopUp = 1
-                        editor!!.putString("sort","$switchPopUp")
-                        adapter?.Listdata?.reverse()
-                        adapter?.notifyDataSetChanged()
+                        editor!!.putInt("sort", switchPopUp).apply()
+                        adapter!!.Listdata?.reverse()
+                        adapter!!.notifyDataSetChanged()
                         true
 
                     }
                     R.id.action_select_sort_character -> {
 
                         switchPopUp = 2
-                        editor!!.putString("sort","$switchPopUp")
-                        adapter?.Listdata?.sortWith(compareBy { it.subject })
-                        adapter?.notifyDataSetChanged()
+                        editor!!.putInt("sort", switchPopUp).apply()
+                        adapter!!.Listdata?.sortWith(compareBy { it.subject })
+                        adapter!!.notifyDataSetChanged()
 
                         true
 
                     }
                     else -> false
                 }
+
             }
             popupMenu.inflate(R.menu.searchbar)
             try {
@@ -176,23 +179,28 @@ class PageMainFragment : Fragment() {
         }
     }
 
-//    private fun dataSort(data: ArrayList<Data>) {
-//
-//        if (switchPopUp == 1 ) {
-//            data.reverse()
-//            adapter!!.Listdata = data
-//            adapter!!.notifyDataSetChanged()
-//
-//
-//        } else if(switchPopUp == 2) {
-//
-//            var sortedList = ArrayList<Data>(data.sortedWith(compareBy { it.subject }))
-//
-//            adapter!!.Listdata = sortedList
-//            adapter!!.notifyDataSetChanged()
-//
-//        }
-//    }
+    private fun sortByInit(dataReverse: ArrayList<Data>) {
+
+        dataReverse.reversed()
+
+        val getInit = shredPref!!.getInt("sort", 1)
+
+        if (getInit == dataSortByReverse) {
+
+            if (getInit == dataSortByReverse) {
+                dataReverse.reverse()
+                adapter?.Listdata = dataReverse
+                adapter?.notifyDataSetChanged()
+
+            } else if (getInit == dataSortByCharactor) {
+
+                adapter?.Listdata?.sortWith(compareBy { it.subject })
+                adapter?.notifyDataSetChanged()
+
+            }
+        }
+
+    }
 
     private fun initListener() {
 
@@ -212,9 +220,11 @@ class PageMainFragment : Fragment() {
                     listdata = Gson().fromJson<ArrayList<Data>>(value)
                     val dataReverse: ArrayList<Data> = arrayListOf()
                     dataReverse.addAll(listdata)
-//                    dataSort(dataReverse)
+                    sortByInit(dataReverse)
+
                     adapter!!.Listdata = dataReverse
                     adapter!!.notifyDataSetChanged()
+
                     textEmpty.visibility = View.INVISIBLE
                     listMain.visibility = View.VISIBLE
                     progressBar.visibility = View.INVISIBLE
@@ -251,11 +261,12 @@ class PageMainFragment : Fragment() {
                         val dataReverser: ArrayList<Data> = arrayListOf()
                         dataReverser.addAll(listdata)
 
+                        sortByInit(dataReverser)
+
                         adapter!!.Listdata = dataReverser
                         adapter!!.notifyDataSetChanged()
                     }
                 }
-                adapter!!.notifyDataSetChanged()
             }
         }
     }
@@ -264,14 +275,22 @@ class PageMainFragment : Fragment() {
 
         val filteredCourseAry: ArrayList<Data> = ArrayList()
         val courseAry: ArrayList<Data> = listdata
+
         for (eachCourse in courseAry) {
+
             if (eachCourse.subject.toLowerCase().contains(text.toLowerCase())) {
                 filteredCourseAry.add(eachCourse)
             }
         }
-        adapter!!.filterList(filteredCourseAry)
-    }
+        filterList(filteredCourseAry)
 
+    }
+    fun filterList(filteredCourseList: ArrayList<Data>) {
+        adapter!!.Listdata = filteredCourseList
+        sortByInit(filteredCourseList)
+        adapter!!.notifyDataSetChanged()
+
+    }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.searchbar, menu)
@@ -292,6 +311,7 @@ class PageMainFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
         ed_search.setText("")
     }
 
