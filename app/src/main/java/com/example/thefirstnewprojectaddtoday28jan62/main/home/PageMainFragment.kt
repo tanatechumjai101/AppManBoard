@@ -181,11 +181,10 @@ class PageMainFragment : Fragment() {
 
     private fun sortByInit(dataReverse: ArrayList<Data>) {
 
-        dataReverse.reversed()
+//        dataReverse.reversed()
 
-        val getInit = shredPref!!.getInt("sort", 1)
+        val getInit = shredPref!!.getInt("sort", dataSortByReverse)
 
-        if (getInit == dataSortByReverse) {
 
             if (getInit == dataSortByReverse) {
                 dataReverse.reverse()
@@ -198,7 +197,6 @@ class PageMainFragment : Fragment() {
                 adapter?.notifyDataSetChanged()
 
             }
-        }
 
     }
 
