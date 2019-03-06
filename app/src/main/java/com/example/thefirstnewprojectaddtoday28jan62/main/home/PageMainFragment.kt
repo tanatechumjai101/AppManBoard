@@ -46,7 +46,9 @@ class PageMainFragment : Fragment() {
     lateinit var progressBar: ProgressBar
     lateinit var textEmpty: TextView
 
-    private var switchPopUp: Boolean = false
+    private var switchPopUp: Int = 1
+//    private var dataSortByCharactor : Int = 2
+//    private var dataSortByReverse : Int = 1
 
     private lateinit var firebaseListener: ValueEventListener
 
@@ -132,13 +134,20 @@ class PageMainFragment : Fragment() {
                 when (item.itemId) {
                     R.id.action_select_sort_time -> {
 
-                        switchPopUp = false
+                        switchPopUp = 1
+                        editor!!.putString("sort","$switchPopUp")
+                        adapter?.Listdata?.reverse()
+                        adapter?.notifyDataSetChanged()
                         true
 
                     }
                     R.id.action_select_sort_character -> {
 
-                        switchPopUp = true
+                        switchPopUp = 2
+                        editor!!.putString("sort","$switchPopUp")
+                        adapter?.Listdata?.sortWith(compareBy { it.subject })
+                        adapter?.notifyDataSetChanged()
+
                         true
 
                     }
@@ -167,21 +176,23 @@ class PageMainFragment : Fragment() {
         }
     }
 
-    private fun dataSort(data: ArrayList<Data>) {
-        if (!switchPopUp) {
-            data.reverse()
-            adapter!!.Listdata = data
-            adapter!!.notifyDataSetChanged()
-
-        } else {
-            var sortedList = data.sortedWith(compareBy { it.subject })
-
-            for (obj in sortedList) {
-//                println(obj.subject)
-            }
-
-        }
-    }
+//    private fun dataSort(data: ArrayList<Data>) {
+//
+//        if (switchPopUp == 1 ) {
+//            data.reverse()
+//            adapter!!.Listdata = data
+//            adapter!!.notifyDataSetChanged()
+//
+//
+//        } else if(switchPopUp == 2) {
+//
+//            var sortedList = ArrayList<Data>(data.sortedWith(compareBy { it.subject }))
+//
+//            adapter!!.Listdata = sortedList
+//            adapter!!.notifyDataSetChanged()
+//
+//        }
+//    }
 
     private fun initListener() {
 
@@ -201,8 +212,7 @@ class PageMainFragment : Fragment() {
                     listdata = Gson().fromJson<ArrayList<Data>>(value)
                     val dataReverse: ArrayList<Data> = arrayListOf()
                     dataReverse.addAll(listdata)
-//                    dataReverse.reverse()
-                    dataSort(dataReverse)
+//                    dataSort(dataReverse)
                     adapter!!.Listdata = dataReverse
                     adapter!!.notifyDataSetChanged()
                     textEmpty.visibility = View.INVISIBLE
