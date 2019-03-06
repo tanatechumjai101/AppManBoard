@@ -2,6 +2,7 @@ package com.example.thefirstnewprojectaddtoday28jan62.main.home
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,7 +13,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.widget.*
-import com.bumptech.glide.Glide
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.adapter.HomeAdapter
 import com.example.thefirstnewprojectaddtoday28jan62.main.home.form.FormActivity
@@ -27,10 +27,15 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import android.view.inputmethod.InputMethodManager
-import android.content.Context
+import android.content.Context.*
+import android.content.SharedPreferences
 
 
 class PageMainFragment : Fragment() {
+
+    var shredPref: SharedPreferences?=null
+    var editor:SharedPreferences.Editor?=null
+
     var adapter: HomeAdapter? = null
     lateinit var mUsersIns: DatabaseReference
     lateinit var activityReference: DatabaseReference
@@ -41,13 +46,15 @@ class PageMainFragment : Fragment() {
     lateinit var progressBar: ProgressBar
     lateinit var textEmpty: TextView
 
-     private var switchPopUp : Boolean = false
+    private var switchPopUp: Boolean = false
 
     private lateinit var firebaseListener: ValueEventListener
 
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
@@ -67,8 +74,10 @@ class PageMainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initListener()
 
+        initListener()
+        shredPref = mActivity.getSharedPreferences("MENU_SORT", Context.MODE_PRIVATE)
+        editor=shredPref!!.edit()
 
         listMain.visibility = View.INVISIBLE
         progressBar.visibility = View.VISIBLE
@@ -123,15 +132,13 @@ class PageMainFragment : Fragment() {
                 when (item.itemId) {
                     R.id.action_select_sort_time -> {
 
-                         switchPopUp = false
-                         adapter!!.notifyDataSetChanged()
+                        switchPopUp = false
                         true
 
                     }
                     R.id.action_select_sort_character -> {
 
                         switchPopUp = true
-                        adapter!!.notifyDataSetChanged()
                         true
 
                     }
@@ -159,21 +166,21 @@ class PageMainFragment : Fragment() {
             startActivityForResult(intent, CREATE_FORM)
         }
     }
-    private fun sortOnClick(data: ArrayList<Data>){
 
-        if(switchPopUp == false ){
+    private fun dataSort(data: ArrayList<Data>) {
+        if (!switchPopUp) {
             data.reverse()
-
+            adapter!!.Listdata = data
             adapter!!.notifyDataSetChanged()
+
         } else {
             var sortedList = data.sortedWith(compareBy { it.subject })
 
             for (obj in sortedList) {
-                println(obj.subject)
+//                println(obj.subject)
             }
-            adapter!!.notifyDataSetChanged()
-        }
 
+        }
     }
 
     private fun initListener() {
@@ -194,9 +201,8 @@ class PageMainFragment : Fragment() {
                     listdata = Gson().fromJson<ArrayList<Data>>(value)
                     val dataReverse: ArrayList<Data> = arrayListOf()
                     dataReverse.addAll(listdata)
-
-                    sortOnClick(dataReverse)
-
+//                    dataReverse.reverse()
+                    dataSort(dataReverse)
                     adapter!!.Listdata = dataReverse
                     adapter!!.notifyDataSetChanged()
                     textEmpty.visibility = View.INVISIBLE
@@ -234,8 +240,7 @@ class PageMainFragment : Fragment() {
                         activityReference.setValue(listdata)
                         val dataReverser: ArrayList<Data> = arrayListOf()
                         dataReverser.addAll(listdata)
-//                        dataReverser.reverse()
-                        sortOnClick(dataReverser)
+
                         adapter!!.Listdata = dataReverser
                         adapter!!.notifyDataSetChanged()
                     }
@@ -265,7 +270,7 @@ class PageMainFragment : Fragment() {
     private fun closeKeyboard(view: View) {
 
         if (view != null) {
-            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm = activity!!.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
