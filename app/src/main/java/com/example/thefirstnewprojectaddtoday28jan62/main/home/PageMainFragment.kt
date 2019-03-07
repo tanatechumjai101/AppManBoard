@@ -103,6 +103,21 @@ class PageMainFragment : Fragment() {
                 dialogFragment.show(fragmentManager, "")
             }
         }
+        if(switchPopUp == 0 ){
+
+            ib_sort.setImageResource(R.drawable.ic_sort)
+
+        } else if(switchPopUp==1){
+
+            ib_sort.setImageResource(R.drawable.ic_time)
+
+        } else if(switchPopUp==2){
+
+            ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
+
+        }
+
+
 
         ed_search.ed_search.addTextChangedListener(object : TextWatcher {
 
@@ -137,15 +152,18 @@ class PageMainFragment : Fragment() {
                     R.id.action_select_sort_time -> {
 
                         switchPopUp = 1
+                        ib_sort.setImageResource(R.drawable.ic_time)
                         editor!!.putInt("sort", switchPopUp).apply()
                         adapter!!.Listdata?.reverse()
                         adapter!!.notifyDataSetChanged()
+
                         true
 
                     }
                     R.id.action_select_sort_character -> {
 
                         switchPopUp = 2
+                        ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
                         editor!!.putInt("sort", switchPopUp).apply()
                         adapter!!.Listdata?.sortWith(compareBy { it.subject })
                         adapter!!.notifyDataSetChanged()
@@ -181,7 +199,6 @@ class PageMainFragment : Fragment() {
 
     private fun sortByInit(dataReverse: ArrayList<Data>) {
 
-//        dataReverse.reversed()
 
         val getInit = shredPref!!.getInt("sort", dataSortByReverse)
 
@@ -260,7 +277,7 @@ class PageMainFragment : Fragment() {
                         dataReverser.addAll(listdata)
 
                         sortByInit(dataReverser)
-
+                        dataReverser.reverse()
                         adapter!!.Listdata = dataReverser
                         adapter!!.notifyDataSetChanged()
                     }
