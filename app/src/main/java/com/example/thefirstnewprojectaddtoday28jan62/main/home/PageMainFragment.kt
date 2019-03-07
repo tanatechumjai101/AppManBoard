@@ -49,7 +49,7 @@ class PageMainFragment : Fragment() {
     private var switchPopUp: Int = 1
     private var dataSortByCharactor: Int = 2
     private var dataSortByReverse: Int = 1
-
+    private lateinit var popupMenu: PopupMenu
     private lateinit var firebaseListener: ValueEventListener
 
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -71,6 +71,8 @@ class PageMainFragment : Fragment() {
 
         return view
     }
+
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -103,11 +105,7 @@ class PageMainFragment : Fragment() {
                 dialogFragment.show(fragmentManager, "")
             }
         }
-        if(switchPopUp == 0 ){
-
-            ib_sort.setImageResource(R.drawable.ic_sort)
-
-        } else if(switchPopUp==1){
+        if(switchPopUp==1){
 
             ib_sort.setImageResource(R.drawable.ic_time)
 
@@ -145,7 +143,7 @@ class PageMainFragment : Fragment() {
 
 
         ib_sort.setOnClickListener {
-            val popupMenu = PopupMenu(mActivity, it)
+             popupMenu = PopupMenu(mActivity, it)
             popupMenu.setOnMenuItemClickListener { item ->
 
                 when (item.itemId) {
@@ -154,8 +152,9 @@ class PageMainFragment : Fragment() {
                         switchPopUp = 1
                         ib_sort.setImageResource(R.drawable.ic_time)
                         editor!!.putInt("sort", switchPopUp).apply()
-                        adapter!!.Listdata?.reverse()
-                        adapter!!.notifyDataSetChanged()
+
+                        adapter?.Listdata?.reverse()
+                        adapter?.notifyDataSetChanged()
 
                         true
 
@@ -163,10 +162,11 @@ class PageMainFragment : Fragment() {
                     R.id.action_select_sort_character -> {
 
                         switchPopUp = 2
+
                         ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
                         editor!!.putInt("sort", switchPopUp).apply()
-                        adapter!!.Listdata?.sortWith(compareBy { it.subject })
-                        adapter!!.notifyDataSetChanged()
+                        adapter?.Listdata?.sortWith(compareBy { it.subject })
+                        adapter?.notifyDataSetChanged()
 
                         true
 
@@ -175,6 +175,7 @@ class PageMainFragment : Fragment() {
                 }
 
             }
+
             popupMenu.inflate(R.menu.searchbar)
             try {
                 val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
@@ -191,6 +192,7 @@ class PageMainFragment : Fragment() {
 
         }
 
+
         floating_action_button.setOnClickListener {
             val intent = Intent(mActivity, FormActivity::class.java)
             startActivityForResult(intent, CREATE_FORM)
@@ -205,7 +207,7 @@ class PageMainFragment : Fragment() {
 
             if (getInit == dataSortByReverse) {
                 dataReverse.reverse()
-                adapter?.Listdata = dataReverse
+//                adapter!!.Listdata = dataReverse
                 adapter?.notifyDataSetChanged()
 
             } else if (getInit == dataSortByCharactor) {
@@ -235,11 +237,9 @@ class PageMainFragment : Fragment() {
                     listdata = Gson().fromJson<ArrayList<Data>>(value)
                     val dataReverse: ArrayList<Data> = arrayListOf()
                     dataReverse.addAll(listdata)
-                    sortByInit(dataReverse)
-
                     adapter!!.Listdata = dataReverse
                     adapter!!.notifyDataSetChanged()
-
+                    sortByInit(dataReverse)
                     textEmpty.visibility = View.INVISIBLE
                     listMain.visibility = View.VISIBLE
                     progressBar.visibility = View.INVISIBLE
@@ -276,10 +276,10 @@ class PageMainFragment : Fragment() {
                         val dataReverser: ArrayList<Data> = arrayListOf()
                         dataReverser.addAll(listdata)
 
-                        sortByInit(dataReverser)
-                        dataReverser.reverse()
+//                        dataReverser.reverse()
                         adapter!!.Listdata = dataReverser
                         adapter!!.notifyDataSetChanged()
+                        sortByInit(dataReverser)
                     }
                 }
             }
