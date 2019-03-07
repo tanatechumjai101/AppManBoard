@@ -75,75 +75,75 @@ class FormActivity : AppCompatActivity() {
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
 
 
-        editor.setEditorHeight(200)
-        editor.setEditorFontSize(22)
-        editor.setEditorFontColor(Color.BLACK)
-        editor.setPadding(10, 10, 10, 10)
-        editor.setPlaceholder("add detail ....")
+        webViewFormPage.setEditorHeight(200)
+        webViewFormPage.setEditorFontSize(22)
+        webViewFormPage.setEditorFontColor(Color.BLACK)
+        webViewFormPage.setPadding(10, 10, 10, 10)
+        webViewFormPage.setPlaceholder("add detail ....")
 
 
         action_undo.setOnClickListener {
-            editor.undo()
+            webViewFormPage.undo()
         }
 
         action_redo.setOnClickListener {
-            editor.redo()
+            webViewFormPage.redo()
         }
 
         action_bold.setOnClickListener {
-            editor.setBold()
+            webViewFormPage.setBold()
         }
 
         action_italic.setOnClickListener {
-            editor.setItalic()
+            webViewFormPage.setItalic()
         }
 
         action_subscript.setOnClickListener {
-            editor.setSubscript()
+            webViewFormPage.setSubscript()
         }
 
         action_superscript.setOnClickListener {
-            editor.setSuperscript()
+            webViewFormPage.setSuperscript()
         }
 
         action_strikethrough.setOnClickListener {
-            editor.setStrikeThrough()
+            webViewFormPage.setStrikeThrough()
         }
 
         action_underline.setOnClickListener {
-            editor.setUnderline()
+            webViewFormPage.setUnderline()
         }
 
         action_heading1.setOnClickListener {
-            editor.setHeading(1)
+            webViewFormPage.setHeading(1)
         }
 
         action_heading2.setOnClickListener {
-            editor.setHeading(2)
+            webViewFormPage.setHeading(2)
         }
 
         action_heading3.setOnClickListener {
-            editor.setHeading(3)
+            webViewFormPage.setHeading(3)
         }
 
         action_heading4.setOnClickListener {
-            editor.setHeading(4)
+            webViewFormPage.setHeading(4)
         }
 
 
         action_heading5.setOnClickListener {
-            editor.setHeading(5)
+            webViewFormPage.setHeading(5)
         }
 
         action_heading6.setOnClickListener {
-            editor.setHeading(6)
+            webViewFormPage.setHeading(6)
         }
 
         action_txt_color.setOnClickListener(object : View.OnClickListener {
             private var isChanged: Boolean = false
 
             override fun onClick(v: View) {
-                editor.setTextColor(
+                webViewFormPage.setTextColor(
                         if (isChanged) {
                             Color.BLACK
                         } else {
@@ -158,7 +158,7 @@ class FormActivity : AppCompatActivity() {
             private var isChanged: Boolean = false
 
             override fun onClick(v: View) {
-                editor.setTextBackgroundColor(
+                webViewFormPage.setTextBackgroundColor(
                         if (isChanged) {
                             Color.TRANSPARENT
                         } else {
@@ -170,48 +170,48 @@ class FormActivity : AppCompatActivity() {
         })
 
         action_indent.setOnClickListener {
-            editor.setIndent()
+            webViewFormPage.setIndent()
         }
 
         action_outdent.setOnClickListener {
-            editor.setOutdent()
+            webViewFormPage.setOutdent()
         }
 
         action_align_left.setOnClickListener {
-            editor.setAlignLeft()
+            webViewFormPage.setAlignLeft()
         }
 
         action_align_center.setOnClickListener {
-            editor.setAlignCenter()
+            webViewFormPage.setAlignCenter()
         }
 
         action_align_right.setOnClickListener {
-            editor.setAlignRight()
+            webViewFormPage.setAlignRight()
         }
 
         action_blockquote.setOnClickListener {
-            editor.setBlockquote()
+            webViewFormPage.setBlockquote()
         }
 
         action_insert_bullets.setOnClickListener {
-            editor.setBullets()
+            webViewFormPage.setBullets()
         }
 
         action_insert_numbers.setOnClickListener {
-            editor.setNumbers()
+            webViewFormPage.setNumbers()
         }
 
 
 
         action_insert_link.setOnClickListener {
-            editor.insertLink(
+            webViewFormPage.insertLink(
                     "https://github.com/wasabeef",
                     "career@appman.co.th"
             )
         }
 
         action_insert_checkbox.setOnClickListener {
-            editor.insertTodo()
+            webViewFormPage.insertTodo()
         }
 
         val dialog = ImageDialog(this)
@@ -258,7 +258,7 @@ class FormActivity : AppCompatActivity() {
             }
         }
 
-        editor.setOnTextChangeListener { text ->
+        webViewFormPage.setOnTextChangeListener { text ->
             var mPreview = text.toString()
             nPreview = mPreview
             PreviewHtml = mPreview
@@ -469,7 +469,7 @@ class FormActivity : AppCompatActivity() {
                         progressDialog.dismiss()
                         Toast.makeText(applicationContext, "Image Uploaded", Toast.LENGTH_SHORT).show()
                         imageRef.downloadUrl.addOnCompleteListener { p0 ->
-                            editor.insertImage(p0.result.toString(), "Failed")
+                            webViewFormPage.insertImage(p0.result.toString(), "Failed")
                         }
                     }
                     .addOnFailureListener {
@@ -497,7 +497,7 @@ class FormActivity : AppCompatActivity() {
                         Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
                         progressDialog.dismiss()
                         imageRef.downloadUrl.addOnCompleteListener { p0 ->
-                            editor.insertImage(p0.result.toString(), "Failed")
+                            webViewFormPage.insertImage(p0.result.toString(), "Failed")
                         }
                     }
                     .addOnProgressListener { taskSnapShot ->

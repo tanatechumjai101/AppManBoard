@@ -448,7 +448,7 @@
                 android:orientation="vertical">
 
                 <jp.wasabeef.richeditor.RichEditor
-                    android:id="@+id/editor"
+                    android:id="@+id/webViewFormPage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 

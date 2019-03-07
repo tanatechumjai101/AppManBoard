@@ -69,6 +69,7 @@ class PageMainFragment : Fragment() {
         listMain = view.findViewById(R.id.listViewMain)
         textEmpty = view.findViewById(R.id.tv_empty)
 
+
         return view
     }
 
