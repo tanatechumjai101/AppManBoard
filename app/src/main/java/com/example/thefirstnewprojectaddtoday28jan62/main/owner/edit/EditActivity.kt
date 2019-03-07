@@ -48,12 +48,12 @@ class EditActivity : AppCompatActivity() {
 
             data = intent?.extras?.getParcelable("data")
             data!!.subject = ed_subject_edit.text.toString()
+            data!!.detail = webview_edit.html
 
-            val body = "<!DOCTYPE html><html><body>"
-            val content = body + data!!.detail + "</body></html>"
-            webview_edit.webChromeClient = WebChromeClient()
-            data!!.detail = ""+webview_edit.loadDataWithBaseURL(null, content, "text/html; charset=utf-8", "UTF-8", "about:blank")
-
+//            val body = "<!DOCTYPE html><html><body>"
+//            val content = body + data!!.detail + "</body></html>"
+//            webview_edit.webChromeClient = WebChromeClient()
+//            data!!.detail = "" + webview_edit.loadDataWithBaseURL(null, content, "text/html; charset=utf-8", "UTF-8", "about:blank")
 
             intent.putExtra("new_data", data)
             setResult(Activity.RESULT_OK, intent)
@@ -196,10 +196,11 @@ class EditActivity : AppCompatActivity() {
     }
 
     private fun setDataNow(data: Data?) {
+
         ed_subject_edit.setText("${data?.subject}")
         val body = "<!DOCTYPE html><html><body>"
         val content = body + data!!.detail + "</body></html>"
-        webview_edit.loadDataWithBaseURL(null, content, "text/html; charset=utf-8", "UTF-8", "about:blank")
+        webview_edit.html = content
 
     }
 

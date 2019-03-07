@@ -301,9 +301,11 @@ class PageOwnerFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
+
             DATA_OWNER -> {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data != null) {
+
                         val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
                         val newData: Data = data.extras.getParcelable("new_data")!!
 
