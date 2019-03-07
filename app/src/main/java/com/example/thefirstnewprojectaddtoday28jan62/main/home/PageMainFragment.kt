@@ -105,13 +105,20 @@ class PageMainFragment : Fragment() {
                 dialogFragment.show(fragmentManager, "")
             }
         }
-        if(switchPopUp==1){
+        if(switchPopUp == 0){
+            ib_sort.setImageResource(R.drawable.ic_sort)
+        }
+        else if(switchPopUp==1){
 
             ib_sort.setImageResource(R.drawable.ic_time)
+            adapter?.Listdata?.clear()
+            adapter?.notifyDataSetChanged()
 
         } else if(switchPopUp==2){
 
             ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
+            adapter?.Listdata?.clear()
+            adapter?.notifyDataSetChanged()
 
         }
 
@@ -121,6 +128,7 @@ class PageMainFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {
                 filter(s.toString())
+
                 if (ed_search.length() != 0) {
                     ib_clear.visibility = View.VISIBLE
                 } else {
@@ -143,7 +151,7 @@ class PageMainFragment : Fragment() {
 
 
         ib_sort.setOnClickListener {
-             popupMenu = PopupMenu(mActivity, it)
+            popupMenu = PopupMenu(mActivity, it)
             popupMenu.setOnMenuItemClickListener { item ->
 
                 when (item.itemId) {
@@ -152,17 +160,15 @@ class PageMainFragment : Fragment() {
                         switchPopUp = 1
                         ib_sort.setImageResource(R.drawable.ic_time)
                         editor!!.putInt("sort", switchPopUp).apply()
-
+                        adapter?.Listdata = listdata
                         adapter?.Listdata?.reverse()
-                        adapter?.notifyDataSetChanged()
-
+                        adapter!!.notifyDataSetChanged()
                         true
 
                     }
                     R.id.action_select_sort_character -> {
 
                         switchPopUp = 2
-
                         ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
                         editor!!.putInt("sort", switchPopUp).apply()
                         adapter?.Listdata?.sortWith(compareBy { it.subject })
@@ -177,6 +183,18 @@ class PageMainFragment : Fragment() {
             }
 
             popupMenu.inflate(R.menu.searchbar)
+            if(switchPopUp == 0){
+                popupMenu.menu.findItem(R.id.action_select_sort_time).isEnabled = true
+                popupMenu.menu.findItem(R.id.action_select_sort_character).isEnabled = true
+            } else if(switchPopUp==1){
+                popupMenu.menu.findItem(R.id.action_select_sort_time).isEnabled = false
+                popupMenu.menu.findItem(R.id.action_select_sort_character).isEnabled = true
+
+            }else if(switchPopUp==2) {
+                popupMenu.menu.findItem(R.id.action_select_sort_time).isEnabled = true
+                popupMenu.menu.findItem(R.id.action_select_sort_character).isEnabled = false
+            }
+
             try {
                 val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
                 fieldMPopup.isAccessible = true
@@ -192,7 +210,7 @@ class PageMainFragment : Fragment() {
 
         }
 
-
+        // Create Board
         floating_action_button.setOnClickListener {
             val intent = Intent(mActivity, FormActivity::class.java)
             startActivityForResult(intent, CREATE_FORM)
@@ -201,27 +219,27 @@ class PageMainFragment : Fragment() {
 
     private fun sortByInit(dataReverse: ArrayList<Data>) {
 
-
         val getInit = shredPref!!.getInt("sort", dataSortByReverse)
 
 
-            if (getInit == dataSortByReverse) {
-                dataReverse.reverse()
-//                adapter!!.Listdata = dataReverse
-                adapter?.notifyDataSetChanged()
+                if (getInit == dataSortByReverse) {
+                    dataReverse.reverse()
+                    adapter?.notifyDataSetChanged()
 
-            } else if (getInit == dataSortByCharactor) {
+                } else if (getInit == dataSortByCharactor) {
 
-                adapter?.Listdata?.sortWith(compareBy { it.subject })
-                adapter?.notifyDataSetChanged()
+                    adapter?.Listdata?.sortWith(compareBy { it.subject })
+                    adapter?.notifyDataSetChanged()
 
-            }
+                }
+
 
     }
 
     private fun initListener() {
 
         firebaseListener = object : ValueEventListener {
+
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.value == null) {
@@ -276,8 +294,7 @@ class PageMainFragment : Fragment() {
                         val dataReverser: ArrayList<Data> = arrayListOf()
                         dataReverser.addAll(listdata)
 
-//                        dataReverser.reverse()
-                        adapter!!.Listdata = dataReverser
+                        adapter?.Listdata = dataReverser
                         adapter!!.notifyDataSetChanged()
                         sortByInit(dataReverser)
                     }
@@ -301,7 +318,7 @@ class PageMainFragment : Fragment() {
 
     }
     fun filterList(filteredCourseList: ArrayList<Data>) {
-        adapter!!.Listdata = filteredCourseList
+        adapter?.Listdata = filteredCourseList
         sortByInit(filteredCourseList)
         adapter!!.notifyDataSetChanged()
 
