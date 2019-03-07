@@ -106,9 +106,11 @@ class PageMainFragment : Fragment() {
                 dialogFragment.show(fragmentManager, "")
             }
         }
+
         if(switchPopUp == 0){
             ib_sort.setImageResource(R.drawable.ic_sort)
         }
+
         else if(switchPopUp==1){
 
             ib_sort.setImageResource(R.drawable.ic_time)

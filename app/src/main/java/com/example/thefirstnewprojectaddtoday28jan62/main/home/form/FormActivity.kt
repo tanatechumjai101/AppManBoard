@@ -309,6 +309,7 @@ class FormActivity : AppCompatActivity() {
         intent.type = "image/*"
         startActivityForResult(intent, PICK_GALLARY)
     }
+
     private fun requestPermission(requestCode: Int) {
 
         ActivityCompat.requestPermissions(
