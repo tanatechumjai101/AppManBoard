@@ -38,6 +38,7 @@ import com.bumptech.glide.request.target.Target
 import com.example.thefirstnewprojectaddtoday28jan62.toByteArray
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.activity_edit.*
 
 
 class FormActivity : AppCompatActivity() {
@@ -79,6 +80,12 @@ class FormActivity : AppCompatActivity() {
         webViewFormPage.setPadding(10, 10, 10, 10)
         webViewFormPage.setPlaceholder("add detail ....")
 
+        if(webViewFormPage.requestFocus()){
+            webViewFormPage.focusEditor()
+            ib_AddImage.visibility = View.VISIBLE
+        }else {
+            ib_AddImage.visibility = View.GONE
+        }
 
         action_undo.setOnClickListener {
             webViewFormPage.undo()

@@ -84,7 +84,12 @@ class EditActivity : AppCompatActivity() {
             nPreview = mPreview
         }
 
-
+        if(webview_edit.requestFocus()){
+            webview_edit.focusEditor()
+            ib_AddImage.visibility = View.VISIBLE
+        }else {
+            ib_AddImage.visibility = View.GONE
+        }
         val dialog = ImageDialogEdit(this)
 
         dialog.listener = object : ImageDialogEdit.DialogListener {
