@@ -1,4 +1,4 @@
-package com.example.thefirstnewprojectaddtoday28jan62.main.home.add.image
+package com.example.thefirstnewprojectaddtoday28jan62.main.owner.dialog
 
 import android.app.Dialog
 import android.content.Context
@@ -7,11 +7,12 @@ import android.view.Window
 import com.example.thefirstnewprojectaddtoday28jan62.R
 import kotlinx.android.synthetic.main.activity_image.*
 
-class ImageDialog(context: Context) : Dialog(context) {
+class ImageDialogEdit(context: Context) : Dialog(context) {
 
     var listener: DialogListener? = null
 
     interface DialogListener {
+
         fun onCameraClick()
 
         fun onGalleryClick()

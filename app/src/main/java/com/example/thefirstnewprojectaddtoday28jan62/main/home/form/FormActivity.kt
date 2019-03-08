@@ -51,10 +51,8 @@ class FormActivity : AppCompatActivity() {
     var PreviewHtml = ""
     private val PICK_CAMARA = 1234
     private val PICK_GALLARY = 4321
-
     var storage: FirebaseStorage? = null
     var storageReference: StorageReference? = null
-
     private lateinit var imagesFolder: File
     private var imageSavedPath: Uri? = null
 
