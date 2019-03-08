@@ -286,7 +286,7 @@ class FormActivity : AppCompatActivity() {
                         .show()
             } else {
                 val formPage = Data(
-                        ed_subject_from.text.toString(),
+                        ed_subject_from.text.toString().trim(),
                         PreviewHtml,
                         dateTime,
                         sharedPreference.getString("img_url", ""),

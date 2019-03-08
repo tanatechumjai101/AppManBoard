@@ -133,7 +133,7 @@ class EditActivity : AppCompatActivity() {
         ib_done_pageForm.setOnClickListener {
 
             data = intent?.extras?.getParcelable("data")
-            data!!.subject = ed_subject_edit.text.toString()
+            data!!.subject = ed_subject_edit.text.toString().trim()
             data!!.detail = webview_edit.html
 
             intent.putExtra("new_data", data)
