@@ -85,9 +85,13 @@ class EditActivity : AppCompatActivity() {
 
         if(webview_edit.requestFocus()){
             webview_edit.focusEditor()
+
             ib_AddImage.visibility = View.VISIBLE
+
         }else {
+
             ib_AddImage.visibility = View.GONE
+
         }
         val dialog = ImageDialogEdit(this)
 
@@ -114,14 +118,21 @@ class EditActivity : AppCompatActivity() {
         }
 
         if(webview_edit.requestFocus()){
+
             webview_edit.focusEditor()
+
             ib_AddImage.visibility = View.VISIBLE
+
         }else {
+
             ib_AddImage.visibility = View.GONE
+
         }
 
         ib_AddImage.setOnClickListener {
+
             dialog.show()
+
         }
 
 

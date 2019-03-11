@@ -57,6 +57,7 @@ class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
             }
         }
     }
+
     fun filterList(filteredCourseList: ArrayList<Data>) {
         this.Listdata = filteredCourseList
         notifyDataSetChanged()

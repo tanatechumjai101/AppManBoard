@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -21,7 +22,6 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.PopupMenu
-import android.widget.Toast
 import com.example.AppManBoard.R
 import com.example.AppManBoard.main.owner.adapter.OwnerRecyclerAdapter
 import com.example.AppManBoard.main.owner.edit.EditActivity
@@ -34,16 +34,23 @@ import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.toolbar.view.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class PageOwnerFragment : Fragment() {
 
+    var shredPref: SharedPreferences? = null
+    var editor: SharedPreferences.Editor? = null
     lateinit var mUsersIns: DatabaseReference
     lateinit var adapter: OwnerRecyclerAdapter
     var listdata = mutableListOf<Data>()
     lateinit var mActivity: Activity
     lateinit var listMain: RecyclerView
     private lateinit var deleteIcon: Drawable
+
+    private var switchPopUp: Int = 1
+    private var dataSortByCharactor: Int = 2
+    private var dataSortByReverse: Int = 1
 
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -59,9 +66,14 @@ class PageOwnerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        shredPref = mActivity.getSharedPreferences("MENU_SORT", Context.MODE_PRIVATE)
+        editor = shredPref!!.edit()
+
         deleteIcon = ContextCompat.getDrawable(mActivity, R.drawable.ic_delete)!!
         var swipeBackground = ColorDrawable(ContextCompat.getColor(mActivity, android.R.color.holo_red_dark))
-
+        listMain.layoutManager = LinearLayoutManager(mActivity, LinearLayout.VERTICAL, false)
+        adapter = OwnerRecyclerAdapter(listdata)
+        listMain.adapter = adapter
         val mRootIns = FirebaseDatabase.getInstance().reference
         mUsersIns = mRootIns.child("PageMain")
         mUsersIns.child("Activity").addValueEventListener(object : ValueEventListener {
@@ -77,6 +89,17 @@ class PageOwnerFragment : Fragment() {
                     .show()
             }
         })
+
+        if (switchPopUp == 1) {
+
+            ib_sort.setImageResource(R.drawable.ic_time)
+            adapter.notifyDataSetChanged()
+
+        } else if (switchPopUp == 2) {
+
+            ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
+            adapter.notifyDataSetChanged()
+        }
 
         val itemTouchHelperCallback =
             object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
@@ -219,24 +242,52 @@ class PageOwnerFragment : Fragment() {
             }
         })
 
-
+//      sort
         ib_sort.setOnClickListener {
             val popupMenu = PopupMenu(mActivity, it)
             popupMenu.setOnMenuItemClickListener { item ->
-                when(item.itemId){
+
+                when (item.itemId) {
                     R.id.action_select_sort_time -> {
-                        Toast.makeText(mActivity,"Sort by Time", Toast.LENGTH_SHORT).show()
+
+                        switchPopUp = 1
+                        ib_sort.setImageResource(R.drawable.ic_time)
+                        editor!!.putInt("sort", switchPopUp).apply()
+                        adapter?.Listdata = listdata
+                        adapter?.Listdata?.reverse()
+                        adapter!!.notifyDataSetChanged()
                         true
+
                     }
                     R.id.action_select_sort_character -> {
-                        Toast.makeText(mActivity,"Sort by character", Toast.LENGTH_SHORT).show()
+
+                        switchPopUp = 2
+                        ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
+                        editor!!.putInt("sort", switchPopUp).apply()
+                        adapter?.Listdata?.sortWith(compareBy { it.subject })
+                        adapter?.notifyDataSetChanged()
+
                         true
+
                     }
                     else -> false
                 }
+
             }
             popupMenu.inflate(R.menu.searchbar)
 
+           if (switchPopUp == 1) {
+
+                popupMenu.menu.findItem(R.id.action_select_sort_time).isEnabled = false
+                popupMenu.menu.findItem(R.id.action_select_sort_character).isEnabled = true
+
+
+            } else if (switchPopUp == 2) {
+
+                popupMenu.menu.findItem(R.id.action_select_sort_time).isEnabled = true
+                popupMenu.menu.findItem(R.id.action_select_sort_character).isEnabled = false
+
+            }
             try{
                 val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
                 fieldMPopup.isAccessible  = true
@@ -276,6 +327,45 @@ class PageOwnerFragment : Fragment() {
             adapter!!.notifyDataSetChanged()
         }
     }
+
+//    private fun filter(text: String) {
+//
+//        val filteredCourseAry: ArrayList<Data> = ArrayList()
+//        val courseAry: MutableList<Data> = listdata
+//
+//        for (eachCourse in courseAry) {
+//
+//            if (eachCourse.subject.toLowerCase().contains(text.toLowerCase())) {
+//                filteredCourseAry.add(eachCourse)
+//            }
+//        }
+//        filterList(filteredCourseAry)
+//
+//    }
+
+    private fun filterList(filteredCourseList: ArrayList<Data>) {
+        adapter?.Listdata = filteredCourseList
+        sortByInit(filteredCourseList)
+        adapter!!.notifyDataSetChanged()
+
+    }
+    private fun sortByInit(dataReverse: ArrayList<Data>) {
+
+        val getInit = shredPref!!.getInt("sort", dataSortByReverse)
+
+
+        if (getInit == dataSortByReverse) {
+            dataReverse.reverse()
+            adapter.notifyDataSetChanged()
+
+        } else if (getInit == dataSortByCharactor) {
+
+            adapter.Listdata?.sortWith(compareBy { it.subject })
+            adapter.notifyDataSetChanged()
+
+        }
+    }
+
     private fun filter(text: String) {
 
         val filteredCourseAry: ArrayList<Data> = ArrayList()
