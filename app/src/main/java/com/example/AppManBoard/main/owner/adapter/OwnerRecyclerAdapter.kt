@@ -1,6 +1,5 @@
 package com.example.AppManBoard.main.owner.adapter
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.view.*
@@ -11,7 +10,6 @@ import kotlinx.android.synthetic.main.list_owner.view.*
 
 class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
     RecyclerView.Adapter<OwnerRecyclerAdapter.OwnerViewHolder>() {
-    lateinit var mCotext: Context
     var listener: RecyclerListener? = null
 
     interface RecyclerListener {

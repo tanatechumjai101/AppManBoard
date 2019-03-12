@@ -43,7 +43,7 @@ class PageOwnerFragment : Fragment() {
     var editor: SharedPreferences.Editor? = null
     lateinit var mUsersIns: DatabaseReference
     lateinit var adapter: OwnerRecyclerAdapter
-    var listdata = mutableListOf<Data>()
+    var listdata = ArrayList<Data>()
     lateinit var mActivity: Activity
     lateinit var listMain: RecyclerView
     private lateinit var deleteIcon: Drawable
@@ -51,7 +51,7 @@ class PageOwnerFragment : Fragment() {
     private var switchPopUp: Int = 1
     private var dataSortByCharactor: Int = 2
     private var dataSortByReverse: Int = 1
-
+    var listshow: ArrayList<Data> = arrayListOf()
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
     private var DATA_OWNER = 4
@@ -114,7 +114,7 @@ class PageOwnerFragment : Fragment() {
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, position: Int) {
                     val oldList: MutableList<Data> = mutableListOf()
-                    val listModify: MutableList<Data> = mutableListOf()
+                    val listModify: ArrayList<Data> = ArrayList()
                     oldList.addAll(adapter.Listdata!!)
                     listModify.addAll(adapter.Listdata!!)
 
@@ -132,6 +132,7 @@ class PageOwnerFragment : Fragment() {
                             break
                         }
                     }
+//                    sortByInit(listshow)
                     adapter.Listdata = listModify
                     adapter.notifyItemRemoved(deleteIndex)
 
@@ -141,10 +142,13 @@ class PageOwnerFragment : Fragment() {
                     ).setAction("UNDO") {
                         listModify.add(deleteIndex, oldList[deleteIndex])
                         insertIndex?.let {
-                            listdata.add(insertIndex, oldList[deleteIndex])
+                            listdata.add(deleteIndex, oldList[deleteIndex])
+//                            sortByInit(listdata)
+
                         }
                         mUsersIns.child("Activity").setValue(listdata)
-                        adapter.Listdata = listModify
+                        sortByInit(listModify)
+                        adapter.Listdata = oldList
                         adapter.notifyItemInserted(deleteIndex)
                     }.show()
                 }
@@ -253,7 +257,7 @@ class PageOwnerFragment : Fragment() {
                         switchPopUp = 1
                         ib_sort.setImageResource(R.drawable.ic_time)
                         editor!!.putInt("sort", switchPopUp).apply()
-                        adapter?.Listdata = listdata
+                        adapter?.Listdata = listshow
                         adapter?.Listdata?.reverse()
                         adapter!!.notifyDataSetChanged()
                         true
@@ -305,7 +309,7 @@ class PageOwnerFragment : Fragment() {
     }
 
 
-    var listshow: MutableList<Data> = arrayListOf()
+
     private fun setListDataFromDataSnapshot(dataSnapshot: DataSnapshot) {
         if (dataSnapshot.value == null) {
             return
@@ -313,8 +317,8 @@ class PageOwnerFragment : Fragment() {
         val value = Gson().toJson(dataSnapshot.value)
         val sharedPreference = mActivity.getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
         if (value.isNotEmpty()) {
-            listdata = Gson().fromJson<MutableList<Data>>(value)
-            val listModify: MutableList<Data> = arrayListOf()
+            listdata = Gson().fromJson<ArrayList<Data>>(value)
+            val listModify: ArrayList<Data> = arrayListOf()
             listModify.addAll(listdata)
             for (i: Int in listModify.size - 1 downTo 0) {
                 if (listModify[i].email != sharedPreference.getString("email", "")) {
@@ -328,27 +332,7 @@ class PageOwnerFragment : Fragment() {
         }
     }
 
-//    private fun filter(text: String) {
-//
-//        val filteredCourseAry: ArrayList<Data> = ArrayList()
-//        val courseAry: MutableList<Data> = listdata
-//
-//        for (eachCourse in courseAry) {
-//
-//            if (eachCourse.subject.toLowerCase().contains(text.toLowerCase())) {
-//                filteredCourseAry.add(eachCourse)
-//            }
-//        }
-//        filterList(filteredCourseAry)
-//
-//    }
 
-    private fun filterList(filteredCourseList: ArrayList<Data>) {
-        adapter?.Listdata = filteredCourseList
-        sortByInit(filteredCourseList)
-        adapter!!.notifyDataSetChanged()
-
-    }
     private fun sortByInit(dataReverse: ArrayList<Data>) {
 
         val getInit = shredPref!!.getInt("sort", dataSortByReverse)
@@ -375,7 +359,7 @@ class PageOwnerFragment : Fragment() {
                 filteredCourseAry.add(eachCourse)
             }
         }
-        adapter!!.filterList(filteredCourseAry)
+        adapter.filterList(filteredCourseAry)
     }
 
 
@@ -394,7 +378,6 @@ class PageOwnerFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data != null) {
 
-                        val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
                         val newData: Data = data.extras.getParcelable("new_data")!!
 
                         for (i: Int in 0 until listdata.size) {
@@ -405,7 +388,7 @@ class PageOwnerFragment : Fragment() {
                             }
                         }
                         mUsersIns.child("Activity").setValue(listdata)
-
+                        sortByInit(listdata)
                     }
                 }
             }
