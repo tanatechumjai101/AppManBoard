@@ -77,7 +77,6 @@
 
 
             <ImageButton
-                android:visibility="gone"
                 android:id="@+id/action_subscript"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -87,11 +86,11 @@
                 android:background="@color/black"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/subscript" />
+                android:src="@drawable/subscript"
+                android:visibility="gone" />
 
 
             <ImageButton
-                android:visibility="gone"
                 android:id="@+id/action_superscript"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -101,11 +100,11 @@
                 android:background="@color/black"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/superscript" />
+                android:src="@drawable/superscript"
+                android:visibility="gone" />
 
 
             <ImageButton
-                android:visibility="gone"
                 android:id="@+id/action_strikethrough"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -115,7 +114,8 @@
                 android:background="@color/black"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/strikethrough" />
+                android:src="@drawable/strikethrough"
+                android:visibility="gone" />
 
 
             <ImageButton
@@ -157,7 +157,6 @@
                 android:src="@drawable/h2" />
 
             <ImageButton
-                android:visibility="gone"
                 android:id="@+id/action_heading3"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -167,11 +166,11 @@
                 android:background="@color/black"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/h3" />
+                android:src="@drawable/h3"
+                android:visibility="gone" />
 
 
             <ImageButton
-                android:visibility="gone"
                 android:id="@+id/action_heading4"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -181,11 +180,11 @@
                 android:background="@color/black"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/h4" />
+                android:src="@drawable/h4"
+                android:visibility="gone" />
 
 
             <ImageButton
-                android:visibility="gone"
                 android:id="@+id/action_heading5"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -195,11 +194,11 @@
                 android:background="@color/black"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/h5" />
+                android:src="@drawable/h5"
+                android:visibility="gone" />
 
 
             <ImageButton
-                android:visibility="gone"
                 android:id="@+id/action_heading6"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -209,7 +208,8 @@
                 android:background="@color/black"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/h6" />
+                android:src="@drawable/h6"
+                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/action_txt_color"
@@ -324,7 +324,6 @@
                 android:src="@drawable/numbers" />
 
             <ImageButton
-                android:visibility="gone"
                 android:id="@+id/action_blockquote"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -334,10 +333,10 @@
                 android:background="@null"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blockquote" />
+                android:src="@drawable/blockquote"
+                android:visibility="gone" />
 
             <ImageButton
-                android:visibility="gone"
                 android:id="@+id/action_insert_image"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -347,10 +346,10 @@
                 android:background="@null"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/insert_image" />
+                android:src="@drawable/insert_image"
+                android:visibility="gone" />
 
             <ImageButton
-
                 android:id="@+id/action_insert_link"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -360,7 +359,8 @@
                 android:background="@null"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/insert_link" />
+                android:src="@drawable/insert_link"
+                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/action_insert_checkbox"
@@ -372,7 +372,8 @@
                 android:background="@null"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@android:drawable/checkbox_on_background" />
+                android:src="@android:drawable/checkbox_on_background"
+                android:visibility="gone" />
         </LinearLayout>
 
     </HorizontalScrollView>
@@ -428,12 +429,12 @@
         android:layout_weight="1">
 
         <android.support.v7.widget.AppCompatImageView
-            android:visibility="invisible"
             android:id="@+id/ivCamera"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            tools:layout_height="500dp"/>
+            android:visibility="invisible"
+            tools:layout_height="500dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
