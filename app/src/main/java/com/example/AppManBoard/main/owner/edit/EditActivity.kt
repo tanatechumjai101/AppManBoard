@@ -383,7 +383,7 @@ class EditActivity : AppCompatActivity() {
             options.inPreferredConfig = Bitmap.Config.ARGB_8888
             val bitmap = BitmapFactory.decodeFile(imagePath, options)
             cursor?.close()
-            uploadImageForGallery(resizeBitmap(bitmap, bitmap.width / 2, bitmap.height / 2).toByteArray())
+            uploadImageForGallery(resizeBitmap(bitmap, (webview_edit.width * 0.8 ).toInt(), (webview_edit.height * 0.8 ).toInt()).toByteArray())
         }
     }
 
@@ -429,6 +429,7 @@ class EditActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             PICK_CAMARA_EDIT -> {
@@ -457,7 +458,7 @@ class EditActivity : AppCompatActivity() {
                                 ): Boolean {
                                     resource?.let {
                                         val rescaleBitmap =
-                                            resizeBitmap(resource, resource.width / 2, resource.height / 2)
+                                            resizeBitmap(resource, (resource.width * 0.8).toInt(), (resource.height * 0.8).toInt())
                                         uploadImageForCamera(rescaleBitmap.toByteArray())
 
                                     }
@@ -483,21 +484,23 @@ class EditActivity : AppCompatActivity() {
     }
 
     private fun resizeBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap {
-        return if (bitmap.width > bitmap.height) {
+
+        return if (bitmap.height > webview_edit.height && bitmap.width > webview_edit.width) {
             //Landscape
-            if (bitmap.width > 1024) {
-                Bitmap.createScaledBitmap(bitmap, width , height , false)
-            } else {
+            if (bitmap.width < 1024) {
                 bitmap
+            } else {
+                Bitmap.createScaledBitmap(bitmap, width , height , false)
             }
         } else {
             //Portrait
-            if (bitmap.height > 1024) {
-                Bitmap.createScaledBitmap(bitmap, width, height , false)
-            } else {
+            if (bitmap.height < 1024) {
                 bitmap
+            } else {
+                Bitmap.createScaledBitmap(bitmap, width, height , false)
             }
         }
+
     }
 
     override fun onBackPressed() {
