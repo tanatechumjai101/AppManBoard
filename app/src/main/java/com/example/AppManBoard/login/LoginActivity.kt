@@ -48,8 +48,8 @@ class LoginActivity : AppCompatActivity() {
         AlertDialog.Builder(this@LoginActivity)
             .setTitle("Are you sure ?")
             .setMessage("Do you want to close the app?")
-            .setPositiveButton("yes") { dialog, which -> finishAffinity() }
-            .setNegativeButton("no") { dialog, which -> }
+            .setPositiveButton("yes") { dialog , which -> finishAffinity() }
+            .setNegativeButton("no") { dialog , which -> }
             .show()
     }
 

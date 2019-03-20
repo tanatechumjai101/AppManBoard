@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -53,7 +54,7 @@ class EditActivity : AppCompatActivity() {
     var storage: FirebaseStorage? = null
     var storageReference: StorageReference? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
 
@@ -383,7 +384,7 @@ class EditActivity : AppCompatActivity() {
             options.inPreferredConfig = Bitmap.Config.ARGB_8888
             val bitmap = BitmapFactory.decodeFile(imagePath, options)
             cursor?.close()
-            uploadImageForGallery(resizeBitmap(bitmap, (webview_edit.width * 0.8 ).toInt(), (webview_edit.height * 0.8 ).toInt()).toByteArray())
+            uploadImageForGallery(resizeBitmapGallery(bitmap, (webview_edit.width * 0.8 ).toInt(), (webview_edit.height * 0.8 ).toInt()).toByteArray())
         }
     }
 
@@ -408,7 +409,7 @@ class EditActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener {
                     progressDialog.dismiss()
-                    Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,"Failed", Toast.LENGTH_SHORT).show()
 
                 }
         }
@@ -437,7 +438,7 @@ class EditActivity : AppCompatActivity() {
                     progressDialog.show()
                     if (imageSavedPath != null) {
                         toast("Bitmap resized.")
-                        Glide.with(this)
+                        Glide.with( this)
                             .asBitmap()
                             .listener(object : RequestListener<Bitmap?> {
                                 override fun onLoadFailed(
@@ -458,7 +459,7 @@ class EditActivity : AppCompatActivity() {
                                 ): Boolean {
                                     resource?.let {
                                         val rescaleBitmap =
-                                            resizeBitmap(resource, (resource.width * 0.8).toInt(), (resource.height * 0.8).toInt())
+                                            resizeBitmapCamera(resource, (resource.width * 0.5).toInt(), (resource.height * 0.5).toInt())
                                         uploadImageForCamera(rescaleBitmap.toByteArray())
 
                                     }
@@ -483,7 +484,7 @@ class EditActivity : AppCompatActivity() {
         }
     }
 
-    private fun resizeBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap {
+    private fun resizeBitmapCamera(bitmap: Bitmap, width: Int, height: Int): Bitmap {
 
         return if (bitmap.height > webview_edit.height && bitmap.width > webview_edit.width) {
             //Landscape
@@ -498,6 +499,35 @@ class EditActivity : AppCompatActivity() {
                 bitmap
             } else {
                 Bitmap.createScaledBitmap(bitmap, width, height , false)
+            }
+        }
+
+    }
+    private fun resizeBitmapGallery(bitmap: Bitmap, width: Int, height: Int): Bitmap {
+
+        return if (bitmap.height > webview_edit.height && bitmap.width > webview_edit.width) {
+            //Landscape
+            if (bitmap.width < 1024) {
+                bitmap
+            } else {
+                val matrix = Matrix()
+                matrix.postRotate(90F)
+//                Bitmap.createBitmap(bitmap, 0, 0, (bitmap.width*0.8).toInt(), (bitmap.height*0.8).toInt(), matrix, true)
+                Bitmap.createBitmap(bitmap, 0, 0, (webview_edit.width).toInt(), (webview_edit.height).toInt(), matrix, true)
+
+//                Bitmap.createScaledBitmap(bitmap, width , height , false)
+            }
+        } else {
+            //Portrait
+            if (bitmap.height < 1024) {
+                bitmap
+            } else {
+                val matrix = Matrix()
+                matrix.postRotate(90F)
+//                Bitmap.createBitmap(bitmap, 0, 0, (bitmap.width*0.8).toInt(), (bitmap.height*0.8).toInt(), matrix, true)
+                Bitmap.createBitmap(bitmap, 0, 0, (webview_edit.width).toInt(), (webview_edit.height).toInt(), matrix, true)
+
+//                Bitmap.createScaledBitmap(bitmap, width, height , false)
             }
         }
 
