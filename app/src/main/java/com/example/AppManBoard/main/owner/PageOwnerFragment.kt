@@ -85,8 +85,8 @@ class PageOwnerFragment : Fragment() {
 
             override fun onCancelled(error: DatabaseError) {
                 AlertDialog.Builder(mActivity)
-                    .setMessage("Error")
-                    .show()
+                        .setMessage("Error")
+                        .show()
             }
         })
 
@@ -100,107 +100,114 @@ class PageOwnerFragment : Fragment() {
             ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
             adapter.notifyDataSetChanged()
         }
+        if(listdata.size != 0){
+            tv_showData.visibility = View.GONE
+            adapter.notifyDataSetChanged()
+        }else {
+            tv_showData.visibility = View.VISIBLE
+            adapter.notifyDataSetChanged()
+        }
 
         val itemTouchHelperCallback =
-            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
+                object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
 
-                override fun onMove(
-                    p0: RecyclerView,
-                    p1: RecyclerView.ViewHolder,
-                    p2: RecyclerView.ViewHolder
-                ): Boolean {
-                    return false
-                }
+                    override fun onMove(
+                            p0: RecyclerView,
+                            p1: RecyclerView.ViewHolder,
+                            p2: RecyclerView.ViewHolder
+                    ): Boolean {
+                        return false
+                    }
 
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, position: Int) {
-                    val oldList: MutableList<Data> = mutableListOf()
-                    val listModify: ArrayList<Data> = ArrayList()
-                    oldList.addAll(adapter.Listdata!!)
-                    listModify.addAll(adapter.Listdata!!)
+                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, position: Int) {
+                        val oldList: MutableList<Data> = mutableListOf()
+                        val listModify: ArrayList<Data> = ArrayList()
+                        oldList.addAll(adapter.Listdata!!)
+                        listModify.addAll(adapter.Listdata!!)
 
-                    val deleteIndex = viewHolder.adapterPosition
-                    var insertIndex: Int? = null
+                        val deleteIndex = viewHolder.adapterPosition
+                        var insertIndex: Int? = null
 
 //                    Delete item from rows //
 
-                    for (i: Int in 0 until listdata.size) {
-                        if (listdata[i].id == listModify[deleteIndex].id) {
-                            listdata.removeAt(i)
-                            mUsersIns.child("Activity").setValue(listdata)
-                            listModify.removeAt(deleteIndex)
-                            insertIndex = i
-                            break
+                        for (i: Int in 0 until listdata.size) {
+                            if (listdata[i].id == listModify[deleteIndex].id) {
+                                listdata.removeAt(i)
+                                mUsersIns.child("Activity").setValue(listdata)
+                                listModify.removeAt(deleteIndex)
+                                insertIndex = i
+                                break
+                            }
                         }
-                    }
 //                    sortByInit(listshow)
-                    adapter.Listdata = listModify
-                    adapter.notifyItemRemoved(deleteIndex)
+                        adapter.Listdata = listModify
+                        adapter.notifyItemRemoved(deleteIndex)
 
-                    Snackbar.make(
-                        viewHolder.itemView,
-                        " ${oldList[deleteIndex].subject} deleted. ", Snackbar.LENGTH_SHORT
-                    ).setAction("UNDO") {
-                        listModify.add(deleteIndex, oldList[deleteIndex])
-                        insertIndex?.let {
-                            listdata.add(deleteIndex, oldList[deleteIndex])
+                        Snackbar.make(
+                                viewHolder.itemView,
+                                " ${oldList[deleteIndex].subject} deleted. ", Snackbar.LENGTH_SHORT
+                        ).setAction("UNDO") {
+                            listModify.add(deleteIndex, oldList[deleteIndex])
+                            insertIndex?.let {
+                                listdata.add(deleteIndex, oldList[deleteIndex])
 //                            sortByInit(listdata)
 
+                            }
+                            mUsersIns.child("Activity").setValue(listdata)
+                            sortByInit(listModify)
+                            adapter.Listdata = oldList
+                            adapter.notifyItemInserted(deleteIndex)
+                        }.show()
+                    }
+
+                    override fun onChildDraw(
+                            c: Canvas,
+                            recyclerView: RecyclerView,
+                            viewHolder: RecyclerView.ViewHolder,
+                            dX: Float,
+                            dY: Float,
+                            actionState: Int,
+                            isCurrentlyActive: Boolean
+                    ) {
+                        val itemView = viewHolder.itemView
+                        val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
+                        if (dX > 0) {
+                            swipeBackground.setBounds(itemView.left, itemView.top, dX.toInt(), itemView.bottom)
+                            deleteIcon.setBounds(
+                                    itemView.left + iconMargin,
+                                    itemView.top + iconMargin,
+                                    itemView.left + iconMargin + deleteIcon.intrinsicWidth,
+                                    itemView.bottom - iconMargin
+                            )
+                        } else {
+                            swipeBackground.setBounds(
+                                    itemView.right + dX.toInt(),
+                                    itemView.top,
+                                    itemView.right,
+                                    itemView.bottom
+                            )
+                            deleteIcon.setBounds(
+                                    itemView.right - iconMargin - deleteIcon.intrinsicWidth,
+                                    itemView.top + iconMargin,
+                                    itemView.right - iconMargin,
+                                    itemView.bottom - iconMargin
+                            )
                         }
-                        mUsersIns.child("Activity").setValue(listdata)
-                        sortByInit(listModify)
-                        adapter.Listdata = oldList
-                        adapter.notifyItemInserted(deleteIndex)
-                    }.show()
-                }
+                        swipeBackground.draw(c)
+                        c.save()
 
-                override fun onChildDraw(
-                    c: Canvas,
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    dX: Float,
-                    dY: Float,
-                    actionState: Int,
-                    isCurrentlyActive: Boolean
-                ) {
-                    val itemView = viewHolder.itemView
-                    val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
-                    if (dX > 0) {
-                        swipeBackground.setBounds(itemView.left, itemView.top, dX.toInt(), itemView.bottom)
-                        deleteIcon.setBounds(
-                            itemView.left + iconMargin,
-                            itemView.top + iconMargin,
-                            itemView.left + iconMargin + deleteIcon.intrinsicWidth,
-                            itemView.bottom - iconMargin
-                        )
-                    } else {
-                        swipeBackground.setBounds(
-                            itemView.right + dX.toInt(),
-                            itemView.top,
-                            itemView.right,
-                            itemView.bottom
-                        )
-                        deleteIcon.setBounds(
-                            itemView.right - iconMargin - deleteIcon.intrinsicWidth,
-                            itemView.top + iconMargin,
-                            itemView.right - iconMargin,
-                            itemView.bottom - iconMargin
-                        )
+                        if (dX > 0) {
+                            c.clipRect(itemView.left, itemView.top, dX.toInt(), itemView.bottom)
+                        } else {
+                            c.clipRect(
+                                    itemView.right + dX.toInt(), itemView.top, itemView.right, itemView.bottom
+                            )
+                        }
+                        deleteIcon.draw(c)
+                        c.restore()
+                        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     }
-                    swipeBackground.draw(c)
-                    c.save()
-
-                    if (dX > 0) {
-                        c.clipRect(itemView.left, itemView.top, dX.toInt(), itemView.bottom)
-                    } else {
-                        c.clipRect(
-                            itemView.right + dX.toInt(), itemView.top, itemView.right, itemView.bottom
-                        )
-                    }
-                    deleteIcon.draw(c)
-                    c.restore()
-                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                 }
-            }
 
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(rv_owner)
@@ -224,9 +231,9 @@ class PageOwnerFragment : Fragment() {
 
                 filter(s.toString())
 
-                if(ed_search.length() > 0){
+                if (ed_search.length() > 0) {
                     ib_clear.visibility = View.VISIBLE
-                }else {
+                } else {
                     ib_clear.visibility = View.INVISIBLE
                 }
 
@@ -280,7 +287,7 @@ class PageOwnerFragment : Fragment() {
             }
             popupMenu.inflate(R.menu.searchbar)
 
-           if (switchPopUp == 1) {
+            if (switchPopUp == 1) {
 
                 popupMenu.menu.findItem(R.id.action_select_sort_time).isEnabled = false
                 popupMenu.menu.findItem(R.id.action_select_sort_character).isEnabled = true
@@ -292,22 +299,21 @@ class PageOwnerFragment : Fragment() {
                 popupMenu.menu.findItem(R.id.action_select_sort_character).isEnabled = false
 
             }
-            try{
+            try {
                 val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
-                fieldMPopup.isAccessible  = true
+                fieldMPopup.isAccessible = true
                 val mPopup = fieldMPopup.get(popupMenu)
                 mPopup.javaClass
-                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                    .invoke(mPopup,true)
-            }catch (e: Exception){
-                Log.e("Main","Error Showing menu icons.",e)
-            }finally {
+                        .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                        .invoke(mPopup, true)
+            } catch (e: Exception) {
+                Log.e("Main", "Error Showing menu icons.", e)
+            } finally {
                 popupMenu.show()
             }
 
         }
     }
-
 
 
     private fun setListDataFromDataSnapshot(dataSnapshot: DataSnapshot) {
@@ -396,7 +402,7 @@ class PageOwnerFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun closeKeyboard(view : View) {
+    private fun closeKeyboard(view: View) {
 
         if (view != null) {
             val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

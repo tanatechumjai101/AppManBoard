@@ -11,12 +11,29 @@
 
     <include android:id="@+id/tb_pageOwner" layout="@layout/toolbar"/>
 
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv_showData"
+            android:visibility="gone"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="40sp"
+            android:text="No Data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <android.support.v7.widget.RecyclerView
             android:layout_marginTop="0.5dp"
             android:background="@color/colorWhite"
             android:id="@+id/rv_owner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+    </LinearLayout>
+
 
 
 </LinearLayout>
