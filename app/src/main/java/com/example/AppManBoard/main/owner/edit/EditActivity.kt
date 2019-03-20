@@ -54,7 +54,7 @@ class EditActivity : AppCompatActivity() {
     var storage: FirebaseStorage? = null
     var storageReference: StorageReference? = null
 
-    override fun onCreate(savedInstanceState: Bundle?)  {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
 
@@ -84,12 +84,12 @@ class EditActivity : AppCompatActivity() {
             nPreview = mPreview
         }
 
-        if(webview_edit.requestFocus()){
+        if (webview_edit.requestFocus()) {
             webview_edit.focusEditor()
 
             ib_AddImage.visibility = View.VISIBLE
 
-        }else {
+        } else {
 
             ib_AddImage.visibility = View.GONE
 
@@ -118,13 +118,13 @@ class EditActivity : AppCompatActivity() {
             }
         }
 
-        if(webview_edit.requestFocus()){
+        if (webview_edit.requestFocus()) {
 
             webview_edit.focusEditor()
 
             ib_AddImage.visibility = View.VISIBLE
 
-        }else {
+        } else {
 
             ib_AddImage.visibility = View.GONE
 
@@ -301,14 +301,14 @@ class EditActivity : AppCompatActivity() {
         return imageSavedPath
     }
 
-    private fun openCamera(){
+    private fun openCamera() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, createPathForCameraIntent())
         startActivityForResult(cameraIntent, PICK_CAMARA_EDIT)
     }
 
 
-    private fun openGallery(){
+    private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         startActivityForResult(intent, PICK_GALLARY_EDIT)
@@ -329,13 +329,18 @@ class EditActivity : AppCompatActivity() {
 
     fun checkPermission(): Boolean {
 
-        return (ContextCompat.checkSelfPermission(this@EditActivity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        return (ContextCompat.checkSelfPermission(
+            this@EditActivity,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
             this@EditActivity,
-            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
             this@EditActivity,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED)
 
     }
 
@@ -384,7 +389,13 @@ class EditActivity : AppCompatActivity() {
             options.inPreferredConfig = Bitmap.Config.ARGB_8888
             val bitmap = BitmapFactory.decodeFile(imagePath, options)
             cursor?.close()
-            uploadImageForGallery(resizeBitmapGallery(bitmap, (webview_edit.width * 0.8 ).toInt(), (webview_edit.height * 0.8 ).toInt()).toByteArray())
+            uploadImageForGallery(
+                resizeBitmapGallery(
+                    bitmap,
+                    (webview_edit.width * 0.8).toInt(),
+                    (webview_edit.height * 0.8).toInt()
+                ).toByteArray()
+            )
         }
     }
 
@@ -409,7 +420,7 @@ class EditActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener {
                     progressDialog.dismiss()
-                    Toast.makeText(this,"Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
 
                 }
         }
@@ -424,7 +435,7 @@ class EditActivity : AppCompatActivity() {
                 }
             }
             REQUEST_PERMISSION_GALLERY_EDIT -> {
-                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     openGallery()
                 }
             }
@@ -438,7 +449,7 @@ class EditActivity : AppCompatActivity() {
                     progressDialog.show()
                     if (imageSavedPath != null) {
                         toast("Bitmap resized.")
-                        Glide.with( this)
+                        Glide.with(this)
                             .asBitmap()
                             .listener(object : RequestListener<Bitmap?> {
                                 override fun onLoadFailed(
@@ -459,7 +470,11 @@ class EditActivity : AppCompatActivity() {
                                 ): Boolean {
                                     resource?.let {
                                         val rescaleBitmap =
-                                            resizeBitmapCamera(resource, (resource.width * 0.5).toInt(), (resource.height * 0.5).toInt())
+                                            resizeBitmapCamera(
+                                                resource,
+                                                (resource.width * 0.5).toInt(),
+                                                (resource.height * 0.5).toInt()
+                                            )
                                         uploadImageForCamera(rescaleBitmap.toByteArray())
 
                                     }
@@ -491,31 +506,33 @@ class EditActivity : AppCompatActivity() {
             if (bitmap.width < 1024) {
                 bitmap
             } else {
-                Bitmap.createScaledBitmap(bitmap, width , height , false)
+                Bitmap.createScaledBitmap(bitmap, width, height, false)
             }
         } else {
             //Portrait
             if (bitmap.height < 1024) {
                 bitmap
             } else {
-                Bitmap.createScaledBitmap(bitmap, width, height , false)
+                Bitmap.createScaledBitmap(bitmap, width, height, false)
             }
         }
 
     }
+
     private fun resizeBitmapGallery(bitmap: Bitmap, width: Int, height: Int): Bitmap {
 
-        return if (bitmap.height > webview_edit.height && bitmap.width > webview_edit.width) {
+        return if (bitmap.width < webview_edit.width) {
+            val matrix = Matrix()
+            matrix.postRotate(90F)
             //Landscape
             if (bitmap.width < 1024) {
                 bitmap
             } else {
-                val matrix = Matrix()
-                matrix.postRotate(90F)
-//                Bitmap.createBitmap(bitmap, 0, 0, (bitmap.width*0.8).toInt(), (bitmap.height*0.8).toInt(), matrix, true)
-                Bitmap.createBitmap(bitmap, 0, 0, (webview_edit.width).toInt(), (webview_edit.height).toInt(), matrix, true)
 
-//                Bitmap.createScaledBitmap(bitmap, width , height , false)
+                val bitmapRotate =
+                    Bitmap.createBitmap(bitmap, 0, 0, (bitmap.width * 0.8).toInt(), (bitmap.height*0.8).toInt(), matrix, false)
+                Bitmap.createScaledBitmap(bitmapRotate, (width / 2).toInt(), (height / 2).toInt(), false)
+
             }
         } else {
             //Portrait
@@ -523,11 +540,10 @@ class EditActivity : AppCompatActivity() {
                 bitmap
             } else {
                 val matrix = Matrix()
-                matrix.postRotate(90F)
-//                Bitmap.createBitmap(bitmap, 0, 0, (bitmap.width*0.8).toInt(), (bitmap.height*0.8).toInt(), matrix, true)
-                Bitmap.createBitmap(bitmap, 0, 0, (webview_edit.width).toInt(), (webview_edit.height).toInt(), matrix, true)
-
-//                Bitmap.createScaledBitmap(bitmap, width, height , false)
+                matrix.postRotate(360F)
+                val bitmapRotate =
+                    Bitmap.createBitmap(bitmap, 0, 0, (bitmap.width).toInt(), (bitmap.height).toInt(), matrix, false)
+                Bitmap.createScaledBitmap(bitmapRotate, (width / 2).toInt(), (height / 2).toInt(), false)
             }
         }
 
