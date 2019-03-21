@@ -1,4 +1,4 @@
-package com.example.AppManBoard.main.home
+ package com.example.AppManBoard.main.home
 
 import android.app.Activity
 import android.app.AlertDialog

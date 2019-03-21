@@ -56,7 +56,7 @@ class PageOwnerFragment : Fragment() {
 
     private var DATA_OWNER = 4
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mActivity = activity!!
+        mActivity = this!!.activity!!
         val view = inflater.inflate(R.layout.fragment_owner, container, false)
         listMain = view.findViewById(R.id.rv_owner)
         return view
@@ -76,6 +76,9 @@ class PageOwnerFragment : Fragment() {
         listMain.adapter = adapter
         val mRootIns = FirebaseDatabase.getInstance().reference
         mUsersIns = mRootIns.child("PageMain")
+
+        tv_showData.visibility = View.GONE
+
         mUsersIns.child("Activity").addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -100,13 +103,7 @@ class PageOwnerFragment : Fragment() {
             ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
             adapter.notifyDataSetChanged()
         }
-        if(listdata.size != 0){
-            tv_showData.visibility = View.GONE
-            adapter.notifyDataSetChanged()
-        }else {
-            tv_showData.visibility = View.VISIBLE
-            adapter.notifyDataSetChanged()
-        }
+
 
         val itemTouchHelperCallback =
                 object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
@@ -335,6 +332,11 @@ class PageOwnerFragment : Fragment() {
             adapter!!.Listdata = listModify
             listshow = listModify
             adapter!!.notifyDataSetChanged()
+            if(listshow.size == 0 ){
+                tv_showData.visibility = View.VISIBLE
+            }else {
+                tv_showData.visibility = View.GONE
+            }
         }
     }
 
@@ -413,5 +415,6 @@ class PageOwnerFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         ed_search.setText("")
+
     }
 }
