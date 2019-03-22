@@ -22,6 +22,7 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.PopupMenu
+import android.widget.TextView
 import com.example.AppManBoard.R
 import com.example.AppManBoard.main.owner.adapter.OwnerRecyclerAdapter
 import com.example.AppManBoard.main.owner.edit.EditActivity
@@ -32,53 +33,53 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_owner.*
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.toolbar.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 
 class PageOwnerFragment : Fragment() {
-
     var shredPref: SharedPreferences? = null
     var editor: SharedPreferences.Editor? = null
-    lateinit var mUsersIns: DatabaseReference
     lateinit var adapter: OwnerRecyclerAdapter
     var listdata = ArrayList<Data>()
     lateinit var mActivity: Activity
     lateinit var listMain: RecyclerView
     private lateinit var deleteIcon: Drawable
+    private lateinit var firebaseListener: ValueEventListener
+    lateinit var mUsersIns: DatabaseReference
 
+    lateinit var activityReference: DatabaseReference
     private var switchPopUp: Int = 1
     private var dataSortByCharactor: Int = 2
     private var dataSortByReverse: Int = 1
     var listshow: ArrayList<Data> = arrayListOf()
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
-
+    lateinit var textEmpty: TextView
     private var DATA_OWNER = 4
+    private lateinit var mRootIns: DatabaseReference
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mActivity = this!!.activity!!
         val view = inflater.inflate(R.layout.fragment_owner, container, false)
-        listMain = view.findViewById(R.id.rv_owner)
+        listMain = view.findViewById<RecyclerView>(R.id.rv_owner)
+        textEmpty = view.findViewById(R.id.tv_showData)
         return view
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        initListener()
         shredPref = mActivity.getSharedPreferences("MENU_SORT", Context.MODE_PRIVATE)
         editor = shredPref!!.edit()
-
         deleteIcon = ContextCompat.getDrawable(mActivity, R.drawable.ic_delete)!!
         var swipeBackground = ColorDrawable(ContextCompat.getColor(mActivity, android.R.color.holo_red_dark))
         listMain.layoutManager = LinearLayoutManager(mActivity, LinearLayout.VERTICAL, false)
         adapter = OwnerRecyclerAdapter(listdata)
         listMain.adapter = adapter
-        val mRootIns = FirebaseDatabase.getInstance().reference
+        mRootIns = FirebaseDatabase.getInstance().reference
         mUsersIns = mRootIns.child("PageMain")
-
-        tv_showData.visibility = View.GONE
-
+        activityReference = mUsersIns.child("Activity")
+        activityReference.addValueEventListener(firebaseListener)
         mUsersIns.child("Activity").addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -103,7 +104,6 @@ class PageOwnerFragment : Fragment() {
             ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
             adapter.notifyDataSetChanged()
         }
-
 
         val itemTouchHelperCallback =
                 object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
@@ -136,7 +136,6 @@ class PageOwnerFragment : Fragment() {
                                 break
                             }
                         }
-//                    sortByInit(listshow)
                         adapter.Listdata = listModify
                         adapter.notifyItemRemoved(deleteIndex)
 
@@ -147,7 +146,6 @@ class PageOwnerFragment : Fragment() {
                             listModify.add(deleteIndex, oldList[deleteIndex])
                             insertIndex?.let {
                                 listdata.add(deleteIndex, oldList[deleteIndex])
-//                            sortByInit(listdata)
 
                             }
                             mUsersIns.child("Activity").setValue(listdata)
@@ -234,6 +232,7 @@ class PageOwnerFragment : Fragment() {
                     ib_clear.visibility = View.INVISIBLE
                 }
 
+
                 ib_clear.setOnClickListener {
                     ed_search.setText("")
                     closeKeyboard(view)
@@ -314,28 +313,70 @@ class PageOwnerFragment : Fragment() {
 
 
     private fun setListDataFromDataSnapshot(dataSnapshot: DataSnapshot) {
+        var listModify: ArrayList<Data> = arrayListOf()
         if (dataSnapshot.value == null) {
+            textEmpty.visibility = View.VISIBLE
             return
+        }else {
+
+            val value = Gson().toJson(dataSnapshot.value)
+            val sharedPreference = mActivity.getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
+            if (value.isNotEmpty()) {
+                listdata = Gson().fromJson<ArrayList<Data>>(value)
+
+                listModify.addAll(listdata)
+                for (i: Int in listModify.size - 1 downTo 0) {
+                    if (listModify[i].email != sharedPreference.getString("email", "")) {
+                        listModify.removeAt(i)
+                    }
+                }
+                textEmpty.visibility = View.INVISIBLE
+                listModify.reverse()
+                adapter!!.Listdata = listModify
+                listshow = listModify
+                checkDateOwner(listshow)
+                adapter!!.notifyDataSetChanged()
+            }
         }
-        val value = Gson().toJson(dataSnapshot.value)
-        val sharedPreference = mActivity.getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
-        if (value.isNotEmpty()) {
-            listdata = Gson().fromJson<ArrayList<Data>>(value)
-            val listModify: ArrayList<Data> = arrayListOf()
-            listModify.addAll(listdata)
-            for (i: Int in listModify.size - 1 downTo 0) {
-                if (listModify[i].email != sharedPreference.getString("email", "")) {
-                    listModify.removeAt(i)
+    }
+
+    private fun checkDateOwner(listshow: ArrayList<Data>) {
+        if(listshow.size==0){
+            textEmpty.visibility = View.VISIBLE
+        }else {
+            textEmpty.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun initListener() {
+
+        firebaseListener = object : ValueEventListener {
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.value == null) {
+                    textEmpty.visibility = View.VISIBLE
+                    listdata.clear()
+                    adapter!!.notifyDataSetChanged()
+                    return
+                }
+
+                val value = Gson().toJson(dataSnapshot.value)
+                if (value.isNotEmpty()) {
+                    listdata = Gson().fromJson<ArrayList<Data>>(value)
+                    val dataReverse: ArrayList<Data> = arrayListOf()
+                    dataReverse.addAll(listdata)
+                    adapter!!.Listdata = dataReverse
+                    adapter!!.notifyDataSetChanged()
+                    sortByInit(dataReverse)
+                    textEmpty.visibility = View.INVISIBLE
+                    listMain.visibility = View.VISIBLE
                 }
             }
-            listModify.reverse()
-            adapter!!.Listdata = listModify
-            listshow = listModify
-            adapter!!.notifyDataSetChanged()
-            if(listshow.size == 0 ){
-                tv_showData.visibility = View.VISIBLE
-            }else {
-                tv_showData.visibility = View.GONE
+
+            override fun onCancelled(error: DatabaseError) {
+                AlertDialog.Builder(mActivity)
+                        .setMessage("Error")
+                        .show()
             }
         }
     }

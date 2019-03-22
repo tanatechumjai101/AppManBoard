@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -43,7 +44,7 @@ import com.google.firebase.storage.StorageReference
 class FormActivity : AppCompatActivity() {
 
     private lateinit var progressDialog: ProgressDialog
-
+    var editor: SharedPreferences.Editor? = null
     private var fileName: String = ""
     private val REQUEST_PERMISSION_CAMERA = 579
     private val REQUEST_PERMISSION_GALLERY = 975
@@ -71,7 +72,7 @@ class FormActivity : AppCompatActivity() {
         imagesFolder = File(Environment.getExternalStorageDirectory(), "AppmanBoard")
 
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
-
+        editor = sharedPreference.edit()
 
         webViewFormPage.setEditorHeight(200)
         webViewFormPage.setEditorFontSize(22)
@@ -293,6 +294,7 @@ class FormActivity : AppCompatActivity() {
                         sharedPreference.getString("email", ""),
                         PrimeryKey_id
                 )
+                editor!!.putString("PrimeryKey_id","$PrimeryKey_id").apply()
                 val intent = Intent().apply {
                     this.putExtra("Data", formPage)
                 }
