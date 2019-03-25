@@ -8,8 +8,8 @@ import com.example.AppManBoard.R
 import com.example.AppManBoard.model.Data
 import kotlinx.android.synthetic.main.list_owner.view.*
 
-class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
-    RecyclerView.Adapter<OwnerRecyclerAdapter.OwnerViewHolder>() {
+class OwnerRecyclerAdapter(var Listdata: ArrayList<Data>?) :
+        RecyclerView.Adapter<OwnerRecyclerAdapter.OwnerViewHolder>() {
     var listener: RecyclerListener? = null
 
     interface RecyclerListener {
@@ -34,20 +34,20 @@ class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
     class OwnerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun setResource(
-            data: Data,
-            listener: RecyclerListener?,
-            position: Int
+                data: Data,
+                listener: RecyclerListener?,
+                position: Int
         ) {
             itemView.tv_setSubject_owner.text = data.subject
             itemView.tv_setDetail_owner.text = Html.fromHtml(data.detail)
             itemView.tv_setTime_owner.text = data.time
             itemView.tv_setName_owner.text = data.displayname
 
-            if(data.imageURI == "null"){
+            if (data.imageURI == "null") {
                 Glide.with(itemView.context).load(R.drawable.playstore_icon).into(itemView.iv_profile_owner)
-            }else {
+            } else {
                 Glide.with(itemView.context).load(data.imageURI)
-                    .into(itemView.iv_profile_owner)
+                        .into(itemView.iv_profile_owner)
             }
 
             itemView.setOnClickListener {
@@ -57,7 +57,7 @@ class OwnerRecyclerAdapter(var Listdata: MutableList<Data>?) :
     }
 
     fun filterList(filteredCourseList: ArrayList<Data>) {
-        this.Listdata = filteredCourseList
+        Listdata = filteredCourseList
         notifyDataSetChanged()
     }
 

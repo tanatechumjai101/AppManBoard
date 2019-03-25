@@ -58,7 +58,7 @@ class PageOwnerFragment : Fragment() {
     private lateinit var mRootIns: DatabaseReference
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mActivity = this!!.activity!!
+        mActivity = activity!!
         val view = inflater.inflate(R.layout.fragment_owner, container, false)
         listMain = view.findViewById<RecyclerView>(R.id.rv_owner)
         textEmpty = view.findViewById(R.id.tv_showData)
@@ -104,6 +104,10 @@ class PageOwnerFragment : Fragment() {
             ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
             adapter.notifyDataSetChanged()
         }
+        if(listdata.isEmpty()){
+            listdata.clear()
+            adapter.notifyDataSetChanged()
+        }
 
         val itemTouchHelperCallback =
                 object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
@@ -117,8 +121,9 @@ class PageOwnerFragment : Fragment() {
                     }
 
                     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, position: Int) {
-                        val oldList: MutableList<Data> = mutableListOf()
+                        val oldList: ArrayList<Data> = ArrayList()
                         val listModify: ArrayList<Data> = ArrayList()
+
                         oldList.addAll(adapter.Listdata!!)
                         listModify.addAll(adapter.Listdata!!)
 
@@ -138,7 +143,6 @@ class PageOwnerFragment : Fragment() {
                         }
                         adapter.Listdata = listModify
                         adapter.notifyItemRemoved(deleteIndex)
-
                         Snackbar.make(
                                 viewHolder.itemView,
                                 " ${oldList[deleteIndex].subject} deleted. ", Snackbar.LENGTH_SHORT
@@ -150,8 +154,10 @@ class PageOwnerFragment : Fragment() {
                             }
                             mUsersIns.child("Activity").setValue(listdata)
                             sortByInit(listModify)
-                            adapter.Listdata = oldList
-                            adapter.notifyItemInserted(deleteIndex)
+                            if (oldList.isNotEmpty()) {
+                                adapter.Listdata = oldList
+                                adapter.notifyItemInserted(deleteIndex)
+                            }
                         }.show()
                     }
 
@@ -223,8 +229,12 @@ class PageOwnerFragment : Fragment() {
 
         ed_search.ed_search.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-
-                filter(s.toString())
+                if(listdata.isNotEmpty()){
+                    filter(s.toString())
+                }else {
+                    listshow = listdata
+                    adapter.notifyDataSetChanged()
+                }
 
                 if (ed_search.length() > 0) {
                     ib_clear.visibility = View.VISIBLE
@@ -232,9 +242,10 @@ class PageOwnerFragment : Fragment() {
                     ib_clear.visibility = View.INVISIBLE
                 }
 
-
                 ib_clear.setOnClickListener {
+
                     ed_search.setText("")
+
                     closeKeyboard(view)
                 }
 
@@ -260,9 +271,9 @@ class PageOwnerFragment : Fragment() {
                         switchPopUp = 1
                         ib_sort.setImageResource(R.drawable.ic_time)
                         editor!!.putInt("sort", switchPopUp).apply()
-                        adapter?.Listdata = listshow
-                        adapter?.Listdata?.reverse()
-                        adapter!!.notifyDataSetChanged()
+                        adapter.Listdata = listshow
+                        adapter.Listdata?.reverse()
+                        adapter.notifyDataSetChanged()
                         true
 
                     }
@@ -317,7 +328,7 @@ class PageOwnerFragment : Fragment() {
         if (dataSnapshot.value == null) {
             textEmpty.visibility = View.VISIBLE
             return
-        }else {
+        } else {
 
             val value = Gson().toJson(dataSnapshot.value)
             val sharedPreference = mActivity.getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
@@ -332,18 +343,25 @@ class PageOwnerFragment : Fragment() {
                 }
                 textEmpty.visibility = View.INVISIBLE
                 listModify.reverse()
-                adapter!!.Listdata = listModify
-                listshow = listModify
+                adapter.Listdata = listModify
+                if (listModify.isNotEmpty()) {
+                    listshow = listModify
+                }
                 checkDateOwner(listshow)
-                adapter!!.notifyDataSetChanged()
+                adapter.notifyDataSetChanged()
+            }else {
+                listModify.clear()
+                listshow.clear()
+                adapter.notifyDataSetChanged()
             }
+
         }
     }
 
     private fun checkDateOwner(listshow: ArrayList<Data>) {
-        if(listshow.size==0){
+        if (listshow.size == 0) {
             textEmpty.visibility = View.VISIBLE
-        }else {
+        } else {
             textEmpty.visibility = View.INVISIBLE
         }
     }
@@ -356,7 +374,7 @@ class PageOwnerFragment : Fragment() {
                 if (dataSnapshot.value == null) {
                     textEmpty.visibility = View.VISIBLE
                     listdata.clear()
-                    adapter!!.notifyDataSetChanged()
+                    adapter.notifyDataSetChanged()
                     return
                 }
 
@@ -365,8 +383,8 @@ class PageOwnerFragment : Fragment() {
                     listdata = Gson().fromJson<ArrayList<Data>>(value)
                     val dataReverse: ArrayList<Data> = arrayListOf()
                     dataReverse.addAll(listdata)
-                    adapter!!.Listdata = dataReverse
-                    adapter!!.notifyDataSetChanged()
+                    adapter.Listdata = dataReverse
+                    adapter.notifyDataSetChanged()
                     sortByInit(dataReverse)
                     textEmpty.visibility = View.INVISIBLE
                     listMain.visibility = View.VISIBLE
@@ -388,14 +406,16 @@ class PageOwnerFragment : Fragment() {
 
 
         if (getInit == dataSortByReverse) {
-            dataReverse.reverse()
-            adapter.notifyDataSetChanged()
+            if (listdata.isNotEmpty()) {
+                dataReverse.reverse()
+                adapter.notifyDataSetChanged()
+            }
 
         } else if (getInit == dataSortByCharactor) {
-
-            adapter.Listdata?.sortWith(compareBy { it.subject })
-            adapter.notifyDataSetChanged()
-
+            if (listdata.isNotEmpty()) {
+                adapter.Listdata?.sortWith(compareBy { it.subject })
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 
@@ -428,16 +448,19 @@ class PageOwnerFragment : Fragment() {
                     if (data != null) {
 
                         val newData: Data = data.extras.getParcelable("new_data")!!
-
-                        for (i: Int in 0 until listdata.size) {
-                            if (listdata[i].id == newData.id) {
-                                listdata!![i].subject = newData.subject
-                                listdata!![i].detail = newData.detail
-                                break
+                        if (newData != null) {
+                            for (i: Int in 0 until listdata.size) {
+                                if (listdata[i].id == newData.id) {
+                                    listdata!![i].subject = newData.subject
+                                    listdata!![i].detail = newData.detail
+                                    break
+                                }
                             }
                         }
-                        mUsersIns.child("Activity").setValue(listdata)
-                        sortByInit(listdata)
+                        if (listdata.isNotEmpty()) {
+                            mUsersIns.child("Activity").setValue(listdata)
+                            sortByInit(listdata)
+                        }
                     }
                 }
             }
@@ -455,6 +478,12 @@ class PageOwnerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        if (listdata.isEmpty()) {
+            listdata = listshow
+            adapter.notifyDataSetChanged()
+        } else {
+            adapter.notifyDataSetChanged()
+        }
         ed_search.setText("")
 
     }
