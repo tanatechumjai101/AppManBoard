@@ -1,55 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_gravity="center"
-              android:screenOrientation="portrait"
-              android:orientation="vertical"
-              android:fitsSystemWindows="true"
-              android:focusableInTouchMode="true"
-              android:background="@color/clean"
-              tools:context=".main.home.PageMainFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/clean"
+    android:fitsSystemWindows="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:screenOrientation="portrait"
+    tools:context=".main.home.PageMainFragment">
 
-    <include android:id="@+id/tb_pageFeed" layout="@layout/toolbar"/>
+    <include
+        android:id="@+id/tb_pageFeed"
+        layout="@layout/toolbar" />
 
-    <FrameLayout android:layout_width="match_parent"
-                 android:layout_height="match_parent">
+    <FrameLayout
+        android:background="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-                android:layout_marginTop="0.5dp"
-                android:background="@color/colorWhite"
-                android:id="@+id/listViewMain"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="invisible"
-                tools:visibility="visible"/>
+            android:id="@+id/listViewMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0.5dp"
+            android:background="@color/colorWhite"
+            android:visibility="invisible"
+            tools:visibility="visible" />
 
         <android.support.design.widget.FloatingActionButton
-                android:id="@+id/floating_action_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="16dp"
-                android:src="@drawable/ic_add"/>
+            android:id="@+id/floating_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_add" />
 
         <ProgressBar
-                android:visibility="invisible"
-                tools:visibility="visible"
-                android:id="@+id/progressBar"
-                android:layout_width="46dp"
-                android:layout_height="46dp"
-                android:layout_gravity="center"/>
+            android:id="@+id/progressBar"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_gravity="center"
+            android:background="@color/colorWhite"
+            tools:visibility="visible" />
 
         <TextView
-                android:textSize="40sp"
-                android:visibility="invisible"
-                tools:visibility="visible"
-                android:gravity="center"
-                android:text="No Data"
-                android:id="@+id/tv_empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+            android:id="@+id/tv_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="No Data"
+            android:textSize="40sp"
+            android:visibility="invisible"
+            tools:visibility="visible" />
     </FrameLayout>
 
 
