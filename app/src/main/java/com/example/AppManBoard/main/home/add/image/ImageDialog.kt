@@ -25,6 +25,11 @@ class ImageDialog(context: Context) : Dialog(context) {
         setContentView(R.layout.activity_image)
         setCancelable(true)
 
+        onClickListenerCP()
+
+    }
+
+    private fun onClickListenerCP() {
         ib_camera.setOnClickListener {
             listener?.onCameraClick()
             dismiss()

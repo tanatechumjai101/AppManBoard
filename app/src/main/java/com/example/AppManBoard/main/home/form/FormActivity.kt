@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -36,6 +37,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.example.AppManBoard.main.home.form.viewmodel.AddData
 import com.example.AppManBoard.toByteArray
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -56,13 +58,13 @@ class FormActivity : AppCompatActivity() {
     var storageReference: StorageReference? = null
     private lateinit var imagesFolder: File
     private var imageSavedPath: Uri? = null
-
+    private lateinit var vm : AddData
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
 
         progressDialog = ProgressDialog(this)
-
+        vm = ViewModelProviders.of(this).get(AddData::class.java)
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
 
@@ -74,19 +76,107 @@ class FormActivity : AppCompatActivity() {
         val sharedPreference = getSharedPreferences("SAVE_ACCOUNT", Context.MODE_PRIVATE)
         editor = sharedPreference.edit()
 
-        webViewFormPage.setEditorHeight(200)
-        webViewFormPage.setEditorFontSize(22)
-        webViewFormPage.setEditorFontColor(Color.BLACK)
-        webViewFormPage.setPadding(10, 10, 10, 10)
-        webViewFormPage.setPlaceholder("add detail ....")
+        setWebView()
 
-        if(webViewFormPage.requestFocus()){
-            webViewFormPage.focusEditor()
-            ib_AddImage.visibility = View.VISIBLE
-        }else {
-            ib_AddImage.visibility = View.GONE
+        setIcon()
+
+        setWebViewOnClick()
+
+        val dialog = ImageDialog(this)
+
+        dialog.listener = object : ImageDialog.DialogListener {
+
+            override fun onCameraClick() {
+
+
+                if (checkPermission()) {
+                        openCamera()
+                } else {
+                    requestPermission(REQUEST_PERMISSION_CAMERA)
+                }
+
+            }
+
+            override fun onGalleryClick() {
+                if (checkPermission()) {
+                    openGallery()
+                } else {
+                    requestPermission(REQUEST_PERMISSION_GALLERY)
+                }
+
+            }
         }
 
+
+        ib_AddImage.setOnClickListener {
+            dialog.show()
+        }
+
+        ib_back_pageForm.setOnClickListener {
+            nPreview = Html.fromHtml(nPreview).toString()
+            if (ed_subject_from.text.toString().isNullOrBlank() && nPreview.isNullOrBlank()) {
+                finish()
+            } else {
+                android.support.v7.app.AlertDialog.Builder(this@FormActivity)
+                        .setTitle("Are you sure ?")
+                        .setMessage("Do you want to close the app?")
+                        .setPositiveButton("yes") { dialog, which -> finish() }
+                        .setNegativeButton("no") { dialog, which -> }
+                        .show()
+            }
+        }
+
+        webViewFormPage.setOnTextChangeListener { text ->
+            var mPreview = text.toString()
+            nPreview = mPreview
+            PreviewHtml = mPreview
+
+        }
+
+        ib_done_pageForm.setOnClickListener {
+            val x = vm.checkData("hi world ja","tanate chumjai","tanate.chu2@appman.com","tanate.chu@appman.co.th 2155559562861","https://lh3.googleusercontent.com/a-/AAuE7mA1JtiOfRPbEpfUbGxh3GYmL33Bvd3N38VfkLqct2A","hey","13-เม.ย.-2019-10:52:42")
+            if(x){
+                Toast.makeText(this@FormActivity,"completed",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@FormActivity,"Filer",Toast.LENGTH_SHORT).show()
+
+            }
+            nPreview = Html.fromHtml(nPreview).toString()
+            val mEmail = sharedPreference.getString("email", "")
+            val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss", Locale.ENGLISH).format(Date())
+            val mTimestamp = Date().time.toString()
+            val PrimeryKey_id = "${mEmail} $mTimestamp"
+
+            if (ed_subject_from.text.toString().isNullOrBlank() || nPreview.isNullOrBlank()) {
+
+                AlertDialog.Builder(this)
+                        .setIcon(R.drawable.ic_priority_high_black_24dp)
+                        .setTitle("ผิดพลาด")
+                        .setMessage("กรุณากรอกข้อมูลใหม่")
+                        .show()
+            } else {
+                val formPage = Data(
+                        ed_subject_from.text.toString().trim(),
+                        PreviewHtml,
+                        dateTime,
+                        sharedPreference.getString("img_url", ""),
+                        sharedPreference.getString("display_name", ""),
+                        sharedPreference.getString("email", ""),
+                        PrimeryKey_id
+                )
+                editor!!.putString("PrimeryKey_id","$PrimeryKey_id").apply()
+                val intent = Intent().apply {
+                    this.putExtra("Data", formPage)
+                }
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
+            closeKeyboard()
+        }
+
+    }
+
+    private fun setWebViewOnClick() {
         action_undo.setOnClickListener {
             webViewFormPage.undo()
         }
@@ -218,93 +308,25 @@ class FormActivity : AppCompatActivity() {
         action_insert_checkbox.setOnClickListener {
             webViewFormPage.insertTodo()
         }
-
-        val dialog = ImageDialog(this)
-
-        dialog.listener = object : ImageDialog.DialogListener {
-
-            override fun onCameraClick() {
-
-
-                if (checkPermission()) {
-                        openCamera()
-                } else {
-                    requestPermission(REQUEST_PERMISSION_CAMERA)
-                }
-
-            }
-
-            override fun onGalleryClick() {
-                if (checkPermission()) {
-                    openGallery()
-                } else {
-                    requestPermission(REQUEST_PERMISSION_GALLERY)
-                }
-
-            }
-        }
-
-
-        ib_AddImage.setOnClickListener {
-            dialog.show()
-        }
-
-        ib_back_pageForm.setOnClickListener {
-            nPreview = Html.fromHtml(nPreview).toString()
-            if (ed_subject_from.text.toString().isNullOrBlank() && nPreview.isNullOrBlank()) {
-                finish()
-            } else {
-                android.support.v7.app.AlertDialog.Builder(this@FormActivity)
-                        .setTitle("Are you sure ?")
-                        .setMessage("Do you want to close the app?")
-                        .setPositiveButton("yes") { dialog, which -> finish() }
-                        .setNegativeButton("no") { dialog, which -> }
-                        .show()
-            }
-        }
-
-        webViewFormPage.setOnTextChangeListener { text ->
-            var mPreview = text.toString()
-            nPreview = mPreview
-            PreviewHtml = mPreview
-
-        }
-
-        ib_done_pageForm.setOnClickListener {
-            nPreview = Html.fromHtml(nPreview).toString()
-            val mEmail = sharedPreference.getString("email", "")
-            val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss", Locale.ENGLISH).format(Date())
-            val mTimestamp = Date().time.toString()
-            val PrimeryKey_id = "${mEmail} $mTimestamp"
-
-            if (ed_subject_from.text.toString().isNullOrBlank() || nPreview.isNullOrBlank()) {
-
-                AlertDialog.Builder(this)
-                        .setIcon(R.drawable.ic_priority_high_black_24dp)
-                        .setTitle("ผิดพลาด")
-                        .setMessage("กรุณากรอกข้อมูลใหม่")
-                        .show()
-            } else {
-                val formPage = Data(
-                        ed_subject_from.text.toString().trim(),
-                        PreviewHtml,
-                        dateTime,
-                        sharedPreference.getString("img_url", ""),
-                        sharedPreference.getString("display_name", ""),
-                        sharedPreference.getString("email", ""),
-                        PrimeryKey_id
-                )
-                editor!!.putString("PrimeryKey_id","$PrimeryKey_id").apply()
-                val intent = Intent().apply {
-                    this.putExtra("Data", formPage)
-                }
-                setResult(Activity.RESULT_OK, intent)
-                finish()
-            }
-            closeKeyboard()
-        }
-
     }
+
+    private fun setIcon() {
+        if (webViewFormPage.requestFocus()) {
+            webViewFormPage.focusEditor()
+            ib_AddImage.visibility = View.VISIBLE
+        } else {
+            ib_AddImage.visibility = View.GONE
+        }
+    }
+
+    private fun setWebView() {
+        webViewFormPage.setEditorHeight(200)
+        webViewFormPage.setEditorFontSize(22)
+        webViewFormPage.setEditorFontColor(Color.BLACK)
+        webViewFormPage.setPadding(10, 10, 10, 10)
+        webViewFormPage.setPlaceholder("add detail ....")
+    }
+
     private fun openCamera(){
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, createPathForCameraIntent())
@@ -442,7 +464,7 @@ class FormActivity : AppCompatActivity() {
     private fun getBitmapFormUriGallery(uri: Uri?) {
         uri?.let {
             val filePath: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-            val cursor = getContentResolver().query(uri, filePath, null, null, null)
+            val cursor = contentResolver.query(uri, filePath, null, null, null)
             cursor?.moveToFirst()
             val imagePath = cursor?.getString(cursor.getColumnIndex(filePath[0]))
             val options = BitmapFactory.Options()

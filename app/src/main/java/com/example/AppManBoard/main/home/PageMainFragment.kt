@@ -1,4 +1,4 @@
- package com.example.AppManBoard.main.home
+package com.example.AppManBoard.main.home
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -104,17 +104,7 @@ class PageMainFragment : Fragment() {
             }
         }
 
-        if (switchPopUp == 1) {
-
-            ib_sort.setImageResource(R.drawable.ic_time)
-            adapter?.notifyDataSetChanged()
-
-        } else if (switchPopUp == 2) {
-
-            ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
-            adapter?.notifyDataSetChanged()
-
-        }
+        setIcon()
 
 
 
@@ -151,22 +141,13 @@ class PageMainFragment : Fragment() {
                 when (item.itemId) {
                     R.id.action_select_sort_time -> {
 
-                        switchPopUp = 1
-                        ib_sort.setImageResource(R.drawable.ic_time)
-                        editor!!.putInt("sort", switchPopUp).apply()
-                        adapter?.Listdata = listdata
-                        adapter?.Listdata?.reverse()
-                        adapter!!.notifyDataSetChanged()
+                        timeSet()
                         true
 
                     }
                     R.id.action_select_sort_character -> {
 
-                        switchPopUp = 2
-                        ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
-                        editor!!.putInt("sort", switchPopUp).apply()
-                        adapter?.Listdata?.sortWith(compareBy { it.subject })
-                        adapter?.notifyDataSetChanged()
+                        CharSet()
 
                         true
 
@@ -177,26 +158,15 @@ class PageMainFragment : Fragment() {
             }
 
             popupMenu.inflate(R.menu.searchbar)
-           if (switchPopUp == 1) {
-
-                popupMenu.menu.findItem(R.id.action_select_sort_time).isEnabled = false
-                popupMenu.menu.findItem(R.id.action_select_sort_character).isEnabled = true
-
-
-            } else if (switchPopUp == 2) {
-
-                popupMenu.menu.findItem(R.id.action_select_sort_time).isEnabled = true
-                popupMenu.menu.findItem(R.id.action_select_sort_character).isEnabled = false
-
-            }
+            setEnabledIcon(popupMenu)
 
             try {
                 val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
                 fieldMPopup.isAccessible = true
                 val mPopup = fieldMPopup.get(popupMenu)
                 mPopup.javaClass
-                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                    .invoke(mPopup, true)
+                        .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                        .invoke(mPopup, true)
             } catch (e: Exception) {
                 Log.e("Main", "Error Showing menu icons.", e)
             } finally {
@@ -209,6 +179,52 @@ class PageMainFragment : Fragment() {
         floating_action_button.setOnClickListener {
             val intent = Intent(mActivity, FormActivity::class.java)
             startActivityForResult(intent, CREATE_FORM)
+        }
+    }
+
+    private fun setEnabledIcon(popupMenu: PopupMenu) {
+        if (switchPopUp == 1) {
+
+            popupMenu.menu.findItem(R.id.action_select_sort_time).isEnabled = false
+            popupMenu.menu.findItem(R.id.action_select_sort_character).isEnabled = true
+
+
+        } else if (switchPopUp == 2) {
+
+            popupMenu.menu.findItem(R.id.action_select_sort_time).isEnabled = true
+            popupMenu.menu.findItem(R.id.action_select_sort_character).isEnabled = false
+
+        }
+    }
+
+    private fun CharSet() {
+        switchPopUp = 2
+        ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
+        editor!!.putInt("sort", switchPopUp).apply()
+        adapter?.Listdata?.sortWith(compareBy { it.subject })
+        adapter?.notifyDataSetChanged()
+    }
+
+    private fun timeSet() {
+        switchPopUp = 1
+        ib_sort.setImageResource(R.drawable.ic_time)
+        editor!!.putInt("sort", switchPopUp).apply()
+        adapter?.Listdata = listdata
+        adapter?.Listdata?.reverse()
+        adapter!!.notifyDataSetChanged()
+    }
+
+    private fun setIcon() {
+        if (switchPopUp == 1) {
+
+            ib_sort.setImageResource(R.drawable.ic_time)
+            adapter?.notifyDataSetChanged()
+
+        } else if (switchPopUp == 2) {
+
+            ib_sort.setImageResource(R.drawable.ic_sort_by_alpha_black_24dp)
+            adapter?.notifyDataSetChanged()
+
         }
     }
 
@@ -261,8 +277,8 @@ class PageMainFragment : Fragment() {
 
             override fun onCancelled(error: DatabaseError) {
                 AlertDialog.Builder(mActivity)
-                    .setMessage("Error")
-                    .show()
+                        .setMessage("Error")
+                        .show()
             }
         }
     }
@@ -276,13 +292,13 @@ class PageMainFragment : Fragment() {
                         val dateTime = SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss").format(Date())
                         val newData: Data = data.extras.getParcelable("Data")!!
                         val data = Data(
-                            newData.subject,
-                            newData.detail,
-                            dateTime,
-                            newData.imageURI,
-                            newData.displayname,
-                            newData.email,
-                            newData.id
+                                newData.subject,
+                                newData.detail,
+                                dateTime,
+                                newData.imageURI,
+                                newData.displayname,
+                                newData.email,
+                                newData.id
                         )
                         listdata.add(data)
                         activityReference.setValue(listdata)

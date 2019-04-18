@@ -36,20 +36,28 @@ class HomeAdapter(var Listdata: ArrayList<Data>?) : RecyclerView.Adapter<HomeAda
     }
 
     class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview){
-            fun setResource(data: Data, listener: RecyclerListener_pageHome?, position: Int){
-                itemView.tv_setSubject.text = data.subject
-                itemView.tv_setDetail.text = Html.fromHtml(data.detail)
-                itemView.tv_setTime.text = data.time
-                itemView.tv_setName.text = data.displayname
-                if(data.imageURI == "null"){
-                    Glide.with(itemView.context).load(R.drawable.playstore_icon).into(itemView.iv_profile)
-                }else {
-                    Glide.with(itemView.context).load(data.imageURI)
-                        .into(itemView.iv_profile)
-                }
-                itemView.setOnClickListener {
+
+        fun setResource(data: Data, listener: RecyclerListener_pageHome?, position: Int){
+
+            setData(data)
+
+            itemView.setOnClickListener {
                     listener?.onItemClick(position, data)
                 }
+        }
+
+        private fun setData(data: Data) {
+            itemView.tv_setSubject.text = data.subject
+            itemView.tv_setDetail.text = Html.fromHtml(data.detail)
+            itemView.tv_setTime.text = data.time
+            itemView.tv_setName.text = data.displayname
+
+            if (data.imageURI == "null") {
+                Glide.with(itemView.context).load(R.drawable.playstore_icon).into(itemView.iv_profile)
+            } else {
+                Glide.with(itemView.context).load(data.imageURI)
+                        .into(itemView.iv_profile)
+            }
         }
     }
 }
