@@ -1,10 +1,12 @@
 package com.example.AppManBoard
 
 import com.example.AppManBoard.login.viewmodel.LoginViewMedel
+import com.example.AppManBoard.main.ViewModelLogout
 import com.example.AppManBoard.main.home.form.viewmodel.AddData
 import com.example.AppManBoard.main.home.viewmodel.SearchModel
 import com.example.AppManBoard.main.owner.edit.viewmodel.DeletedData
 import com.example.AppManBoard.main.owner.edit.viewmodel.EditData
+import com.example.AppManBoard.main.owner.viewmodel.SearchModelPageOwner
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -21,7 +23,10 @@ class ExampleUnitTest {
     private val addData: AddData by lazy { AddData() }
     private val editData: EditData by lazy { EditData() }
     private val deletedData: DeletedData by lazy { DeletedData() }
-    private val searchData : SearchModel by lazy { SearchModel() }
+    private val searchDataPageHome : SearchModel by lazy { SearchModel() }
+    private val searchDataPageOwner : SearchModelPageOwner by lazy { SearchModelPageOwner() }
+    private val logoutViewModel : ViewModelLogout by lazy { ViewModelLogout() }
+
     @Test
     fun checkLoginFail(){
         assertFalse(loginViewMedel.checkLogin("tanate.chu@gmail.com","1234"))
@@ -56,12 +61,28 @@ class ExampleUnitTest {
         assertFalse(deletedData.checkData("tanate.chu@appman.co.th adlkwkljadadjkl 155559562861"))
     }
     @Test
-    fun checkSearchDataTrue(){
-        assertTrue(searchData.checkData("hi"))
+    fun checkSearchDataHomeTrue(){
+        assertTrue(searchDataPageHome.checkData("hi"))
     }
     @Test
-    fun checkSearchDataFalse(){
-        assertFalse(searchData.checkData("axcghjkl;"))
+    fun checkSearchDataHomeFalse(){
+        assertFalse(searchDataPageHome.checkData("axcghjkl;"))
+    }
+    @Test
+    fun checkSearchDataOwnerTrue(){
+        assertTrue(searchDataPageOwner.checkData("hi nage"))
+    }
+    @Test
+    fun checkSearchDataOwnerFalse(){
+        assertFalse(searchDataPageOwner.checkData("axcghjkl;"))
+    }
+    @Test
+    fun checkLogoutTrue(){
+        assertTrue(logoutViewModel.checkEmail("tanate.chu@appman.co.th"))
+    }
+    @Test
+    fun checkLogoutFalse(){
+        assertFalse(logoutViewModel.checkEmail("null"))
     }
 
 }

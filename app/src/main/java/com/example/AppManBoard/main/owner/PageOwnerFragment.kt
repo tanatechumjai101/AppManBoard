@@ -2,6 +2,7 @@ package com.example.AppManBoard.main.owner
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -23,9 +24,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import com.example.AppManBoard.R
 import com.example.AppManBoard.main.owner.adapter.OwnerRecyclerAdapter
 import com.example.AppManBoard.main.owner.edit.EditActivity
+import com.example.AppManBoard.main.owner.viewmodel.SearchModelPageOwner
 import com.example.AppManBoard.model.Data
 import com.google.firebase.database.*
 import com.google.gson.Gson
@@ -56,12 +59,13 @@ class PageOwnerFragment : Fragment() {
     lateinit var textEmpty: TextView
     private var DATA_OWNER = 4
     private lateinit var mRootIns: DatabaseReference
-
+    private lateinit var checkDataViewModel: SearchModelPageOwner
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mActivity = activity!!
         val view = inflater.inflate(R.layout.fragment_owner, container, false)
         listMain = view.findViewById<RecyclerView>(R.id.rv_owner)
         textEmpty = view.findViewById(R.id.tv_showData)
+        checkDataViewModel = ViewModelProviders.of(this).get(SearchModelPageOwner::class.java)
         return view
 
     }
@@ -93,6 +97,17 @@ class PageOwnerFragment : Fragment() {
                         .show()
             }
         })
+
+        var checkSearch = checkDataViewModel.checkData("rear")
+
+        if(checkSearch){
+            Toast.makeText(mActivity,"Search completed", Toast.LENGTH_SHORT).show()
+
+        }else {
+
+            Toast.makeText(mActivity,"Search completed",Toast.LENGTH_SHORT).show()
+
+        }
 
         if (switchPopUp == 1) {
 

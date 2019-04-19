@@ -1,7 +1,9 @@
 package com.example.AppManBoard.main
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.widget.Toast
 import com.example.AppManBoard.*
 import com.example.AppManBoard.base.BaseActivity
 import com.example.AppManBoard.main.owner.PageOwnerFragment
@@ -15,11 +17,12 @@ class MainActivity : BaseActivity() {
     private lateinit var pagemainFragment: PageMainFragment
     private lateinit var pagechatFragment: PageOwnerFragment
     private lateinit var pagepersonFragment: PagePersonFragment
+    private lateinit var checklogout: ViewModelLogout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        checklogout = ViewModelProviders.of(this).get(ViewModelLogout::class.java)
         pagemainFragment = PageMainFragment.newInstance()
         pagechatFragment = PageOwnerFragment.newInstance()
         pagepersonFragment = PagePersonFragment.newInstance()
@@ -29,6 +32,14 @@ class MainActivity : BaseActivity() {
             .commit()
 
         NavMain.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        var checkemanil = checklogout.checkEmail("null")
+        if(checkemanil){
+            Toast.makeText(this@MainActivity,"Logout completed", Toast.LENGTH_SHORT).show()
+
+        }else {
+            Toast.makeText(this@MainActivity,"Logout completed",Toast.LENGTH_SHORT).show()
+
+        }
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
