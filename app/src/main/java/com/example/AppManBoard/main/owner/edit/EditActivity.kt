@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -29,6 +30,8 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.AppManBoard.R
 import com.example.AppManBoard.main.owner.dialog.ImageDialogEdit
+import com.example.AppManBoard.main.owner.edit.viewmodel.DeletedData
+import com.example.AppManBoard.main.owner.edit.viewmodel.EditData
 import com.example.AppManBoard.model.Data
 import com.example.AppManBoard.toByteArray
 import com.google.firebase.storage.FirebaseStorage
@@ -53,11 +56,14 @@ class EditActivity : AppCompatActivity() {
     private val PICK_GALLARY_EDIT = 2142
     var storage: FirebaseStorage? = null
     var storageReference: StorageReference? = null
-
+    private lateinit var vm: EditData
+    private lateinit var vn: DeletedData
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
 
+        vm = ViewModelProviders.of(this).get(EditData::class.java)
+         vn =  ViewModelProviders.of(this).get(DeletedData::class.java)
         val builder = StrictMode.VmPolicy.Builder()
 
         StrictMode.setVmPolicy(builder.build())
@@ -68,6 +74,20 @@ class EditActivity : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
 
+        var x = vm.checkData("hid", "tanate chumjai", "tanate.chu@appman.com", "tanate.chu@appman.co.th 155559562861", "https://lh3.googleusercontent.com/a-/AAuE7mA1JtiOfRPbEpfUbGxh3GYmL33Bvd3N38VfkLqctA", "hi", "18-เม.ย.-2019-10:52:42")
+        if (x) {
+            Toast.makeText(this@EditActivity,"Edit completed",Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this@EditActivity,"Edit Failed",Toast.LENGTH_SHORT).show()
+
+        }
+        var id = vn.checkData("tanate.chu@appman.co.th 155559562861")
+        if (id){
+            Toast.makeText(this@EditActivity,"Deleted completed",Toast.LENGTH_SHORT).show()
+
+        } else {
+            Toast.makeText(this@EditActivity,"Deleted completed",Toast.LENGTH_SHORT).show()
+        }
 
         if (intent.extras != null) {
             data = intent?.extras?.getParcelable("data")
@@ -140,11 +160,11 @@ class EditActivity : AppCompatActivity() {
         ib_back_pageForm.setOnClickListener {
 
             android.support.v7.app.AlertDialog.Builder(this@EditActivity)
-                .setTitle("Are you sure ?")
-                .setMessage("Do you want to close the app?")
-                .setPositiveButton("yes") { dialog, which -> finish() }
-                .setNegativeButton("no") { dialog, which -> }
-                .show()
+                    .setTitle("Are you sure ?")
+                    .setMessage("Do you want to close the app?")
+                    .setPositiveButton("yes") { dialog, which -> finish() }
+                    .setNegativeButton("no") { dialog, which -> }
+                    .show()
 
         }
 
@@ -223,11 +243,11 @@ class EditActivity : AppCompatActivity() {
 
             override fun onClick(v: View) {
                 webview_edit.setTextColor(
-                    if (isChanged) {
-                        Color.BLACK
-                    } else {
-                        Color.RED
-                    }
+                        if (isChanged) {
+                            Color.BLACK
+                        } else {
+                            Color.RED
+                        }
                 )
                 isChanged = !isChanged
             }
@@ -238,11 +258,11 @@ class EditActivity : AppCompatActivity() {
 
             override fun onClick(v: View) {
                 webview_edit.setTextBackgroundColor(
-                    if (isChanged) {
-                        Color.TRANSPARENT
-                    } else {
-                        Color.YELLOW
-                    }
+                        if (isChanged) {
+                            Color.TRANSPARENT
+                        } else {
+                            Color.YELLOW
+                        }
                 )
                 isChanged = !isChanged
             }
@@ -284,8 +304,8 @@ class EditActivity : AppCompatActivity() {
 
         action_insert_link_edit.setOnClickListener {
             webview_edit.insertLink(
-                "https://github.com/wasabeef",
-                "career@appman.co.th"
+                    "https://github.com/wasabeef",
+                    "career@appman.co.th"
             )
         }
 
@@ -317,12 +337,12 @@ class EditActivity : AppCompatActivity() {
     private fun requestPermission(requestCode: Int) {
 
         ActivityCompat.requestPermissions(
-            this@EditActivity,
-            arrayOf(
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ), requestCode
+                this@EditActivity,
+                arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), requestCode
         )
 
     }
@@ -330,16 +350,16 @@ class EditActivity : AppCompatActivity() {
     fun checkPermission(): Boolean {
 
         return (ContextCompat.checkSelfPermission(
-            this@EditActivity,
-            Manifest.permission.CAMERA
+                this@EditActivity,
+                Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-            this@EditActivity,
-            Manifest.permission.READ_EXTERNAL_STORAGE
+                this@EditActivity,
+                Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-            this@EditActivity,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                this@EditActivity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED)
 
     }
@@ -359,22 +379,22 @@ class EditActivity : AppCompatActivity() {
             progressDialog.setTitle("Uploading....")
             val imageRef = storageReference!!.child("Image/Camera/" + UUID.randomUUID().toString())
             imageRef.putBytes(byteArray)
-                .addOnSuccessListener { taskSnapShot ->
-                    progressDialog.dismiss()
-                    Toast.makeText(applicationContext, "Image Uploaded", Toast.LENGTH_SHORT).show()
-                    imageRef.downloadUrl.addOnCompleteListener { p0 ->
-                        webview_edit.insertImage(p0.result.toString(), "Failed")
+                    .addOnSuccessListener { taskSnapShot ->
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                        imageRef.downloadUrl.addOnCompleteListener { p0 ->
+                            webview_edit.insertImage(p0.result.toString(), "Failed")
+                        }
                     }
-                }
-                .addOnFailureListener {
-                    progressDialog.dismiss()
-                    Toast.makeText(applicationContext, "Failed", Toast.LENGTH_SHORT).show()
-                }
-                .addOnProgressListener { taskSnapShot ->
-                    val progress = (100.00 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
-                    progressDialog.setMessage("Uploading  " + progress.toInt() + "  % ...")
+                    .addOnFailureListener {
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, "Failed", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnProgressListener { taskSnapShot ->
+                        val progress = (100.00 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
+                        progressDialog.setMessage("Uploading  " + progress.toInt() + "  % ...")
 
-                }
+                    }
 
         }
     }
@@ -390,11 +410,11 @@ class EditActivity : AppCompatActivity() {
             val bitmap = BitmapFactory.decodeFile(imagePath, options)
             cursor?.close()
             uploadImageForGallery(
-                resizeBitmapGallery(
-                    bitmap,
-                    (webview_edit.width * 0.8).toInt(),
-                    (webview_edit.height * 0.8).toInt()
-                ).toByteArray()
+                    resizeBitmapGallery(
+                            bitmap,
+                            (webview_edit.width * 0.8).toInt(),
+                            (webview_edit.height * 0.8).toInt()
+                    ).toByteArray()
             )
         }
     }
@@ -407,22 +427,22 @@ class EditActivity : AppCompatActivity() {
             progressDialog.setTitle("Uploading....")
             val imageRef = storageReference!!.child("Image/Gallery/" + UUID.randomUUID().toString())
             imageRef.putBytes(byteArray)
-                .addOnSuccessListener { taskSnapShot ->
-                    Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
-                    progressDialog.dismiss()
-                    imageRef.downloadUrl.addOnCompleteListener { p0 ->
-                        webview_edit.insertImage(p0.result.toString(), "Failed")
+                    .addOnSuccessListener { taskSnapShot ->
+                        Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                        progressDialog.dismiss()
+                        imageRef.downloadUrl.addOnCompleteListener { p0 ->
+                            webview_edit.insertImage(p0.result.toString(), "Failed")
+                        }
                     }
-                }
-                .addOnProgressListener { taskSnapShot ->
-                    var progress = (100.0 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
-                    progressDialog.setMessage("Uploading " + progress.toInt() + "% ...")
-                }
-                .addOnFailureListener {
-                    progressDialog.dismiss()
-                    Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+                    .addOnProgressListener { taskSnapShot ->
+                        var progress = (100.0 * taskSnapShot.bytesTransferred) / taskSnapShot.totalByteCount
+                        progressDialog.setMessage("Uploading " + progress.toInt() + "% ...")
+                    }
+                    .addOnFailureListener {
+                        progressDialog.dismiss()
+                        Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
 
-                }
+                    }
         }
     }
 
@@ -450,39 +470,39 @@ class EditActivity : AppCompatActivity() {
                     if (imageSavedPath != null) {
                         toast("Bitmap resized.")
                         Glide.with(this)
-                            .asBitmap()
-                            .listener(object : RequestListener<Bitmap?> {
-                                override fun onLoadFailed(
-                                    e: GlideException?,
-                                    model: Any?,
-                                    target: Target<Bitmap?>?,
-                                    isFirstResource: Boolean
-                                ): Boolean {
-                                    return false
-                                }
-
-                                override fun onResourceReady(
-                                    resource: Bitmap?,
-                                    model: Any?,
-                                    target: Target<Bitmap?>?,
-                                    dataSource: DataSource?,
-                                    isFirstResource: Boolean
-                                ): Boolean {
-                                    resource?.let {
-                                        val rescaleBitmap =
-                                            resizeBitmapCamera(
-                                                resource,
-                                                (resource.width * 0.5).toInt(),
-                                                (resource.height * 0.5).toInt()
-                                            )
-                                        uploadImageForCamera(rescaleBitmap.toByteArray())
-
+                                .asBitmap()
+                                .listener(object : RequestListener<Bitmap?> {
+                                    override fun onLoadFailed(
+                                            e: GlideException?,
+                                            model: Any?,
+                                            target: Target<Bitmap?>?,
+                                            isFirstResource: Boolean
+                                    ): Boolean {
+                                        return false
                                     }
-                                    return false
-                                }
-                            })
-                            .load(imageSavedPath)
-                            .into(ivCameraEdit)
+
+                                    override fun onResourceReady(
+                                            resource: Bitmap?,
+                                            model: Any?,
+                                            target: Target<Bitmap?>?,
+                                            dataSource: DataSource?,
+                                            isFirstResource: Boolean
+                                    ): Boolean {
+                                        resource?.let {
+                                            val rescaleBitmap =
+                                                    resizeBitmapCamera(
+                                                            resource,
+                                                            (resource.width * 0.5).toInt(),
+                                                            (resource.height * 0.5).toInt()
+                                                    )
+                                            uploadImageForCamera(rescaleBitmap.toByteArray())
+
+                                        }
+                                        return false
+                                    }
+                                })
+                                .load(imageSavedPath)
+                                .into(ivCameraEdit)
                     } else {
                         toast("bitmap not found.")
                     }
@@ -530,7 +550,7 @@ class EditActivity : AppCompatActivity() {
             } else {
 
                 val bitmapRotate =
-                    Bitmap.createBitmap(bitmap, 0, 0, (bitmap.width * 0.8).toInt(), (bitmap.height*0.8).toInt(), matrix, false)
+                        Bitmap.createBitmap(bitmap, 0, 0, (bitmap.width * 0.8).toInt(), (bitmap.height * 0.8).toInt(), matrix, false)
                 Bitmap.createScaledBitmap(bitmapRotate, (width / 2).toInt(), (height / 2).toInt(), false)
 
             }
@@ -542,7 +562,7 @@ class EditActivity : AppCompatActivity() {
                 val matrix = Matrix()
                 matrix.postRotate(360F)
                 val bitmapRotate =
-                    Bitmap.createBitmap(bitmap, 0, 0, (bitmap.width).toInt(), (bitmap.height).toInt(), matrix, false)
+                        Bitmap.createBitmap(bitmap, 0, 0, (bitmap.width).toInt(), (bitmap.height).toInt(), matrix, false)
                 Bitmap.createScaledBitmap(bitmapRotate, (width / 2).toInt(), (height / 2).toInt(), false)
             }
         }
@@ -552,11 +572,11 @@ class EditActivity : AppCompatActivity() {
     override fun onBackPressed() {
 //        super.onBackPressed()
         AlertDialog.Builder(this@EditActivity)
-            .setTitle("Are you sure ?")
-            .setMessage("Do you want to close this page?")
-            .setPositiveButton("yes") { dialog, which -> finish() }
-            .setNegativeButton("no") { dialog, which -> }
-            .show()
+                .setTitle("Are you sure ?")
+                .setMessage("Do you want to close this page?")
+                .setPositiveButton("yes") { dialog, which -> finish() }
+                .setNegativeButton("no") { dialog, which -> }
+                .show()
     }
 
     private fun closeKeyboard() {

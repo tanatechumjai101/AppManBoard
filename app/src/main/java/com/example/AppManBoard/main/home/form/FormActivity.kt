@@ -138,7 +138,7 @@ class FormActivity : AppCompatActivity() {
             if(x){
                 Toast.makeText(this@FormActivity,"completed",Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this@FormActivity,"Filer",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@FormActivity,"Fail",Toast.LENGTH_SHORT).show()
 
             }
             nPreview = Html.fromHtml(nPreview).toString()
