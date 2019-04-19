@@ -30,8 +30,8 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.AppManBoard.R
 import com.example.AppManBoard.main.owner.dialog.ImageDialogEdit
-import com.example.AppManBoard.main.owner.edit.viewmodel.DeletedData
-import com.example.AppManBoard.main.owner.edit.viewmodel.EditData
+import com.example.AppManBoard.main.owner.edit.viewmodel.EditActivityViewModelDeleted
+import com.example.AppManBoard.main.owner.edit.viewmodel.EditActivityViewModelEdit
 import com.example.AppManBoard.model.Data
 import com.example.AppManBoard.toByteArray
 import com.google.firebase.storage.FirebaseStorage
@@ -56,14 +56,14 @@ class EditActivity : AppCompatActivity() {
     private val PICK_GALLARY_EDIT = 2142
     var storage: FirebaseStorage? = null
     var storageReference: StorageReference? = null
-    private lateinit var vm: EditData
-    private lateinit var vn: DeletedData
+    private lateinit var vm: EditActivityViewModelEdit
+    private lateinit var vn: EditActivityViewModelDeleted
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
 
-        vm = ViewModelProviders.of(this).get(EditData::class.java)
-         vn =  ViewModelProviders.of(this).get(DeletedData::class.java)
+        vm = ViewModelProviders.of(this).get(EditActivityViewModelEdit::class.java)
+         vn =  ViewModelProviders.of(this).get(EditActivityViewModelDeleted::class.java)
         val builder = StrictMode.VmPolicy.Builder()
 
         StrictMode.setVmPolicy(builder.build())

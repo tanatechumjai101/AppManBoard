@@ -17,12 +17,12 @@ class MainActivity : BaseActivity() {
     private lateinit var pagemainFragment: PageMainFragment
     private lateinit var pagechatFragment: PageOwnerFragment
     private lateinit var pagepersonFragment: PagePersonFragment
-    private lateinit var checklogout: ViewModelLogout
+    private lateinit var checklogout: MainActivityViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        checklogout = ViewModelProviders.of(this).get(ViewModelLogout::class.java)
+        checklogout = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
         pagemainFragment = PageMainFragment.newInstance()
         pagechatFragment = PageOwnerFragment.newInstance()
         pagepersonFragment = PagePersonFragment.newInstance()
@@ -33,11 +33,12 @@ class MainActivity : BaseActivity() {
 
         NavMain.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         var checkemanil = checklogout.checkEmail("null")
+
         if(checkemanil){
-            Toast.makeText(this@MainActivity,"Logout completed", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@MainActivity,"Logout completed", Toast.LENGTH_SHORT).show()
 
         }else {
-            Toast.makeText(this@MainActivity,"Logout completed",Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@MainActivity,"Logout completed",Toast.LENGTH_SHORT).show()
 
         }
     }

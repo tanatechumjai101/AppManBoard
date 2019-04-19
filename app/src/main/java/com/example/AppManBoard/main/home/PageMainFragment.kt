@@ -30,7 +30,7 @@ import kotlin.collections.ArrayList
 import android.view.inputmethod.InputMethodManager
 import android.content.Context.*
 import android.content.SharedPreferences
-import com.example.AppManBoard.main.home.viewmodel.SearchModel
+import com.example.AppManBoard.main.home.viewmodel.PageMainViewModel
 
 
 class PageMainFragment : Fragment() {
@@ -52,7 +52,7 @@ class PageMainFragment : Fragment() {
     private var dataSortByCharactor: Int = 2
     private var dataSortByReverse: Int = 1
     private lateinit var firebaseListener: ValueEventListener
-    private lateinit var checkSearch: SearchModel
+    private lateinit var checkPageMainView: PageMainViewModel
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
 
@@ -70,7 +70,7 @@ class PageMainFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar)
         listMain = view.findViewById(R.id.listViewMain)
         textEmpty = view.findViewById(R.id.tv_empty)
-        checkSearch = ViewModelProviders.of(this).get(SearchModel::class.java)
+        checkPageMainView = ViewModelProviders.of(this).get(PageMainViewModel::class.java)
         return view
     }
 
@@ -108,13 +108,14 @@ class PageMainFragment : Fragment() {
 
         setIcon()
 
-        var checkSearchModel = checkSearch.checkData("hi")
+        var checkSearchModel = checkPageMainView.checkData("hi")
+
         if(checkSearchModel){
 
-            Toast.makeText(mActivity,"Search completed",Toast.LENGTH_SHORT).show()
+//            Toast.makeText(mActivity,"Search completed",Toast.LENGTH_SHORT).show()
 
         } else {
-            Toast.makeText(mActivity,"Search completed",Toast.LENGTH_SHORT).show()
+//            Toast.makeText(mActivity,"Search completed",Toast.LENGTH_SHORT).show()
 
         }
 

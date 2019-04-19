@@ -37,7 +37,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.example.AppManBoard.main.home.form.viewmodel.AddData
+import com.example.AppManBoard.main.home.form.viewmodel.FormActivityViewModel
 import com.example.AppManBoard.toByteArray
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -58,13 +58,13 @@ class FormActivity : AppCompatActivity() {
     var storageReference: StorageReference? = null
     private lateinit var imagesFolder: File
     private var imageSavedPath: Uri? = null
-    private lateinit var vm : AddData
+    private lateinit var vm : FormActivityViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
 
         progressDialog = ProgressDialog(this)
-        vm = ViewModelProviders.of(this).get(AddData::class.java)
+        vm = ViewModelProviders.of(this).get(FormActivityViewModel::class.java)
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
 
