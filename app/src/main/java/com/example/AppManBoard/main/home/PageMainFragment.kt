@@ -2,6 +2,7 @@ package com.example.AppManBoard.main.home
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -29,6 +30,7 @@ import kotlin.collections.ArrayList
 import android.view.inputmethod.InputMethodManager
 import android.content.Context.*
 import android.content.SharedPreferences
+import com.example.AppManBoard.main.home.viewmodel.SearchModel
 
 
 class PageMainFragment : Fragment() {
@@ -50,7 +52,7 @@ class PageMainFragment : Fragment() {
     private var dataSortByCharactor: Int = 2
     private var dataSortByReverse: Int = 1
     private lateinit var firebaseListener: ValueEventListener
-
+    private lateinit var checkSearch: SearchModel
     inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
 
@@ -58,6 +60,7 @@ class PageMainFragment : Fragment() {
 
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -67,8 +70,7 @@ class PageMainFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar)
         listMain = view.findViewById(R.id.listViewMain)
         textEmpty = view.findViewById(R.id.tv_empty)
-
-
+        checkSearch = ViewModelProviders.of(this).get(SearchModel::class.java)
         return view
     }
 
@@ -106,7 +108,15 @@ class PageMainFragment : Fragment() {
 
         setIcon()
 
+        var checkSearchModel = checkSearch.checkData("hi")
+        if(checkSearchModel){
 
+            Toast.makeText(mActivity,"Search completed",Toast.LENGTH_SHORT).show()
+
+        } else {
+            Toast.makeText(mActivity,"Search completed",Toast.LENGTH_SHORT).show()
+
+        }
 
         ed_search.ed_search.addTextChangedListener(object : TextWatcher {
 

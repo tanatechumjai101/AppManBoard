@@ -2,6 +2,7 @@ package com.example.AppManBoard
 
 import com.example.AppManBoard.login.viewmodel.LoginViewMedel
 import com.example.AppManBoard.main.home.form.viewmodel.AddData
+import com.example.AppManBoard.main.home.viewmodel.SearchModel
 import com.example.AppManBoard.main.owner.edit.viewmodel.DeletedData
 import com.example.AppManBoard.main.owner.edit.viewmodel.EditData
 import org.junit.Test
@@ -20,6 +21,7 @@ class ExampleUnitTest {
     private val addData: AddData by lazy { AddData() }
     private val editData: EditData by lazy { EditData() }
     private val deletedData: DeletedData by lazy { DeletedData() }
+    private val searchData : SearchModel by lazy { SearchModel() }
     @Test
     fun checkLoginFail(){
         assertFalse(loginViewMedel.checkLogin("tanate.chu@gmail.com","1234"))
@@ -52,6 +54,14 @@ class ExampleUnitTest {
     @Test
     fun checkDeletedDataFalse(){
         assertFalse(deletedData.checkData("tanate.chu@appman.co.th adlkwkljadadjkl 155559562861"))
+    }
+    @Test
+    fun checkSearchDataTrue(){
+        assertTrue(searchData.checkData("hi"))
+    }
+    @Test
+    fun checkSearchDataFalse(){
+        assertFalse(searchData.checkData("axcghjkl;"))
     }
 
 }
