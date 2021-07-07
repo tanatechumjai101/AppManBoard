@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2D3534</color>
-    <color name="colorPrimaryDark">#242121</color>
+    <color name="colorPrimary">#cc0000</color>
+    <color name="Toolbar">#cc0000</color>
+    <color name="colorPrimaryDark">#990000</color>
     <color name="colorAccentDark">#FF9800</color>
-    <color name="colorAccent">#E7A444</color>
-    <color name="colorColorDark">#02FFE7</color>
+    <color name="colorAccent">#ff0000</color>
+    <color name="colorColorDark">#6102FFE7</color>
     <color name="colorColor">#19C2B2</color>
     <color name="colorRedDark">#F44336</color>
-    <color name="colorRed">#D55E56</color>
+    <color name="colorRed">#F0554D</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="Red">#FF1000</color>
+    <color name="grayDark">#646261</color>
+    <color name="colorgray">#D5D2CE</color>
+    <color name="color_gray">#ACA7A3</color>
+    <color name="base">#c6001e</color>
+    <color name="black">#000000</color>
+    <color name="blue">#2196F3</color>
+    <color name="clean">#e3e3e3</color>
+    <color name="Brown">#483c2e</color>
+    <color name="block">#1A1918</color>
 </resources>
+
